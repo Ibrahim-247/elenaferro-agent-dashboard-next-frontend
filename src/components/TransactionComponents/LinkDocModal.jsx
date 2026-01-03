@@ -35,7 +35,7 @@ export default function LinkDocModal({ open, onOpenChange, getValue }) {
           <FileText className="size-4" /> {getValue()}
         </span>
       </DialogTrigger>
-      <DialogContent className="max-w-2xl rounded-xl p-6 [&>button]:hidden">
+      <DialogContent className="max-w-2xl rounded-xl p-6 [&>button]:[&_svg]:hidden">
         {/* Header */}
         <DialogHeader className="flex flex-row items-start justify-between">
           <div>

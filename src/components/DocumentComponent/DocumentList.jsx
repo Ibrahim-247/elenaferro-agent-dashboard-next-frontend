@@ -17,7 +17,7 @@ export default function DocumentList() {
           <UploadDocModal />
         </div>
       </div>
-      <div className="grid grid-cols-3 gap-8">
+      <div className="grid grid-cols-4 gap-8">
         {[...Array(6)]?.map((_, index) => (
           <FolderCard key={index} />
         ))}

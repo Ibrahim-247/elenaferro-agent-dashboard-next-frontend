@@ -5,9 +5,7 @@ export default function FolderSvg({ className }) {
     <svg
       viewBox="0 0 72.3651 64"
       xmlns="http://www.w3.org/2000/svg"
-      width="72.365051"
-      height="64.000000"
-      className={cn(className)}
+      className={cn("w-15", className)}
       fill="none"
     >
       <rect
