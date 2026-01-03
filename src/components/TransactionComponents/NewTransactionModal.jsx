@@ -55,7 +55,7 @@ export default function NewTransactionModal() {
             <Plus className="size-6" /> New Transaction
           </Button>
         </DialogTrigger>
-        <DialogContent className="max-w-150! [&>button]:hidden  p-0">
+        <DialogContent className="max-w-150! [&>button]:hidden p-0">
           <form
             onSubmit={handleSubmit(onSubmit)}
             className="overflow-auto h-[90vh] space-y-5"

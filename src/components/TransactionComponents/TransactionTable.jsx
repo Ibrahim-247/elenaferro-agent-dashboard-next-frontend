@@ -10,6 +10,8 @@ import {
 import { createColumnHelper } from "@tanstack/react-table";
 import { Eye, Pencil } from "lucide-react";
 import NewTransactionModal from "./NewTransactionModal";
+import { ViewDocumentModal } from "./ViewDocumentModal";
+import LinkDocModal from "./LinkDocModal";
 
 const data = [
   {
@@ -99,11 +101,7 @@ export default function TransactionTable() {
 
     columnHelper.accessor("docs", {
       header: "Docs",
-      cell: ({ getValue }) => (
-        <span className="text-blue-600 font-medium cursor-pointer flex items-center gap-1">
-          <FileText className="size-4" /> {getValue()}
-        </span>
-      ),
+      cell: ({ getValue }) => <LinkDocModal getValue={getValue} />,
     }),
 
     columnHelper.display({
@@ -111,9 +109,7 @@ export default function TransactionTable() {
       header: "Action",
       cell: () => (
         <div className="flex gap-3">
-          <div className="size-7 rounded-full bg-[#F4F6F8] flex items-center justify-center cursor-pointer">
-            <Eye className="text-gray-500 size-5" />
-          </div>
+          <ViewDocumentModal />
           <div className="size-7 rounded-full bg-[#F4F6F8] flex items-center justify-center cursor-pointer">
             <SquarePen className="text-gray-500 size-5" />
           </div>
