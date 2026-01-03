@@ -22,6 +22,26 @@ import { useForm, Controller, useWatch } from "react-hook-form";
 import { CircleAlert, UserRoundPlus } from "lucide-react";
 
 export default function CreateLead({ open, onOpenChange }) {
+  // lead source data
+  const leadSource = [
+    { name: "Website", value: "website" },
+    { name: "Referral", value: "referral" },
+    { name: "Open House", value: "open_house" },
+    { name: "Past Client", value: "past_client" },
+    { name: "Cold Call", value: "cold_call" },
+    { name: "Other", value: "other" },
+  ];
+
+  // timeline data
+  const timeline = [
+    { name: "Within 1 Month", value: "1" },
+    { name: "1–3 Months", value: "1–3" },
+    { name: "O3–6 Months", value: "O3–6" },
+    { name: "6+ Months", value: "6+" },
+    { name: "Not Sure Yet", value: "not_sure" },
+  ];
+
+  // hook form
   const {
     control,
     register,
@@ -164,9 +184,11 @@ export default function CreateLead({ open, onOpenChange }) {
                         <SelectValue placeholder="Lead Source" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="website">Website</SelectItem>
-                        <SelectItem value="referral">Referral</SelectItem>
-                        <SelectItem value="ads">Ads</SelectItem>
+                        {leadSource?.map((item, index) => (
+                          <SelectItem key={index} value={item?.value}>
+                            {item?.name}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                   )}
@@ -213,15 +235,17 @@ export default function CreateLead({ open, onOpenChange }) {
                     control={control}
                     name="timeline"
                     className="w-full"
-                    rules={{ required: "Lead type required" }}
                     render={({ field }) => (
                       <Select onValueChange={field.onChange}>
                         <SelectTrigger className="w-full">
                           <SelectValue placeholder="Select timeline" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="buyer">Buyer</SelectItem>
-                          <SelectItem value="seller">Seller</SelectItem>
+                          {timeline?.map((item, index) => (
+                            <SelectItem value={item?.value} key={index}>
+                              {item?.name}
+                            </SelectItem>
+                          ))}
                         </SelectContent>
                       </Select>
                     )}

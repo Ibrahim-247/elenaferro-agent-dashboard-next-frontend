@@ -18,7 +18,7 @@ export default function Sidebar() {
   const sidebar_menu = [
     { name: "Dashboard", path: "/", icon: <LayoutDashboard /> },
     { name: "CRM", path: "/crm", icon: <Users /> },
-    { name: "Documents", path: "", icon: <FileText /> },
+    { name: "Documents", path: "/documents", icon: <FileText /> },
     { name: "Transactions", path: "", icon: <ArrowRightLeft /> },
     { name: "Performance & Tasks", path: "", icon: <TrendingUp /> },
     { name: "Public Folder", path: "", icon: <Folder /> },
@@ -29,7 +29,7 @@ export default function Sidebar() {
       <Image src={logo} alt="logo" className="w-64 ml-11" />
       <div className="text-lg font-medium text-[#4F586D] mt-8 space-y-2.5 h-[calc(100vh-150px)] overflow-auto pr-11 custom_scroll">
         {sidebar_menu?.map((item, index) => (
-          <div className="ml-11">
+          <div className="ml-11" key={index}>
             <Link
               href={item?.path}
               key={index}
