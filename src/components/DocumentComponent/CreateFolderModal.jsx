@@ -22,7 +22,7 @@ export default function CreateFolderModal() {
               <FolderPlus className="size-5" /> Create New Folder
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-[600px]! p-8 [&>button]:hidden">
+          <DialogContent className="max-w-150! p-8 [&>button]:hidden">
             <DialogClose asChild>
               <div
                 type="button"

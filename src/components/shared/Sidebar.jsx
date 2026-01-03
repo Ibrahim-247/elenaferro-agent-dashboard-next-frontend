@@ -19,7 +19,7 @@ export default function Sidebar() {
     { name: "Dashboard", path: "/", icon: <LayoutDashboard /> },
     { name: "CRM", path: "/crm", icon: <Users /> },
     { name: "Documents", path: "/documents", icon: <FileText /> },
-    { name: "Transactions", path: "", icon: <ArrowRightLeft /> },
+    { name: "Transactions", path: "/transaction", icon: <ArrowRightLeft /> },
     { name: "Performance & Tasks", path: "", icon: <TrendingUp /> },
     { name: "Public Folder", path: "", icon: <Folder /> },
     { name: "Training Portal", path: "", icon: <Video /> },
