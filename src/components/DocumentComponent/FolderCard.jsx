@@ -1,10 +1,11 @@
 import Image from "next/image";
 import folderBg from "../../assets/folder_bg.png";
 import FolderSvg from "../svg/FolderSvg";
+import Link from "next/link";
 
 export default function FolderCard() {
   return (
-    <div className="w-full h-86 relative">
+    <Link href="/documents/454" className="w-full h-86 relative">
       <div className="absolute top-12 left-15">
         <FolderSvg />
       </div>
@@ -19,6 +20,6 @@ export default function FolderCard() {
           12 files, 502 MB
         </p>
       </div>
-    </div>
+    </Link>
   );
 }
