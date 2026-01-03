@@ -6,7 +6,6 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -14,7 +13,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Search, UserRoundPlus } from "lucide-react";
+import { Search } from "lucide-react";
+import CreateLead from "./CreateLead";
 
 // leads data
 const leads = [
@@ -171,15 +171,14 @@ export default function LeadsTabel() {
           </SelectContent>
         </Select>
 
-        <Button className="h-12 bg-secondary text-white hover:bg-secondary/90 px-5!">
-          <UserRoundPlus /> Add New Lead
-        </Button>
+        {/* create lead modal */}
+        <CreateLead />
       </div>
       {/* leads table */}
       <div className="bg-white p-6 rounded-2xl space-y-6">
         <h5 className="text-xl font-semibold text-[#0C58FF] mb-6">New Leads</h5>
         <div className="relative w-full overflow-x-auto rounded-lg border border-primary/50">
-          <table className="min-w-[900px] w-full">
+          <table className="min-w-225 w-full">
             <thead className="bg-[#F5F6F7]">
               {table.getHeaderGroups().map((group) => (
                 <tr key={group.id}>
@@ -219,7 +218,7 @@ export default function LeadsTabel() {
         </div>
         <h5 className="text-xl font-semibold text-[#C57A00] mb-6">Contacted</h5>
         <div className="relative w-full overflow-x-auto rounded-lg border border-primary/50">
-          <table className="min-w-[900px] w-full">
+          <table className="min-w-225 w-full">
             <thead className="bg-[#F5F6F7]">
               {table.getHeaderGroups().map((group) => (
                 <tr key={group.id}>
@@ -259,7 +258,7 @@ export default function LeadsTabel() {
         </div>
         <h5 className="text-xl font-semibold text-[#12C359] mb-6">Converted</h5>
         <div className="relative w-full overflow-x-auto rounded-lg border border-primary/50">
-          <table className="min-w-[900px] w-full">
+          <table className="min-w-225 w-full">
             <thead className="bg-[#F5F6F7]">
               {table.getHeaderGroups().map((group) => (
                 <tr key={group.id}>
