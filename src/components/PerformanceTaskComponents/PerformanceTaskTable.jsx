@@ -6,6 +6,7 @@ import {
 } from "@tanstack/react-table";
 import { Trash2, SquarePen } from "lucide-react";
 import PerformanceTaskHeader from "./PerformanceTaskHeader";
+import EditTaskModal from "./EditTaskModal";
 
 const data = [
   {
@@ -101,7 +102,7 @@ export default function PerformanceTaskTable() {
       header: "Action",
       cell: () => (
         <div className="flex gap-3">
-          <SquarePen className="text-gray-500 cursor-pointer size-5" />
+          <EditTaskModal />
           <Trash2 size={18} className="cursor-pointer text-red-500" />
         </div>
       ),
