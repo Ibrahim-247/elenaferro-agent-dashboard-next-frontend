@@ -12,6 +12,7 @@ import {
 import { Plus, Search } from "lucide-react";
 import { useState } from "react";
 import { Button } from "../ui/button";
+import NewTaskModal from "./NewTaskModal";
 
 export default function PerformanceTaskHeader() {
   const [search, setSearch] = useState("");
@@ -55,9 +56,7 @@ export default function PerformanceTaskHeader() {
             <SelectItem value="Converted">Converted</SelectItem>
           </SelectContent>
         </Select>
-        <Button className="h-12 bg-secondary text-white hover:bg-secondary/90 px-5!">
-          <Plus className="size-5" /> Add Task
-        </Button>
+        <NewTaskModal />
       </div>
     </div>
   );
