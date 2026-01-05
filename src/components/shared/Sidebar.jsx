@@ -6,6 +6,7 @@ import {
   FileText,
   Folder,
   LayoutDashboard,
+  Settings,
   TrendingUp,
   Users,
   Video,
@@ -25,8 +26,9 @@ export default function Sidebar() {
       path: "/performance_tasks",
       icon: <TrendingUp />,
     },
-    { name: "Public Folder", path: "", icon: <Folder /> },
+    { name: "Public Folder", path: "/public_folder", icon: <Folder /> },
     { name: "Training Portal", path: "", icon: <Video /> },
+    { name: "Settings", path: "", icon: <Settings /> },
   ];
   return (
     <div className="max-w-88 w-full pr-0 pt-3 pb-6">
