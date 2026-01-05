@@ -27,7 +27,7 @@ export default function Sidebar() {
       icon: <TrendingUp />,
     },
     { name: "Public Folder", path: "/public_folder", icon: <Folder /> },
-    { name: "Training Portal", path: "", icon: <Video /> },
+    { name: "Training Portal", path: "/training_portal", icon: <Video /> },
     { name: "Settings", path: "", icon: <Settings /> },
   ];
   return (
