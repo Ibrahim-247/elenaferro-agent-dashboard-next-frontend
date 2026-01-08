@@ -9,12 +9,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Plus, Search } from "lucide-react";
+import { Search } from "lucide-react";
 import { useState } from "react";
-import { Button } from "../ui/button";
-import NewTaskModal from "./NewTaskModal";
 
-export default function PerformanceTaskHeader() {
+export default function PublicFolderHeader() {
   const [search, setSearch] = useState("");
   const [type, setType] = useState("all");
   const [status, setStatus] = useState("all");
@@ -28,7 +26,7 @@ export default function PerformanceTaskHeader() {
             onChange={(e) => setSearch(e.target.value)}
             className="w-full h-12 pl-10"
           />
-          <Search className="absolute top-1/2 -translate-y-1/2 left-2 text-gray-500" />
+          <Search className="absolute top-1/2 -translate-y-1/2 left-3 text-gray-500" />
         </div>
 
         <Select value={type} onValueChange={setType}>
@@ -37,7 +35,6 @@ export default function PerformanceTaskHeader() {
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
-              <SelectLabel>Priority</SelectLabel>
               <SelectItem value="all">All Priority</SelectItem>
               <SelectItem value="Buyer">Buyer</SelectItem>
               <SelectItem value="Seller">Seller</SelectItem>
@@ -56,7 +53,6 @@ export default function PerformanceTaskHeader() {
             <SelectItem value="Converted">Converted</SelectItem>
           </SelectContent>
         </Select>
-        <NewTaskModal />
       </div>
     </div>
   );
