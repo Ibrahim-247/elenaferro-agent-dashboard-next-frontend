@@ -6,6 +6,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+import { useTasklist } from "@/hooks/dashboard.api";
 
 export default function DealsBarchart() {
   const chartData = [
@@ -22,6 +23,11 @@ export default function DealsBarchart() {
       color: "var(--chart-1)",
     },
   };
+
+  // my task list
+  const { data } = useTasklist();
+  console.log(data);
+
   return (
     <div className="grid grid-cols-12 gap-6">
       {/* Monthly Deal */}
