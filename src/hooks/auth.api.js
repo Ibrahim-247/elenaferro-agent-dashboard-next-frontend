@@ -23,6 +23,7 @@ export const useLogin = () => {
         })
       );
       router.push("/");
+      console.log(data);
     },
     onError: (error) => {
       if (error?.code === "ERR_NETWORK") {

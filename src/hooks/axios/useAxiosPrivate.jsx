@@ -1,3 +1,4 @@
+import { getSessionStorage } from "@/utils/sessionStorage";
 import axios from "axios";
 import Cookies from "js-cookie";
 
@@ -8,7 +9,20 @@ const axiosPrivate = axios.create({
     Accept: "application/json",
   },
   timeout: 15000,
+  withCredentials: true,
 });
+
+axiosPrivate.interceptors.request.use(
+  (config) => {
+    const sessionToken = getSessionStorage("elena_access_token");
+    if (sessionToken) {
+      config.headers.Authorization = `Bearer ${sessionToken}`;
+    }
+
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
 
 // REQUEST INTERCEPTOR
 axiosPrivate.interceptors.response.use(
