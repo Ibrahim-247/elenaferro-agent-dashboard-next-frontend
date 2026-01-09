@@ -1,15 +1,10 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
-import { ArrowRight, Eye, EyeOff } from "lucide-react";
-import Link from "next/link";
-import google from "../../../assets/google.png";
-import Image from "next/image";
+import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { loginSchema } from "@/lib/validators/loginSchema";
 import { registerSchema } from "@/lib/validators/registerSchema";
 
 export default function ChangePassForm() {
@@ -20,7 +15,7 @@ export default function ChangePassForm() {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
     setValue,
     watch,
   } = useForm({

@@ -1,13 +1,13 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
-import { useForm, Controller } from "react-hook-form";
 import {
   InputOTP,
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
+import { ArrowRight } from "lucide-react";
+import { useForm, Controller } from "react-hook-form";
 
 export default function EmailVerifyForm() {
   const {
