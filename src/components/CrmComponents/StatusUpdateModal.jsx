@@ -21,11 +21,7 @@ import { toast } from "sonner";
 import { Spinner } from "../ui/spinner";
 import { useQueryClient } from "@tanstack/react-query";
 
-export default function StatusUpdateModal({
-  rowId,
-  currentStatus,
-  onStatusUpdated,
-}) {
+export default function StatusUpdateModal({ rowId, currentStatus }) {
   const [open, setOpen] = useState(false);
   const [status, setStatus] = useState(currentStatus || "");
   const queryClient = useQueryClient();
@@ -37,9 +33,8 @@ export default function StatusUpdateModal({
     endpoint: `agent/lead/status/${rowId}`,
     onSuccess: (data) => {
       setOpen(false);
-      toast.success("Status successfully updated");
+      toast.success(`Status updated to ${data?.data?.status}`);
       queryClient?.invalidateQueries(["lead_list"]);
-      console.log(data);
     },
     onError: (error) => {
       console.error("Lead status update", error);
