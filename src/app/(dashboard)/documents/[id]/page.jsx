@@ -1,9 +1,11 @@
 import DocumentDetails from "@/components/DocumentComponent/DocumentDetails";
 
-export default function page() {
+export default async function page({ params }) {
+  const { id } = await params;
+
   return (
     <div>
-      <DocumentDetails />
+      <DocumentDetails id={id} />
     </div>
   );
 }
