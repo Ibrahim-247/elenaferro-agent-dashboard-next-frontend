@@ -13,94 +13,64 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Search } from "lucide-react";
+import { Inbox, Search } from "lucide-react";
 import CreateLead from "./CreateLead";
-
-// leads data
-const leads = [
-  {
-    name: "Jerry Helfer",
-    type: "Buyer",
-    note: "Interested in downtown property",
-    email: "autumn_philips@aol.com",
-    phone: "(555) 123-4567",
-    status: "New",
-  },
-  {
-    name: "Jerry Helfer",
-    type: "Seller",
-    note: "Interested in downtown property",
-    email: "autumn_philips@aol.com",
-    phone: "(555) 123-4567",
-    status: "Contacted",
-  },
-  {
-    name: "Jerry Helfer",
-    type: "Buyer",
-    note: "Interested in downtown property",
-    email: "autumn_philips@aol.com",
-    phone: "(555) 123-4567",
-    status: "Converted",
-  },
-];
+import { useLeadlist } from "@/hooks/crm.api";
+import { Spinner } from "../ui/spinner";
+import StatusUpdateModal from "./StatusUpdateModal";
 
 // status update select
 const statusStyle = {
-  New: "bg-blue-100 text-blue-600",
-  Contacted: "bg-yellow-100 text-yellow-600",
-  Converted: "bg-green-100 text-green-600",
+  new: "bg-blue-100 text-blue-600",
+  contacted: "bg-yellow-100 text-yellow-600",
+  converted: "bg-green-100 text-green-600",
 };
-
-function StatusSelect({ value, onChange }) {
-  return (
-    <Select value={value} onValueChange={onChange}>
-      <SelectTrigger
-        className={`h-8 w-fit px-3 rounded-full border-none ${statusStyle[value]}`}
-      >
-        <SelectValue />
-      </SelectTrigger>
-
-      <SelectContent>
-        {Object.keys(statusStyle).map((status) => (
-          <SelectItem key={status} value={status}>
-            {status}
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
-  );
-}
 
 export default function LeadsTabel() {
   const [search, setSearch] = useState("");
   const [type, setType] = useState("all");
   const [status, setStatus] = useState("all");
 
+  // lead list hooks
+  const { data, isPending } = useLeadlist();
+  const leads = data?.data?.data || [];
+
   // filter logic
   const filteredData = useMemo(() => {
-    return leads.filter((lead) => {
+    return leads?.filter((lead) => {
       const matchSearch =
-        lead.name.toLowerCase().includes(search.toLowerCase()) ||
-        lead.email.toLowerCase().includes(search.toLowerCase()) ||
-        lead.phone.includes(search);
+        lead?.full_name?.toLowerCase().includes(search.toLowerCase()) ||
+        lead?.email?.toLowerCase().includes(search.toLowerCase()) ||
+        lead?.phone?.includes(search);
 
-      const matchType = type === "all" || lead.type === type;
-      const matchStatus = status === "all" || lead.status === status;
+      const matchType = type === "all" || lead?.lead_type === type;
+      const matchStatus = status === "all" || lead?.status === status;
 
       return matchSearch && matchType && matchStatus;
     });
-  }, [search, type, status]);
+  }, [search, type, status, leads]);
 
   // TABLE COLUMNS
   const columns = [
-    { accessorKey: "name", header: "Name" },
-    { accessorKey: "type", header: "Type" },
     {
-      accessorKey: "note",
+      accessorKey: "full_name",
+      header: "Name",
+      cell: ({ getValue }) => getValue() || "N/A",
+    },
+    {
+      accessorKey: "lead_type",
+      header: "Type",
+      cell: ({ getValue }) =>
+        getValue()
+          ? getValue().replace(/\b\w/g, (c) => c.toUpperCase())
+          : "N/A" || "N/A",
+    },
+    {
+      accessorKey: "notes",
       header: "Notes",
       cell: ({ row }) => (
-        <span className="truncate max-w-[200px] block">
-          {row.original.note}
+        <span className="truncate max-w-50 block">
+          {row.original.notes || "N/A"}
         </span>
       ),
     },
@@ -109,20 +79,35 @@ export default function LeadsTabel() {
       header: "Email",
       cell: ({ row }) => (
         <a href={`mailto:${row.original.email}`} className="text-blue-600">
-          {row.original.email}
+          {row.original.email || "N/A"}
         </a>
       ),
     },
-    { accessorKey: "phone", header: "Phone" },
+    {
+      accessorKey: "phone",
+      header: "Phone",
+      cell: ({ getValue }) => getValue() || "N/A",
+    },
     {
       accessorKey: "status",
       header: "Status",
       cell: ({ row }) => (
-        <StatusSelect
-          value={row.original.status}
-          onChange={(newStatus) => {
-            row.original.status = newStatus;
-          }}
+        <div
+          className={`py-1 text-base w-fit px-3 rounded-full border-none ${
+            statusStyle[row.original.status]
+          }`}
+        >
+          {row.original.status}
+        </div>
+      ),
+    },
+    {
+      accessorKey: "edit",
+      header: "Action",
+      cell: ({ row }) => (
+        <StatusUpdateModal
+          currentStatus={row?.original?.status}
+          rowId={row?.original?.id}
         />
       ),
     },
@@ -154,8 +139,8 @@ export default function LeadsTabel() {
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All</SelectItem>
-            <SelectItem value="Buyer">Buyer</SelectItem>
-            <SelectItem value="Seller">Seller</SelectItem>
+            <SelectItem value="buyer">Buyer</SelectItem>
+            <SelectItem value="seller">Seller</SelectItem>
           </SelectContent>
         </Select>
 
@@ -165,9 +150,9 @@ export default function LeadsTabel() {
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All</SelectItem>
-            <SelectItem value="New">New</SelectItem>
-            <SelectItem value="Contacted">Contacted</SelectItem>
-            <SelectItem value="Converted">Converted</SelectItem>
+            <SelectItem value="new">New</SelectItem>
+            <SelectItem value="contacted">Contacted</SelectItem>
+            <SelectItem value="converted">Converted</SelectItem>
           </SelectContent>
         </Select>
 
@@ -176,7 +161,7 @@ export default function LeadsTabel() {
       </div>
       {/* leads table */}
       <div className="bg-white p-6 rounded-2xl space-y-6">
-        <h5 className="text-xl font-semibold text-[#0C58FF] mb-6">New Leads</h5>
+        <h5 className="text-xl font-semibold text-[#0C58FF] mb-6">Leads</h5>
         <div className="relative w-full overflow-x-auto rounded-lg border border-primary/50">
           <table className="min-w-225 w-full">
             <thead className="bg-[#F5F6F7]">
@@ -188,7 +173,7 @@ export default function LeadsTabel() {
                       className="px-4 py-3 text-left text-sm font-semibold whitespace-nowrap border-r border-primary/50 last:border-r-0"
                     >
                       {flexRender(
-                        header.column.columnDef.header,
+                        header.column.columnDef.header ?? "N/A",
                         header.getContext()
                       )}
                     </th>
@@ -196,104 +181,62 @@ export default function LeadsTabel() {
                 </tr>
               ))}
             </thead>
-
-            <tbody>
-              {table.getRowModel().rows.map((row) => (
-                <tr key={row.id} className="border-t border-t-primary/50 ">
-                  {row.getVisibleCells().map((cell) => (
+            {isPending ? (
+              <tbody>
+                <tr>
+                  <td
+                    colSpan={table.getAllColumns().length}
+                    className="h-40 text-center text-base"
+                  >
+                    <div className="flex items-center justify-center gap-2">
+                      <Spinner /> Loading...
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            ) : filteredData?.length > 0 ? (
+              <tbody>
+                {table.getRowModel().rows.length === 0 ? (
+                  <tr>
                     <td
-                      key={cell.id}
-                      className="px-4 py-3 text-sm whitespace-nowrap border-r border-r-primary/50 last:border-r-0"
+                      colSpan={table.getAllColumns().length}
+                      className="py-6 text-center text-sm"
                     >
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
+                      No data found
                     </td>
-                  ))}
+                  </tr>
+                ) : (
+                  table.getRowModel().rows.map((row) => (
+                    <tr key={row.id} className="border-t border-t-primary/50">
+                      {row.getVisibleCells().map((cell) => (
+                        <td
+                          key={cell.id}
+                          className="px-4 py-3 text-sm whitespace-nowrap border-r border-r-primary/50 last:border-r-0"
+                        >
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </td>
+                      ))}
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            ) : (
+              <tbody>
+                <tr>
+                  <td
+                    colSpan={table.getAllColumns().length}
+                    className="h-40 text-center text-base"
+                  >
+                    <div className="flex flex-col items-center justify-center gap-2">
+                      <Inbox className="text-gray-400 size-13" /> No data found
+                    </div>
+                  </td>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <h5 className="text-xl font-semibold text-[#C57A00] mb-6">Contacted</h5>
-        <div className="relative w-full overflow-x-auto rounded-lg border border-primary/50">
-          <table className="min-w-225 w-full">
-            <thead className="bg-[#F5F6F7]">
-              {table.getHeaderGroups().map((group) => (
-                <tr key={group.id}>
-                  {group.headers.map((header) => (
-                    <th
-                      key={header.id}
-                      className="px-4 py-3 text-left text-sm font-semibold whitespace-nowrap border-r border-primary/50 last:border-r-0"
-                    >
-                      {flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
-                    </th>
-                  ))}
-                </tr>
-              ))}
-            </thead>
-
-            <tbody>
-              {table.getRowModel().rows.map((row) => (
-                <tr key={row.id} className="border-t border-t-primary/50 ">
-                  {row.getVisibleCells().map((cell) => (
-                    <td
-                      key={cell.id}
-                      className="px-4 py-3 text-sm whitespace-nowrap border-r border-r-primary/50 last:border-r-0"
-                    >
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <h5 className="text-xl font-semibold text-[#12C359] mb-6">Converted</h5>
-        <div className="relative w-full overflow-x-auto rounded-lg border border-primary/50">
-          <table className="min-w-225 w-full">
-            <thead className="bg-[#F5F6F7]">
-              {table.getHeaderGroups().map((group) => (
-                <tr key={group.id}>
-                  {group.headers.map((header) => (
-                    <th
-                      key={header.id}
-                      className="px-4 py-3 text-left text-sm font-semibold whitespace-nowrap border-r border-primary/50 last:border-r-0"
-                    >
-                      {flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
-                    </th>
-                  ))}
-                </tr>
-              ))}
-            </thead>
-
-            <tbody>
-              {table.getRowModel().rows.map((row) => (
-                <tr key={row.id} className="border-t border-t-primary/50 ">
-                  {row.getVisibleCells().map((cell) => (
-                    <td
-                      key={cell.id}
-                      className="px-4 py-3 text-sm whitespace-nowrap border-r border-r-primary/50 last:border-r-0"
-                    >
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
+              </tbody>
+            )}
           </table>
         </div>
       </div>

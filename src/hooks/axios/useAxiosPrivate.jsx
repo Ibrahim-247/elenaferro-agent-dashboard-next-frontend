@@ -1,6 +1,10 @@
-import { getSessionStorage } from "@/utils/sessionStorage";
+import { getLocalStorage, removeLocalStorage } from "@/utils/localStorage";
+import {
+  getSessionStorage,
+  removeSessionStorage,
+} from "@/utils/sessionStorage";
 import axios from "axios";
-import Cookies from "js-cookie";
+import { toast } from "sonner";
 
 const axiosPrivate = axios.create({
   baseURL: `${process.env.NEXT_PUBLIC_BASE_URL}/api`,
@@ -9,14 +13,16 @@ const axiosPrivate = axios.create({
     Accept: "application/json",
   },
   timeout: 15000,
-  withCredentials: true,
 });
 
 axiosPrivate.interceptors.request.use(
   (config) => {
-    const sessionToken = getSessionStorage("elena_access_token");
-    if (sessionToken) {
-      config.headers.Authorization = `Bearer ${sessionToken}`;
+    const token =
+      getSessionStorage("elena_access_token") ||
+      getLocalStorage("elena_access_token");
+
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
     }
 
     return config;
@@ -42,10 +48,10 @@ axiosPrivate.interceptors.response.use(
     // 401 Unauthorized
     if (status === 401) {
       toast.error("Session expired. Please log in again.");
-      Cookies.remove("louish-token");
-
-      if (window.location.pathname !== "/login") {
-        window.location.href = "/login";
+      removeLocalStorage("elena_access_token");
+      removeSessionStorage("elena_access_token");
+      if (window.location.pathname !== "/auth/login") {
+        window.location.href = "/auth/login";
       }
 
       return Promise.reject(error);
