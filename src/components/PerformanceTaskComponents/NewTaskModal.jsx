@@ -24,8 +24,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useForm, Controller } from "react-hook-form";
+import { useState } from "react";
 
 export default function NewTaskModal() {
+  const [open, setopen] = useState();
+
   // hook form
   const {
     control,
@@ -43,7 +46,7 @@ export default function NewTaskModal() {
 
   return (
     <div>
-      <Dialog>
+      <Dialog open={open} onOpenChange={setopen}>
         <DialogTrigger asChild>
           <Button className="h-12 bg-secondary text-white hover:bg-secondary/90 px-5!">
             <Plus className="size-5" /> Add Task
@@ -203,7 +206,11 @@ export default function NewTaskModal() {
 
             <div className="sticky bottom-0 left-0 bg-white pb-8 pt-3 px-8 flex items-center gap-3.5 rounded-2xl">
               <DialogClose asChild>
-                <Button variant="outline" className="w-full shrink h-10">
+                <Button
+                  onClick={() => setopen(false)}
+                  variant="outline"
+                  className="w-full shrink h-10"
+                >
                   Cancel
                 </Button>
               </DialogClose>
