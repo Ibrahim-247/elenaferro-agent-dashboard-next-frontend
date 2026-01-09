@@ -25,8 +25,15 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "../ui/textarea";
 import { useForm, Controller } from "react-hook-form";
+import useApiMutation from "@/hooks/useApiMutation";
+import { useState } from "react";
+import { useLeadlist } from "@/hooks/crm.api";
+import { Spinner } from "../ui/spinner";
+import { toast } from "sonner";
 
 export default function NewTransactionModal() {
+  const [open, setopen] = useState();
+
   // hook form
   const {
     control,
@@ -40,8 +47,31 @@ export default function NewTransactionModal() {
     },
   });
 
+  // lead list
+  const { data } = useLeadlist();
+  const leads = data?.data?.data;
+
+  // create transaction api call
+  const createTransaction = useApiMutation({
+    key: "create_transaction",
+    isPrivate: true,
+    endpoint: `/agent/transaction/create`,
+    onSuccess: (data) => {
+      setopen(false);
+      toast.success(`Transaction created ${data?.data?.transaction_id}`);
+      // queryClient?.invalidateQueries(["lead_list"]);
+    },
+    onError: (error) => {
+      console.error("Transaction create error:", error);
+    },
+  });
+
   const onSubmit = (data) => {
-    console.log(data);
+    createTransaction?.mutate({
+      ...data,
+      start_date: data?.start_date?.toLocaleDateString("en-CA"),
+      close_date: data?.close_date?.toLocaleDateString("en-CA"),
+    });
   };
 
   const FieldError = ({ error }) =>
@@ -49,7 +79,7 @@ export default function NewTransactionModal() {
 
   return (
     <div>
-      <Dialog>
+      <Dialog open={open} onOpenChange={setopen}>
         <DialogTrigger asChild>
           <Button className="h-12 bg-secondary text-white hover:bg-secondary/90 px-5!">
             <Plus className="size-6" /> New Transaction
@@ -85,34 +115,32 @@ export default function NewTransactionModal() {
                   <label className="text-[#404A60]">Listing Date</label>
                   <Controller
                     control={control}
-                    name="listingDate"
+                    name="start_date"
                     rules={{ required: "Listing date is required" }}
                     render={({ field }) => (
-                      <>
-                        <Popover>
-                          <PopoverTrigger asChild>
-                            <Button
-                              variant="outline"
-                              className={`w-full justify-start gap-2 h-10 text-gray-500 ${
-                                errors.listingDate && "border-red-500"
-                              }`}
-                            >
-                              <CalendarRange />
-                              {field.value
-                                ? field.value.toLocaleDateString()
-                                : "Pick a date"}
-                            </Button>
-                          </PopoverTrigger>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant="outline"
+                            className={`w-full justify-start gap-2 h-10 text-gray-500 ${
+                              errors.start_date && "border-red-500"
+                            }`}
+                          >
+                            <CalendarRange />
+                            {field.value
+                              ? field.value.toLocaleDateString("en-CA")
+                              : "Pick a date"}
+                          </Button>
+                        </PopoverTrigger>
 
-                          <PopoverContent className="w-auto p-0" align="start">
-                            <Calendar
-                              mode="single"
-                              selected={field.value}
-                              onSelect={field.onChange}
-                            />
-                          </PopoverContent>
-                        </Popover>
-                      </>
+                        <PopoverContent className="w-auto p-0" align="start">
+                          <Calendar
+                            mode="single"
+                            selected={field.value}
+                            onSelect={field.onChange}
+                          />
+                        </PopoverContent>
+                      </Popover>
                     )}
                   />
                 </div>
@@ -121,7 +149,7 @@ export default function NewTransactionModal() {
                   <label className="text-[#404A60]">Expected Close Date</label>
                   <Controller
                     control={control}
-                    name="closeDate"
+                    name="close_date"
                     rules={{ required: "Expected close date is required" }}
                     render={({ field }) => (
                       <>
@@ -130,12 +158,12 @@ export default function NewTransactionModal() {
                             <Button
                               variant="outline"
                               className={`w-full justify-start gap-2 h-10 text-gray-500 ${
-                                errors.closeDate && "border-red-500"
+                                errors.close_date && "border-red-500"
                               }`}
                             >
                               <CalendarRange />
                               {field.value
-                                ? field.value.toLocaleDateString()
+                                ? field.value.toLocaleDateString("en-CA")
                                 : "Pick a date"}
                             </Button>
                           </PopoverTrigger>
@@ -188,7 +216,7 @@ export default function NewTransactionModal() {
                 <label className="text-[#404A60]">Select Client</label>
                 <Controller
                   control={control}
-                  name="client"
+                  name="lead_id"
                   rules={{ required: "Client is required" }}
                   render={({ field }) => (
                     <>
@@ -200,12 +228,15 @@ export default function NewTransactionModal() {
                           <SelectValue placeholder="Select client" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="client1">Client 1</SelectItem>
-                          <SelectItem value="client2">Client 2</SelectItem>
+                          {leads?.map((item, index) => (
+                            <SelectItem value={item?.id} key={index}>
+                              {item?.full_name}
+                            </SelectItem>
+                          ))}
                         </SelectContent>
                       </Select>
 
-                      <FieldError error={errors.client} />
+                      <FieldError error={errors.lead_id} />
                     </>
                   )}
                 />
@@ -220,18 +251,18 @@ export default function NewTransactionModal() {
                 <Input
                   placeholder="123 Maple Ave, Atlanta, GA 30301"
                   className="h-10"
-                  {...register("address", {
+                  {...register("property_address", {
                     required: "Property address is required",
                   })}
                 />
-                <FieldError error={errors.address} />
+                <FieldError error={errors.property_address} />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="grid gap-2">
                   <label className="text-[#404A60]">Property Type</label>
                   <Controller
                     control={control}
-                    name="propertyType"
+                    name="property_type"
                     rules={{ required: "Property type is required" }}
                     render={({ field }) => (
                       <>
@@ -241,7 +272,7 @@ export default function NewTransactionModal() {
                         >
                           <SelectTrigger
                             className={`h-10! w-full ${
-                              errors.propertyType && "border-red-500"
+                              errors.property_type && "border-red-500"
                             }`}
                           >
                             <SelectValue placeholder="Property type" />
@@ -259,9 +290,11 @@ export default function NewTransactionModal() {
                   <label className="text-[#404A60]">Listing Price</label>
                   <Input
                     placeholder="00000"
-                    className={`h-10 ${errors.price && "border-red-500"}`}
+                    className={`h-10 ${
+                      errors.listing_price && "border-red-500"
+                    }`}
                     type="number"
-                    {...register("price", {
+                    {...register("listing_price", {
                       required: "Listing price is required",
                       min: {
                         value: 1,
@@ -275,22 +308,28 @@ export default function NewTransactionModal() {
                 <label className="text-[#404A60]">Internal Notes</label>
                 <Textarea
                   placeholder="Add any internal notes..."
-                  {...register("notes")}
+                  {...register("internal_notes")}
                 />
               </div>
             </div>
 
             <div className="sticky bottom-0 left-0 bg-white pb-8 pt-3 px-8 flex items-center gap-3.5">
               <DialogClose asChild>
-                <Button variant="outline" className="w-full shrink h-10">
+                <Button
+                  disabled={createTransaction?.isPending}
+                  onClick={() => setopen(false)}
+                  variant="outline"
+                  className="w-full shrink h-10"
+                >
                   Cancel
                 </Button>
               </DialogClose>
               <Button
                 type="submit"
+                disabled={createTransaction?.isPending}
                 className="bg-secondary text-white hover:bg-secondary/90 w-full shrink h-10"
               >
-                Save Transaction
+                {createTransaction?.isPending && <Spinner />} Save Transaction
               </Button>
             </div>
           </form>
