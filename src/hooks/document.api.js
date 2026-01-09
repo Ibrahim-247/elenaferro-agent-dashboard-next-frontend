@@ -13,3 +13,18 @@ export const useFolderlist = () => {
     },
   });
 };
+
+// document details
+export const useDocumentDetails = (id) => {
+  return useApiMutation({
+    key: "document_details",
+    method: "get",
+    params: { id },
+    isPrivate: true,
+    endpoint: `agent/document/list/document_folder/${id}`,
+    onError: (error) => {
+      console.error("Document details", error);
+    },
+    enabled: !!id,
+  });
+};

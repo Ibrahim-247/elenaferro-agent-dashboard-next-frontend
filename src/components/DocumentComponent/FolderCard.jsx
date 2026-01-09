@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function FolderCard({ item }) {
   return (
-    <Link href="/documents/454" className="w-full relative">
+    <Link href={`/documents/${item?.id}`} className="w-full relative">
       <div className="absolute top-12 left-10">
         <FolderSvg className="" />
       </div>
