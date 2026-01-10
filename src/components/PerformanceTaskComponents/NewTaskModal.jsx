@@ -25,9 +25,17 @@ import {
 } from "@/components/ui/select";
 import { useForm, Controller } from "react-hook-form";
 import { useState } from "react";
+import useApiMutation from "@/hooks/useApiMutation";
+import { useLeadlist } from "@/hooks/crm.api";
+import { Spinner } from "../ui/spinner";
+import { toast } from "sonner";
 
 export default function NewTaskModal() {
   const [open, setopen] = useState();
+
+  // lead list
+  const { data } = useLeadlist();
+  const leads = data?.data?.data;
 
   // hook form
   const {
@@ -37,7 +45,25 @@ export default function NewTaskModal() {
     formState: { errors },
   } = useForm();
 
+  // create task mutation
+  const createTaskMutation = useApiMutation({
+    key: "create_task",
+    isPrivate: true,
+    endpoint: `/agent/task/create`,
+    onSuccess: () => {
+      toast.success("Task created successfully");
+      setopen(false);
+    },
+    onError: (error) => {
+      console.error("Create task", error);
+    },
+  });
+
   const onSubmit = (data) => {
+    createTaskMutation?.mutate({
+      ...data,
+      due_date: data?.due_date?.toLocaleDateString("en-CA"),
+    });
     console.log(data);
   };
 
@@ -175,12 +201,56 @@ export default function NewTaskModal() {
             </div>
 
             {/* Link To */}
-            <div className="space-y-3 px-8">
+            <div className="px-8 grid grid-cols-2 gap-4">
+              <div className="grid gap-2">
+                <label className="text-[#404A60]">Status</label>
+                <Controller
+                  control={control}
+                  name="status"
+                  rules={{ required: "Status is required" }}
+                  render={({ field }) => (
+                    <>
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value}
+                      >
+                        <SelectTrigger
+                          className={`h-10! w-full ${
+                            errors.status && "border-red-500"
+                          }`}
+                        >
+                          <SelectValue placeholder="Select status" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem
+                            value="in_progress"
+                            className="flex items-center gap-2"
+                          >
+                            In Progress
+                          </SelectItem>
+                          <SelectItem
+                            value="blocked"
+                            className="flex items-center gap-2"
+                          >
+                            Blocked
+                          </SelectItem>
+                          <SelectItem
+                            value="done"
+                            className="flex items-center gap-2"
+                          >
+                            Done
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </>
+                  )}
+                />
+              </div>
               <div className="grid gap-2">
                 <label className="text-[#404A60]">Link To</label>
                 <Controller
                   control={control}
-                  name="client"
+                  name="lead_id"
                   rules={{ required: "Client is required" }}
                   render={({ field }) => (
                     <>
@@ -192,12 +262,15 @@ export default function NewTaskModal() {
                           <SelectValue placeholder="Select client" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="client1">Client 1</SelectItem>
-                          <SelectItem value="client2">Client 2</SelectItem>
+                          {leads?.map((item, index) => (
+                            <SelectItem key={index} value={item?.id}>
+                              {item?.full_name}
+                            </SelectItem>
+                          ))}
                         </SelectContent>
                       </Select>
 
-                      <FieldError error={errors.client} />
+                      <FieldError error={errors.lead_id} />
                     </>
                   )}
                 />
@@ -208,6 +281,7 @@ export default function NewTaskModal() {
               <DialogClose asChild>
                 <Button
                   onClick={() => setopen(false)}
+                  disabled={createTaskMutation?.isPending}
                   variant="outline"
                   className="w-full shrink h-10"
                 >
@@ -216,8 +290,10 @@ export default function NewTaskModal() {
               </DialogClose>
               <Button
                 type="submit"
+                disabled={createTaskMutation?.isPending}
                 className="bg-secondary text-white hover:bg-secondary/90 w-full shrink h-10"
               >
+                {createTaskMutation?.isPending && <Spinner />}
                 Create Task
               </Button>
             </div>

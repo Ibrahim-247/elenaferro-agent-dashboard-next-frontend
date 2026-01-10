@@ -1,7 +1,6 @@
-import { useQueryClient } from "@tanstack/react-query";
 import useApiMutation from "./useApiMutation";
 
-// my task list
+// my folder list
 export const useFolderlist = () => {
   return useApiMutation({
     key: "folder_list",
@@ -21,7 +20,7 @@ export const useDocumentDetails = (id) => {
     method: "get",
     params: { id },
     isPrivate: true,
-    endpoint: `agent/document/list/document_folder/${id}`,
+    endpoint: `/agent/document/list/document_folder/${id}`,
     onError: (error) => {
       console.error("Document details", error);
     },

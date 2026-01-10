@@ -1,6 +1,27 @@
-/** @type {import('next').NextConfig} */
+let domain = "example.com";
+const siteUrl = process.env.NEXT_PUBLIC_BASE_URL;
+
+if (siteUrl) {
+  try {
+    domain = new URL(siteUrl).hostname;
+  } catch (error) {
+    console.warn("Invalid NEXT_PUBLIC_BASE_URL, using fallback domain.");
+  }
+} else {
+  console.warn("NEXT_PUBLIC_BASE_URL not set, using fallback domain.");
+}
+
 const nextConfig = {
-  /* config options here */
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: domain,
+        port: "",
+        pathname: "/**",
+      },
+    ],
+  },
 };
 
 export default nextConfig;

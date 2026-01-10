@@ -9,7 +9,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { CalendarRange, Plus, X } from "lucide-react";
+import { CalendarRange, SquarePen, X } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
@@ -26,13 +26,13 @@ import {
 import { Textarea } from "../ui/textarea";
 import { useForm, Controller } from "react-hook-form";
 import useApiMutation from "@/hooks/useApiMutation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLeadlist } from "@/hooks/crm.api";
 import { Spinner } from "../ui/spinner";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 
-export default function NewTransactionModal() {
+export default function EditTransaction({ datas }) {
   const [open, setopen] = useState();
   const queryClient = useQueryClient();
 
@@ -41,38 +41,53 @@ export default function NewTransactionModal() {
     control,
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({
     defaultValues: {
-      listingDate: null,
-      closeDate: null,
+      ...datas,
+      start_date: datas?.start_date ?? "",
+      close_date: datas?.close_date ?? "",
     },
   });
+
+  useEffect(() => {
+    if (datas) {
+      reset({
+        ...datas,
+      });
+    }
+  }, [datas, reset]);
 
   // lead list
   const { data } = useLeadlist();
   const leads = data?.data?.data;
 
-  // create transaction api call
-  const createTransaction = useApiMutation({
-    key: "create_transaction",
+  // update transaction api call
+  const updateTransaction = useApiMutation({
+    key: "transaction_update",
     isPrivate: true,
-    endpoint: `/agent/transaction/create`,
+    endpoint: `/agent/transaction/update/${datas?.id}`,
     onSuccess: (data) => {
       setopen(false);
-      toast.success(`Transaction created ${data?.data?.transaction_id}`);
+      toast.success(`Transaction updated ${data?.data?.transaction_id}`);
       queryClient?.invalidateQueries(["transaction_list"]);
     },
     onError: (error) => {
-      console.error("Transaction create error:", error);
+      console.error("Transaction update error:", error);
     },
   });
 
+  //   submit data
   const onSubmit = (data) => {
-    createTransaction?.mutate({
+    updateTransaction?.mutate({
       ...data,
-      start_date: data?.start_date?.toLocaleDateString("en-CA"),
-      close_date: data?.close_date?.toLocaleDateString("en-CA"),
+      start_date: data?.start_date
+        ? new Date(data.start_date).toLocaleDateString("en-CA")
+        : null,
+      close_date: data?.close_date
+        ? new Date(data.close_date).toLocaleDateString("en-CA")
+        : null,
     });
   };
 
@@ -83,9 +98,9 @@ export default function NewTransactionModal() {
     <div>
       <Dialog open={open} onOpenChange={setopen}>
         <DialogTrigger asChild>
-          <Button className="h-12 bg-secondary text-white hover:bg-secondary/90 px-5!">
-            <Plus className="size-6" /> New Transaction
-          </Button>
+          <div className="size-7 rounded-full bg-[#F4F6F8] flex items-center justify-center cursor-pointer">
+            <SquarePen className="text-gray-500 size-5" />
+          </div>
         </DialogTrigger>
         <DialogContent className="max-w-150! [&>button]:hidden p-0">
           <form
@@ -102,12 +117,8 @@ export default function NewTransactionModal() {
             </DialogClose>
             <DialogHeader className="px-8 pt-8">
               <DialogTitle className="text-3xl font-bold text-secondary font-cormorant">
-                New Transaction
+                Update Transaction
               </DialogTitle>
-              <p className="text-sm font-normal">
-                Create a new transaction record for tracking deals and
-                documents.
-              </p>
             </DialogHeader>
             {/* Transaction Info */}
             <div className="space-y-3 px-8">
@@ -129,8 +140,10 @@ export default function NewTransactionModal() {
                             }`}
                           >
                             <CalendarRange />
-                            {field.value
-                              ? field.value.toLocaleDateString("en-CA")
+                            {field?.value && !isNaN(new Date(field.value))
+                              ? new Date(field.value).toLocaleDateString(
+                                  "en-CA"
+                                )
                               : "Pick a date"}
                           </Button>
                         </PopoverTrigger>
@@ -164,8 +177,10 @@ export default function NewTransactionModal() {
                               }`}
                             >
                               <CalendarRange />
-                              {field.value
-                                ? field.value.toLocaleDateString("en-CA")
+                              {field?.value && !isNaN(new Date(field.value))
+                                ? new Date(field.value).toLocaleDateString(
+                                    "en-CA"
+                                  )
                                 : "Pick a date"}
                             </Button>
                           </PopoverTrigger>
@@ -320,7 +335,7 @@ export default function NewTransactionModal() {
             <div className="sticky bottom-0 left-0 bg-white pb-8 pt-3 px-8 flex items-center gap-3.5">
               <DialogClose asChild>
                 <Button
-                  disabled={createTransaction?.isPending}
+                  disabled={updateTransaction?.isPending}
                   onClick={() => setopen(false)}
                   variant="outline"
                   className="w-full shrink h-10"
@@ -330,10 +345,10 @@ export default function NewTransactionModal() {
               </DialogClose>
               <Button
                 type="submit"
-                disabled={createTransaction?.isPending}
+                disabled={updateTransaction?.isPending}
                 className="bg-secondary text-white hover:bg-secondary/90 w-full shrink h-10"
               >
-                {createTransaction?.isPending && <Spinner />} Save Transaction
+                {updateTransaction?.isPending && <Spinner />} Save Transaction
               </Button>
             </div>
           </form>
