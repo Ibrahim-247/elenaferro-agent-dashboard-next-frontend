@@ -1,8 +1,15 @@
+"use client";
 import { Download, FileText, SquarePen } from "lucide-react";
 import PublicFolderHeader from "./PublicFolderHeader";
 import { Button } from "../ui/button";
+import { useResourceslist } from "@/hooks/resources.api";
 
 export default function PublicFolders() {
+  // resources list
+  const { data } = useResourceslist();
+  const resources = data?.data?.data;
+  console.log(resources);
+
   return (
     <div className="space-y-5">
       <PublicFolderHeader />

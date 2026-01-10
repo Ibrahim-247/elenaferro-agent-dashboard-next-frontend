@@ -36,3 +36,16 @@ export const useLogin = () => {
     },
   });
 };
+
+// profile info
+export const useProfileInfo = () => {
+  return useApiMutation({
+    key: "me",
+    method: "get",
+    isPrivate: true,
+    endpoint: "/me",
+    onError: (error) => {
+      console.error("Error from profile info", error);
+    },
+  });
+};
