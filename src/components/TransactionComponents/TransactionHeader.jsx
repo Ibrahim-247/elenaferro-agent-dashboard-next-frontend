@@ -18,18 +18,23 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-export default function TransactionHeader() {
-  const [search, setSearch] = useState("");
-  const [status, setStatus] = useState("all");
+export default function TransactionHeader({
+  search,
+  status,
+  date,
+  setDate,
+  setSearch,
+  setStatus,
+}) {
   const [open, setOpen] = useState(false);
-  const [date, setDate] = useState(undefined);
+
   return (
     <div>
       {/* filter and search */}
       <div className="flex flex-col md:flex-row gap-5 bg-white p-6 rounded-2xl">
         <div className="relative w-full">
           <Input
-            placeholder="Search name, email or phone"
+            placeholder="Search by client name and transaction id"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="w-full h-12 pl-10"
@@ -43,9 +48,10 @@ export default function TransactionHeader() {
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All</SelectItem>
-            <SelectItem value="New">New</SelectItem>
-            <SelectItem value="Contacted">Contacted</SelectItem>
-            <SelectItem value="Converted">Converted</SelectItem>
+            <SelectItem value="active">Active</SelectItem>
+            <SelectItem value="pending">Pending</SelectItem>
+            <SelectItem value="closed">Closed</SelectItem>
+            <SelectItem value="cancelled">Cancelled</SelectItem>
           </SelectContent>
         </Select>
         <div>

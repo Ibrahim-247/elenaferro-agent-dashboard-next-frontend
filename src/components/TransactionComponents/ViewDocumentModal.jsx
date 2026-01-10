@@ -1,3 +1,4 @@
+"use client";
 import {
   Dialog,
   DialogContent,
@@ -17,9 +18,11 @@ import {
   Eye,
 } from "lucide-react";
 
-export function ViewDocumentModal({ open, onOpenChange }) {
+export function ViewDocumentModal({ data }) {
+  console.log("data from modal", data);
+
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog>
       <DialogTrigger asChild>
         <div className="size-7 rounded-full bg-[#F4F6F8] flex items-center justify-center cursor-pointer">
           <Eye className="text-gray-500 size-5" />
@@ -28,11 +31,11 @@ export function ViewDocumentModal({ open, onOpenChange }) {
       <DialogContent className="max-w-150! rounded-2xl p-6 [&>button]:hidden overflow-auto max-h-screen">
         {/* Header */}
         <DialogHeader className="relative gap-0">
-          <DialogTitle className="text-2xl font-semibold text-secondary font-cormorant">
-            #TRX- <span className="font-inter">1021</span>
+          <DialogTitle className="text-2xl font-semibold text-secondary font-inter">
+            {data?.transaction_id}
           </DialogTitle>
           <p className="text-sm text-gray-600 mt-1">
-            Jhon Smith • 123 Maple Ave, Atlanta, GA
+            {data?.client_name} • {data?.property_address}
           </p>
 
           <DialogClose className="absolute right-0 top-0 rounded-full border p-2">
@@ -47,13 +50,13 @@ export function ViewDocumentModal({ open, onOpenChange }) {
           <InfoRow
             icon={<MapPin size={16} />}
             label="Address"
-            value="123 Maple Ave, Atlanta, GA 30301"
+            value={data?.property_address}
           />
 
           <InfoRow
             icon={<DollarSign size={16} />}
             label="Listing Price"
-            value="$500,000"
+            value={`$${data?.listing_price}`}
           />
         </section>
 
@@ -61,18 +64,22 @@ export function ViewDocumentModal({ open, onOpenChange }) {
         <section className="mt-6 space-y-3">
           <h4 className="font-semibold text-gray-800">Client Information</h4>
 
-          <InfoRow icon={<User size={16} />} label="Name" value="Jhon Smith" />
+          <InfoRow
+            icon={<User size={16} />}
+            label="Name"
+            value={data?.client_name}
+          />
 
           <InfoRow
             icon={<Mail size={16} />}
             label="Email"
-            value="rifatsf102@gmail.com"
+            value={data?.client_email}
           />
 
           <InfoRow
             icon={<Phone size={16} />}
             label="Phone"
-            value="+44 56650 5546"
+            value={data?.client_phone}
           />
         </section>
 
@@ -83,13 +90,13 @@ export function ViewDocumentModal({ open, onOpenChange }) {
           <InfoRow
             icon={<Calendar size={16} />}
             label="Start Date"
-            value="3 Nov 2025"
+            value={data?.start_date}
           />
 
           <InfoRow
             icon={<Calendar size={16} />}
             label="Close Date"
-            value="Not Set"
+            value={data?.close_date}
           />
         </section>
 
@@ -97,9 +104,7 @@ export function ViewDocumentModal({ open, onOpenChange }) {
         <section className="mt-6 space-y-2">
           <h4 className="font-semibold text-gray-800">Notes</h4>
           <div className="bg-yellow-50 rounded-lg p-4 text-sm text-gray-700 font-normal">
-            First-time home buyer. Pre-approved for up to $550K. Looking for
-            3-bedroom home with backyard. Timeline flexible but prefers to close
-            before end of year.
+            {data?.internal_notes}
           </div>
         </section>
       </DialogContent>
