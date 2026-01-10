@@ -46,7 +46,6 @@ const authSlice = createSlice({
       state.user = null;
       state.token = null;
       state.remember = false;
-
       removeSessionStorage("elena_access_token");
       removeLocalStorage("elena_access_token");
     },
