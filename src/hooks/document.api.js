@@ -1,6 +1,6 @@
 import useApiMutation from "./useApiMutation";
 
-// my task list
+// my folder list
 export const useFolderlist = () => {
   return useApiMutation({
     key: "folder_list",

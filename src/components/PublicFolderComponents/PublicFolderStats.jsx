@@ -1,42 +1,39 @@
-import React from "react";
+"use client";
 import StatsCard from "../common/StatsCard";
-import {
-  CircleDollarSign,
-  File,
-  FileText,
-  FolderMinus,
-  ListChecks,
-  Users,
-} from "lucide-react";
+import { File, FileText, FolderMinus } from "lucide-react";
 import { Image } from "lucide-react";
+import { useResourceslist } from "@/hooks/resources.api";
 
 export default function PublicFolderStats() {
+  const { data } = useResourceslist();
+  const statsData = data?.data;
+
   // stats data
   const stats = [
     {
       name: "Templates",
-      value: "8",
+      value: statsData?.templates || 0,
       icon: <FileText />,
       bg: "#EFF6FF",
       color: "#3853FF",
     },
     {
       name: "Brand Assets",
-      value: "8",
+      value: statsData?.brand_assets || 0,
       icon: <Image />,
       bg: "#F0FDF4",
       color: "#2FA75F",
     },
     {
       name: "Guidelines",
-      value: "8",
+      value: statsData?.guidelines || 0,
       icon: <File />,
       bg: "#FAF5FF",
       color: "#A633FA",
     },
     {
       name: "Marketing Materials",
-      value: "8",
+      value: statsData?.marketing_materials || 0,
       icon: <FolderMinus />,
       bg: "#FFF7ED",
       color: "#F7763D",
