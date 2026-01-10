@@ -7,6 +7,7 @@ import {
 import { Trash2, SquarePen } from "lucide-react";
 import PerformanceTaskHeader from "./PerformanceTaskHeader";
 import EditTaskModal from "./EditTaskModal";
+import { useState } from "react";
 
 const data = [
   {
@@ -36,6 +37,10 @@ const data = [
 ];
 
 export default function PerformanceTaskTable() {
+  const [search, setSearch] = useState("");
+  const [type, setType] = useState("all");
+  const [status, setStatus] = useState("all");
+
   const priorityStyles = {
     High: "bg-red-100 text-red-600",
     Medium: "bg-yellow-100 text-yellow-600",
@@ -100,9 +105,9 @@ export default function PerformanceTaskTable() {
     {
       id: "action",
       header: "Action",
-      cell: () => (
+      cell: ({ row }) => (
         <div className="flex gap-3">
-          <EditTaskModal />
+          <EditTaskModal data={row?.original} />
           <Trash2 size={18} className="cursor-pointer text-red-500" />
         </div>
       ),
@@ -117,7 +122,14 @@ export default function PerformanceTaskTable() {
   });
   return (
     <div className="space-y-6">
-      <PerformanceTaskHeader />
+      <PerformanceTaskHeader
+        setSearch={setSearch}
+        setType={setType}
+        setStatus={setStatus}
+        search={search}
+        type={type}
+        status={status}
+      />
 
       {/* table */}
       <div className="w-full p-6 bg-white rounded-xl space-y-6">

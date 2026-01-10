@@ -9,21 +9,23 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Plus, Search } from "lucide-react";
-import { useState } from "react";
-import { Button } from "../ui/button";
+import { Search } from "lucide-react";
 import NewTaskModal from "./NewTaskModal";
 
-export default function PerformanceTaskHeader() {
-  const [search, setSearch] = useState("");
-  const [type, setType] = useState("all");
-  const [status, setStatus] = useState("all");
+export default function PerformanceTaskHeader({
+  setSearch,
+  search,
+  setType,
+  type,
+  status,
+  setStatus,
+}) {
   return (
     <div>
       <div className="flex flex-col md:flex-row gap-5 bg-white p-6 rounded-2xl">
         <div className="relative w-full">
           <Input
-            placeholder="Search documents..."
+            placeholder="Search by task title"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="w-full h-12 pl-10"
@@ -39,8 +41,9 @@ export default function PerformanceTaskHeader() {
             <SelectGroup>
               <SelectLabel>Priority</SelectLabel>
               <SelectItem value="all">All Priority</SelectItem>
-              <SelectItem value="Buyer">Buyer</SelectItem>
-              <SelectItem value="Seller">Seller</SelectItem>
+              <SelectItem value="low ">Low</SelectItem>
+              <SelectItem value="medium">Medium</SelectItem>
+              <SelectItem value="high">High</SelectItem>
             </SelectGroup>
           </SelectContent>
         </Select>
@@ -51,9 +54,9 @@ export default function PerformanceTaskHeader() {
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All</SelectItem>
-            <SelectItem value="New">New</SelectItem>
-            <SelectItem value="Contacted">Contacted</SelectItem>
-            <SelectItem value="Converted">Converted</SelectItem>
+            <SelectItem value="in_progress">In Progress </SelectItem>
+            <SelectItem value="blocked">Blocked</SelectItem>
+            <SelectItem value="done">Done</SelectItem>
           </SelectContent>
         </Select>
         <NewTaskModal />
