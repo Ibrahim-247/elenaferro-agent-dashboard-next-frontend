@@ -12,15 +12,3 @@ export const useLeadlist = () => {
     },
   });
 };
-
-// create lead
-export const useCreateLead = () => {
-  return useApiMutation({
-    key: "create_lead",
-    isPrivate: true,
-    endpoint: "/agent/lead/list",
-    onError: (error) => {
-      console.error("Lead list", error);
-    },
-  });
-};
