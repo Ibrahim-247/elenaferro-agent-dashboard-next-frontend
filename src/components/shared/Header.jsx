@@ -1,7 +1,12 @@
+"use client";
 import { Bell } from "lucide-react";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 
 export default function Header() {
+  const pathname = usePathname();
+  console.log(pathname);
+
   return (
     <div className="h-23 w-full flex items-center justify-between px-6">
       <h4 className="text-3xl font-semibold">Good Morning, Sarah Mitchell</h4>

@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
-import { ArrowRight, CircleAlert, Eye, EyeOff } from "lucide-react";
+import { ArrowRight, CircleAlert, Eye, EyeOff, Info } from "lucide-react";
 import Link from "next/link";
 import google from "../../../assets/google.png";
 import Image from "next/image";
@@ -38,7 +38,7 @@ export default function LoginForm() {
     login?.mutate(data);
   };
 
-  console.log(login?.error);
+  console.log(login?.data);
 
   return (
     <div className="flex flex-col items-center justify-center my-10">
@@ -47,6 +47,15 @@ export default function LoginForm() {
         <Alert className="bg-yellow-50 border-yellow-500 mb-5">
           <CircleAlert />
           <AlertTitle>{login?.error?.message}</AlertTitle>
+        </Alert>
+      )}
+      {login?.data?.data?.is_subscribed === false && (
+        <Alert className="bg-yellow-100 border-yellow-300 mb-5">
+          <Info />
+          <AlertTitle>
+            Please note that an active subscription is required to access the
+            dashboard.
+          </AlertTitle>
         </Alert>
       )}
 
