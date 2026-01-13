@@ -14,15 +14,24 @@ export const useLogin = () => {
     method: "post",
     endpoint: "/login",
     onSuccess: (data, variables) => {
-      const remember = variables?.remember || false;
-      dispatch(
-        setAuth({
-          user: data?.data?.user,
-          token: data?.data?.token?.original?.access_token,
-          remember,
-        })
-      );
-      router.push("/");
+      if (data?.data?.is_subscribed) {
+        const remember = variables?.remember || false;
+        dispatch(
+          setAuth({
+            user: data?.data?.user,
+            token: data?.data?.token?.original?.access_token,
+            remember,
+          })
+        );
+
+        router.push("/");
+      } else {
+        router.push("https://elenaferro-agent.vercel.app/pricing");
+        toast.info(
+          "You must have an active subscription to access the dashboard."
+        );
+      }
+
       console.log(data);
     },
     onError: (error) => {

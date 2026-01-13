@@ -20,15 +20,21 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { useForm, Controller, useWatch } from "react-hook-form";
 import { CircleAlert, UserRoundPlus } from "lucide-react";
+import { Spinner } from "../ui/spinner";
+import { useState } from "react";
+import useApiMutation from "@/hooks/useApiMutation";
+import { useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 
-export default function CreateLead({ open, onOpenChange }) {
+export default function CreateLead() {
+  const [open, setopen] = useState();
+  const queryClient = useQueryClient();
+
   // lead source data
   const leadSource = [
     { name: "Website", value: "website" },
     { name: "Referral", value: "referral" },
-    { name: "Open House", value: "open_house" },
-    { name: "Past Client", value: "past_client" },
-    { name: "Cold Call", value: "cold_call" },
+    { name: "Social media", value: "social_media" },
     { name: "Other", value: "other" },
   ];
 
@@ -54,9 +60,25 @@ export default function CreateLead({ open, onOpenChange }) {
   });
 
   const leadType = useWatch({ control, name: "lead_type" });
-  const hasRepairs = useWatch({ control, name: "hasRepairs" });
+  const hasRepairs = useWatch({ control, name: "repairs_needed" });
+
+  //  create lead hooks
+  const createLeadMutation = useApiMutation({
+    key: "create_lead",
+    isPrivate: true,
+    endpoint: "/agent/lead/create",
+    onSuccess: (data) => {
+      setopen(false);
+      queryClient.invalidateQueries(["lead_list"]);
+      toast.success("Lead created successfully");
+    },
+    onError: (error) => {
+      console.error("Lead create", error);
+    },
+  });
 
   const onSubmit = (data) => {
+    createLeadMutation?.mutate(data);
     console.log(data);
   };
 
@@ -71,7 +93,7 @@ export default function CreateLead({ open, onOpenChange }) {
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={setopen}>
       <DialogTrigger asChild>
         <Button className="h-12 bg-secondary text-white hover:bg-secondary/90 px-5!">
           <UserRoundPlus /> Add New Lead
@@ -130,7 +152,7 @@ export default function CreateLead({ open, onOpenChange }) {
               <h4 className="text-sm font-medium">Preferred Contact Method</h4>
               <Controller
                 control={control}
-                name="contactMethod"
+                name="contact_method"
                 rules={{ required: "Select contact method" }}
                 render={({ field }) => (
                   <Select onValueChange={field.onChange}>
@@ -140,12 +162,11 @@ export default function CreateLead({ open, onOpenChange }) {
                     <SelectContent>
                       <SelectItem value="email">Email</SelectItem>
                       <SelectItem value="phone">Phone</SelectItem>
-                      <SelectItem value="sms">SMS</SelectItem>
                     </SelectContent>
                   </Select>
                 )}
               />
-              <FieldError error={errors.contactMethod} />
+              <FieldError error={errors.contact_method} />
             </div>
           </section>
           {/*=============== lead type and source ==============*/}
@@ -177,7 +198,7 @@ export default function CreateLead({ open, onOpenChange }) {
                 <h4 className="text-sm font-normal">Lead Type</h4>
                 <Controller
                   control={control}
-                  name="leadSource"
+                  name="lead_source"
                   render={({ field }) => (
                     <Select onValueChange={field.onChange}>
                       <SelectTrigger className="w-full">
@@ -205,7 +226,7 @@ export default function CreateLead({ open, onOpenChange }) {
                 <h4 className="text-sm font-normal">Desired Location (s)</h4>
                 <Input
                   placeholder="Desired Locations"
-                  {...register("location")}
+                  {...register("desired_location")}
                 />
               </div>
 
@@ -215,7 +236,7 @@ export default function CreateLead({ open, onOpenChange }) {
                   <Input
                     type="number"
                     placeholder="Min Budget"
-                    {...register("minBudget", { min: 0 })}
+                    {...register("min_budget", { min: 0 })}
                   />
                 </div>
                 <div className="space-y-2.5">
@@ -223,7 +244,7 @@ export default function CreateLead({ open, onOpenChange }) {
                   <Input
                     type="number"
                     placeholder="Max Budget"
-                    {...register("maxBudget", { min: 0 })}
+                    {...register("max_budget", { min: 0 })}
                   />
                 </div>
               </div>
@@ -233,7 +254,7 @@ export default function CreateLead({ open, onOpenChange }) {
                   <h4 className="text-sm font-normal">Move In Timeline</h4>
                   <Controller
                     control={control}
-                    name="timeline"
+                    name="move_in_timeline"
                     className="w-full"
                     render={({ field }) => (
                       <Select onValueChange={field.onChange}>
@@ -255,7 +276,7 @@ export default function CreateLead({ open, onOpenChange }) {
                   <h4 className="text-sm font-normal">Home Type</h4>
                   <Controller
                     control={control}
-                    name="leadSource"
+                    name="home_type"
                     render={({ field }) => (
                       <Select onValueChange={field.onChange}>
                         <SelectTrigger className="w-full">
@@ -276,7 +297,7 @@ export default function CreateLead({ open, onOpenChange }) {
                 <div className="space-y-2.5">
                   <h4 className="text-sm font-normal">Bedrooms</h4>
                   <Input
-                    placeholder="Bedrooms"
+                    placeholder="bedrooms"
                     type="number"
                     {...register("bedrooms")}
                   />
@@ -294,14 +315,14 @@ export default function CreateLead({ open, onOpenChange }) {
                 <h4 className="text-sm font-normal">Must-Have Features</h4>
                 <Textarea
                   placeholder="Must-have features"
-                  {...register("features")}
+                  {...register("desired_features")}
                 />
               </div>
               <div className="space-y-2.5">
                 <h4 className="text-sm font-normal">Financing Status</h4>
                 <Controller
                   control={control}
-                  name="financing"
+                  name="financial_status"
                   render={({ field }) => (
                     <Select onValueChange={field.onChange}>
                       <SelectTrigger className="w-full">
@@ -322,7 +343,7 @@ export default function CreateLead({ open, onOpenChange }) {
                 <h4 className="text-sm font-normal">Notes/Preferences</h4>
                 <Textarea
                   placeholder="Notes / Preferences"
-                  {...register("buyerNotes")}
+                  {...register("notes")}
                 />
               </div>
             </section>
@@ -336,7 +357,7 @@ export default function CreateLead({ open, onOpenChange }) {
                 <h4 className="text-sm font-normal">Property Adress</h4>
                 <Input
                   placeholder="Property Address"
-                  {...register("propertyAddress", {
+                  {...register("property_address", {
                     required: "Property address required",
                   })}
                 />
@@ -348,7 +369,7 @@ export default function CreateLead({ open, onOpenChange }) {
                   <Input
                     type="number"
                     placeholder="Estimated Home Value"
-                    {...register("homeValue")}
+                    {...register("estimated_home_value")}
                   />
                 </div>
 
@@ -357,7 +378,7 @@ export default function CreateLead({ open, onOpenChange }) {
                   <Input
                     type="text"
                     placeholder="Reason"
-                    {...register("selling_reason")}
+                    {...register("reason_for_selling")}
                   />
                 </div>
               </div>
@@ -366,7 +387,7 @@ export default function CreateLead({ open, onOpenChange }) {
                   <h4 className="text-sm font-normal">Timeline to sell</h4>
                   <Controller
                     control={control}
-                    name="sell_timeline"
+                    name="timeline_to_sell"
                     render={({ field }) => (
                       <Select onValueChange={field.onChange}>
                         <SelectTrigger className="w-full">
@@ -384,7 +405,7 @@ export default function CreateLead({ open, onOpenChange }) {
                   <h4 className="text-sm font-normal">Occupied or vacant</h4>
                   <Controller
                     control={control}
-                    name="occupancy"
+                    name="property_occupancy"
                     render={({ field }) => (
                       <Select onValueChange={field.onChange}>
                         <SelectTrigger className="w-full">
@@ -410,10 +431,11 @@ export default function CreateLead({ open, onOpenChange }) {
 
                     <Controller
                       control={control}
-                      name="hasRepairs"
+                      name="repairs_needed"
                       defaultValue={false}
                       render={({ field }) => (
                         <Switch
+                          {...register("repairs_needed")}
                           checked={field.value}
                           onCheckedChange={field.onChange}
                           className="data-[state=checked]:bg-green-500"
@@ -427,7 +449,7 @@ export default function CreateLead({ open, onOpenChange }) {
                 {hasRepairs && (
                   <Textarea
                     placeholder="Describe repairs needed..."
-                    {...register("repairs", {
+                    {...register("repairs_description", {
                       required: "Please describe the repairs",
                     })}
                   />
@@ -438,7 +460,7 @@ export default function CreateLead({ open, onOpenChange }) {
                 <h4 className="text-sm font-normal">Marketing Preferences</h4>
                 <Input
                   placeholder="Marketing Preferences"
-                  {...register("marketing")}
+                  {...register("marketing_preferences")}
                 />
               </div>
             </section>
@@ -447,16 +469,22 @@ export default function CreateLead({ open, onOpenChange }) {
           {/* ================= ACTIONS ================= */}
           <div className="flex justify-end gap-3 sticky bottom-0 left-0 bg-white w-full pb-6 pt-2 px-7">
             <DialogClose>
-              <Button variant="outline" type="button">
+              <Button
+                onClick={() => setopen(false)}
+                disabled={createLeadMutation?.isPending}
+                variant="outline"
+                type="button"
+              >
                 Cancel
               </Button>
             </DialogClose>
 
             <Button
               type="submit"
+              disabled={createLeadMutation?.isPending}
               className="bg-secondary text-white hover:bg-secondary/90"
             >
-              Save Lead
+              Save Lead {createLeadMutation?.isPending && <Spinner />}
             </Button>
           </div>
         </form>
