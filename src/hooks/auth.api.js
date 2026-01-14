@@ -23,7 +23,6 @@ export const useLogin = () => {
             remember,
           })
         );
-
         router.push("/");
       } else {
         router.push("https://elenaferro-agent.vercel.app/pricing");

@@ -4,53 +4,47 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { Trash2, SquarePen } from "lucide-react";
+import { Inbox, Trash2 } from "lucide-react";
 import PerformanceTaskHeader from "./PerformanceTaskHeader";
 import EditTaskModal from "./EditTaskModal";
-import { useState } from "react";
-
-const data = [
-  {
-    title: "Follow up with client",
-    client: "Jerry Helfer",
-    dueDate: "12 Nov 2025",
-    priority: "High",
-    status: "In Progress",
-    assignedTo: "Self",
-  },
-  {
-    title: "Confirm client signed documents",
-    client: "Jerry Helfer",
-    dueDate: "12 Nov 2025",
-    priority: "Low",
-    status: "Blocked",
-    assignedTo: "Admin",
-  },
-  {
-    title: "Schedule meeting with client",
-    client: "Jerry Helfer",
-    dueDate: "12 Nov 2025",
-    priority: "Medium",
-    status: "Done",
-    assignedTo: "Self",
-  },
-];
+import { useMemo, useState } from "react";
+import { useTasklist } from "@/hooks/dashboard.api";
+import { Spinner } from "../ui/spinner";
+import DeleteModal from "../common/DeleteModal";
 
 export default function PerformanceTaskTable() {
   const [search, setSearch] = useState("");
   const [type, setType] = useState("all");
   const [status, setStatus] = useState("all");
 
+  // task table data
+  const { data: tasklist, isPending } = useTasklist();
+  const data = tasklist?.data?.data;
+
+  // filter logic
+  const filteredData = useMemo(() => {
+    return data?.filter((lead) => {
+      const matchSearch = lead?.title
+        ?.toLowerCase()
+        .includes(search.toLowerCase());
+
+      const matchType = type === "all" || lead?.priority === type;
+      const matchStatus = status === "all" || lead?.status === status;
+
+      return matchSearch && matchType && matchStatus;
+    });
+  }, [search, type, status, data]);
+
   const priorityStyles = {
-    High: "bg-red-100 text-red-600",
-    Medium: "bg-yellow-100 text-yellow-600",
-    Low: "bg-green-100 text-green-600",
+    high: "bg-red-100 text-red-600",
+    medium: "bg-yellow-100 text-yellow-600",
+    low: "bg-green-100 text-green-600",
   };
 
   const statusStyles = {
-    "In Progress": "bg-blue-100 text-blue-600",
-    Blocked: "bg-red-100 text-red-600",
-    Done: "bg-green-100 text-green-600",
+    in_progress: "bg-blue-100 text-blue-600",
+    blocked: "bg-red-100 text-red-600",
+    done: "bg-green-100 text-green-600",
   };
 
   /* ================= COLUMNS ================= */
@@ -69,15 +63,24 @@ export default function PerformanceTaskTable() {
       ),
     },
     {
-      accessorKey: "dueDate",
+      accessorKey: "due_date",
       header: "Due Date",
+      cell: ({ row }) => (
+        <span>
+          {new Date(row.original.due_date).toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "short",
+            day: "2-digit",
+          })}
+        </span>
+      ),
     },
     {
       accessorKey: "priority",
       header: "Priority",
       cell: ({ row }) => (
         <span
-          className={`px-3 py-1 rounded-full text-sm font-medium ${
+          className={`px-3 py-1 rounded-full text-sm capitalize font-medium ${
             priorityStyles[row.original.priority]
           }`}
         >
@@ -90,7 +93,7 @@ export default function PerformanceTaskTable() {
       header: "Status",
       cell: ({ row }) => (
         <span
-          className={`px-3 py-1 rounded-full text-sm font-medium ${
+          className={`px-3 py-1 rounded-full capitalize text-sm font-medium ${
             statusStyles[row.original.status]
           }`}
         >
@@ -106,9 +109,9 @@ export default function PerformanceTaskTable() {
       id: "action",
       header: "Action",
       cell: ({ row }) => (
-        <div className="flex gap-3">
+        <div className="flex gap-3 items-center">
           <EditTaskModal data={row?.original} />
-          <Trash2 size={18} className="cursor-pointer text-red-500" />
+          <DeleteModal id={row?.original?.id} />
         </div>
       ),
     },
@@ -116,7 +119,7 @@ export default function PerformanceTaskTable() {
 
   // transtack table
   const table = useReactTable({
-    data,
+    data: filteredData || [],
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
@@ -161,26 +164,54 @@ export default function PerformanceTaskTable() {
                 </tr>
               ))}
             </thead>
-            <tbody>
-              {table.getRowModel().rows.map((row) => (
-                <tr
-                  key={row.id}
-                  className="border-b last:border-none border-b-black/50"
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <td
-                      key={cell.id}
-                      className="px-4 py-4 border-x border-x-black/50 last:border-r-0 first:border-l-0"
-                    >
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </td>
-                  ))}
+            {isPending ? (
+              <tbody>
+                <tr>
+                  <td
+                    colSpan={table.getAllColumns().length}
+                    className="h-40 text-center text-base"
+                  >
+                    <div className="flex items-center justify-center gap-2">
+                      <Spinner /> Loading...
+                    </div>
+                  </td>
                 </tr>
-              ))}
-            </tbody>
+              </tbody>
+            ) : filteredData?.length > 0 ? (
+              <tbody>
+                {table.getRowModel().rows.map((row) => (
+                  <tr
+                    key={row.id}
+                    className="border-b last:border-none border-b-black/50"
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <td
+                        key={cell.id}
+                        className="px-4 py-4 border-x border-x-black/50 last:border-r-0 first:border-l-0"
+                      >
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            ) : (
+              <tbody>
+                <tr>
+                  <td
+                    colSpan={table.getAllColumns().length}
+                    className="h-40 text-center text-base"
+                  >
+                    <div className="flex flex-col items-center justify-center gap-2">
+                      <Inbox className="text-gray-400 size-13" /> No data found
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            )}
           </table>
         </div>
       </div>
