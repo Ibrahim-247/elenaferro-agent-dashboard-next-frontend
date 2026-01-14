@@ -27,7 +27,7 @@ export default function DashboardStats() {
       color: "#A633FA",
     },
     {
-      name: "New Leads",
+      name: "Tasks Due Today",
       value: "8",
       icon: <ListChecks />,
       bg: "#FFF7ED",

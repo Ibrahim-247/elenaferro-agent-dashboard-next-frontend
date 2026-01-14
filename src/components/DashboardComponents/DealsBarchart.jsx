@@ -7,6 +7,8 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { useTasklist } from "@/hooks/dashboard.api";
+import { Spinner } from "../ui/spinner";
+import { Inbox } from "lucide-react";
 
 export default function DealsBarchart() {
   const chartData = [
@@ -24,9 +26,16 @@ export default function DealsBarchart() {
     },
   };
 
+  const statusStyles = {
+    in_progress: "bg-blue-100 text-blue-600",
+    blocked: "bg-red-100 text-red-600",
+    done: "bg-green-100 text-green-600",
+  };
+
   // my task list
-  const { data } = useTasklist();
-  console.log(data);
+  const { data, isPending } = useTasklist();
+  const taskList = data?.data?.data;
+  console.log(taskList);
 
   return (
     <div className="grid grid-cols-12 gap-6">
@@ -88,22 +97,46 @@ export default function DealsBarchart() {
       <div className="bg-white rounded-2xl p-6 pr-0 col-span-3">
         <h4 className="text-2xl font-semibold">My Tasks</h4>
         <div className="mt-5 space-y-3 h-120 overflow-auto pr-6 custom_scroll">
-          {[...Array(8)].map((_, index) => (
-            <div
-              key={index}
-              className="flex items-center gap-9 justify-between pb-3 border-b"
-            >
-              <div className="space-y-1.5">
-                <h3 className="text-xl font-medium line-clamp-2">
-                  Call client for appraisal
-                </h3>
-                <p className="text-sm font-normal">Today</p>
-              </div>
-              <div className="py-1 px-2 rounded-full bg-red-200 text-red-500 text-xs font-normal">
-                Urgent
+          {isPending ? (
+            <div className="h-full text-center text-base flex flex-col items-center justify-center">
+              <div className="flex items-center justify-center gap-2">
+                <Spinner /> Loading...
               </div>
             </div>
-          ))}
+          ) : taskList?.length > 0 ? (
+            taskList?.map((item, index) => (
+              <div
+                key={index}
+                className="flex items-center gap-9 justify-between pb-3 border-b"
+              >
+                <div className="space-y-1.5">
+                  <h3 className="text-lg font-medium line-clamp-2">
+                    {item?.title}
+                  </h3>
+                  <p className="text-sm font-normal">
+                    {new Date(item?.due_date).toLocaleDateString("en-US", {
+                      day: "2-digit",
+                      month: "short",
+                      year: "numeric",
+                    })}
+                  </p>
+                </div>
+                <div
+                  className={`py-1 px-2 rounded-full capitalize text-xs font-normal ${
+                    statusStyles[item?.status]
+                  }`}
+                >
+                  {item?.status}
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="h-full flex flex-col justify-center text-center text-base">
+              <div className="flex flex-col items-center justify-center gap-2">
+                <Inbox className="text-gray-400 size-13" /> No data found
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
