@@ -27,9 +27,13 @@ import { useForm, Controller } from "react-hook-form";
 import useApiMutation from "@/hooks/useApiMutation";
 import { useEffect, useState } from "react";
 import { useLeadlist } from "@/hooks/crm.api";
+import { Spinner } from "../ui/spinner";
+import { toast } from "sonner";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function EditTaskModal({ data }) {
   const [open, setopen] = useState();
+  const queryClient = useQueryClient();
 
   // lead list
   const { datas } = useLeadlist();
@@ -57,6 +61,7 @@ export default function EditTaskModal({ data }) {
     enabled: !!data?.id,
     onSuccess: () => {
       toast.success("Task updated successfully");
+      queryClient.invalidateQueries(["task_list"]);
       setopen(false);
     },
     onError: (error) => {
@@ -135,7 +140,7 @@ export default function EditTaskModal({ data }) {
                             >
                               <CalendarRange />
                               {field.value
-                                ? field.value.toLocaleDateString()
+                                ? new Date(field.value).toLocaleDateString()
                                 : "Pick a date"}
                             </Button>
                           </PopoverTrigger>
@@ -283,6 +288,7 @@ export default function EditTaskModal({ data }) {
               <DialogClose asChild>
                 <Button
                   onClick={() => setopen(false)}
+                  disabled={updateTaskMutation?.isPending}
                   variant="outline"
                   className="w-full shrink h-10"
                 >
@@ -291,9 +297,10 @@ export default function EditTaskModal({ data }) {
               </DialogClose>
               <Button
                 type="submit"
+                disabled={updateTaskMutation?.isPending}
                 className="bg-secondary text-white hover:bg-secondary/90 w-full shrink h-10"
               >
-                Create Task
+                Update Task {updateTaskMutation?.isPending && <Spinner />}
               </Button>
             </div>
           </form>

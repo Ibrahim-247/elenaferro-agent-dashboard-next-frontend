@@ -29,13 +29,16 @@ import useApiMutation from "@/hooks/useApiMutation";
 import { useLeadlist } from "@/hooks/crm.api";
 import { Spinner } from "../ui/spinner";
 import { toast } from "sonner";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function NewTaskModal() {
   const [open, setopen] = useState();
+  const queryClient = useQueryClient();
 
   // lead list
   const { data } = useLeadlist();
   const leads = data?.data?.data;
+  console.log(leads);
 
   // hook form
   const {
@@ -52,6 +55,7 @@ export default function NewTaskModal() {
     endpoint: `/agent/task/create`,
     onSuccess: () => {
       toast.success("Task created successfully");
+      queryClient.invalidateQueries(["task_list"]);
       setopen(false);
     },
     onError: (error) => {
@@ -255,16 +259,16 @@ export default function NewTaskModal() {
                   render={({ field }) => (
                     <>
                       <Select
-                        onValueChange={field.onChange}
-                        value={field.value}
+                        onValueChange={(val) => field.onChange(Number(val))}
+                        value={field.value ? String(field.value) : ""}
                       >
                         <SelectTrigger className="h-10! w-full">
                           <SelectValue placeholder="Select client" />
                         </SelectTrigger>
                         <SelectContent>
-                          {leads?.map((item, index) => (
-                            <SelectItem key={index} value={item?.id}>
-                              {item?.full_name}
+                          {leads?.map((item) => (
+                            <SelectItem key={item.id} value={String(item.id)}>
+                              {item.full_name}
                             </SelectItem>
                           ))}
                         </SelectContent>
