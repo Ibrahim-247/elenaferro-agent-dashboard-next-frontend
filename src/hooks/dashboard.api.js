@@ -12,3 +12,16 @@ export const useTasklist = () => {
     },
   });
 };
+
+// dashboard stats
+export const useDashboardStats = () => {
+  return useApiMutation({
+    key: "dashboard_stats",
+    method: "get",
+    isPrivate: true,
+    endpoint: "/agent/dashboard",
+    onError: (error) => {
+      console.error("Dashboard stats data", error);
+    },
+  });
+};

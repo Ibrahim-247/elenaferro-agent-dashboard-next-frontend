@@ -11,15 +11,37 @@ import { useMemo, useState } from "react";
 import { useTasklist } from "@/hooks/dashboard.api";
 import { Spinner } from "../ui/spinner";
 import DeleteModal from "../common/DeleteModal";
+import useApiMutation from "@/hooks/useApiMutation";
+import { useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 export default function PerformanceTaskTable() {
   const [search, setSearch] = useState("");
   const [type, setType] = useState("all");
   const [status, setStatus] = useState("all");
+  const queryClient = useQueryClient();
+  const [open, setopen] = useState(false);
+  const [taskId, settaskId] = useState();
 
   // task table data
   const { data: tasklist, isPending } = useTasklist();
   const data = tasklist?.data?.data;
+
+  // task delete
+  const deleteMutation = useApiMutation({
+    key: "delete_task",
+    endpoint: `/agent/task/delete/${taskId}`,
+    isPrivate: true,
+    method: "delete",
+    onSuccess: () => {
+      setopen(false);
+      queryClient.invalidateQueries(["task_list"]);
+      toast.success("Successfully deleted");
+    },
+    onError: (error) => {
+      console.error("Delete task error:", error);
+    },
+  });
 
   // filter logic
   const filteredData = useMemo(() => {
@@ -111,7 +133,13 @@ export default function PerformanceTaskTable() {
       cell: ({ row }) => (
         <div className="flex gap-3 items-center">
           <EditTaskModal data={row?.original} />
-          <DeleteModal id={row?.original?.id} />
+          <div onClick={() => settaskId(row?.original?.id)}>
+            <DeleteModal
+              deleteMutation={deleteMutation}
+              open={open}
+              setopen={setopen}
+            />
+          </div>
         </div>
       ),
     },
@@ -157,7 +185,7 @@ export default function PerformanceTaskTable() {
                     >
                       {flexRender(
                         header.column.columnDef.header,
-                        header.getContext()
+                        header.getContext(),
                       )}
                     </th>
                   ))}
@@ -191,7 +219,7 @@ export default function PerformanceTaskTable() {
                       >
                         {flexRender(
                           cell.column.columnDef.cell,
-                          cell.getContext()
+                          cell.getContext(),
                         )}
                       </td>
                     ))}

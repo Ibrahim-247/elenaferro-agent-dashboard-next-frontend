@@ -38,8 +38,6 @@ export default function LoginForm() {
     login?.mutate(data);
   };
 
-  console.log(login?.data);
-
   return (
     <div className="flex flex-col items-center justify-center my-10">
       <h4 className="text-4xl font-semibold mb-8">Login to continue</h4>

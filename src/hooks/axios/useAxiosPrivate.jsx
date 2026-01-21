@@ -27,7 +27,7 @@ axiosPrivate.interceptors.request.use(
 
     return config;
   },
-  (error) => Promise.reject(error)
+  (error) => Promise.reject(error),
 );
 
 // REQUEST INTERCEPTOR
@@ -50,6 +50,8 @@ axiosPrivate.interceptors.response.use(
       toast.error("Session expired. Please log in again.");
       removeLocalStorage("elena_access_token");
       removeSessionStorage("elena_access_token");
+      removeSessionStorage("elena_access_user");
+      removeLocalStorage("elena_access_user");
       if (window.location.pathname !== "/auth/login") {
         window.location.href = "/auth/login";
       }
@@ -90,7 +92,7 @@ axiosPrivate.interceptors.response.use(
     // Default
     toast.error(response.data?.message || "Something went wrong.");
     return Promise.reject(error);
-  }
+  },
 );
 
 export default axiosPrivate;

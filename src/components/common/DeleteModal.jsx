@@ -10,33 +10,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import useApiMutation from "@/hooks/useApiMutation";
 import { Trash2 } from "lucide-react";
 import { Spinner } from "../ui/spinner";
-import { useState } from "react";
-import { toast } from "sonner";
-import { useQueryClient } from "@tanstack/react-query";
 
-export default function DeleteModal({ id }) {
-  const [open, setopen] = useState(false);
-  const queryClient = useQueryClient();
-
-  // logout mutation
-  const deleteMutation = useApiMutation({
-    key: "delete_task",
-    endpoint: `/agent/task/delete/${id}`,
-    isPrivate: true,
-    method: "delete",
-    onSuccess: () => {
-      setopen(false);
-      queryClient.invalidateQueries(["task_list"]);
-      toast.success("Successfully deleted");
-    },
-    onError: (error) => {
-      console.error("Delete task error:", error);
-    },
-  });
-
+export default function DeleteModal({ deleteMutation, open, setopen }) {
   return (
     <Dialog open={open} onOpenChange={setopen}>
       <DialogTrigger asChild>

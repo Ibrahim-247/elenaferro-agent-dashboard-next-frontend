@@ -17,23 +17,47 @@ import { Inbox, Search } from "lucide-react";
 import CreateLead from "./CreateLead";
 import { useLeadlist } from "@/hooks/crm.api";
 import { Spinner } from "../ui/spinner";
-import StatusUpdateModal from "./StatusUpdateModal";
+import LeadUpdateModal from "./LeadUpdateModal";
+import DeleteModal from "../common/DeleteModal";
+import { toast } from "sonner";
+import { useQueryClient } from "@tanstack/react-query";
+import useApiMutation from "@/hooks/useApiMutation";
 
 // status update select
 const statusStyle = {
   new: "bg-blue-100 text-blue-600",
   contacted: "bg-yellow-100 text-yellow-600",
   converted: "bg-green-100 text-green-600",
+  lost: "bg-red-100 text-red-600",
 };
 
 export default function LeadsTabel() {
   const [search, setSearch] = useState("");
   const [type, setType] = useState("all");
   const [status, setStatus] = useState("all");
+  const [id, setid] = useState();
+  const [open, setopen] = useState();
+  const queryClient = useQueryClient();
 
   // lead list hooks
   const { data, isPending } = useLeadlist();
   const leads = data?.data?.data || [];
+
+  // laad delete
+  const deleteMutation = useApiMutation({
+    key: "delete_lead",
+    endpoint: `/agent/lead/delete/${id}`,
+    isPrivate: true,
+    method: "delete",
+    onSuccess: () => {
+      setopen(false);
+      queryClient.invalidateQueries(["lead_list"]);
+      toast.success("Successfully deleted");
+    },
+    onError: (error) => {
+      console.error("Delete task error:", error);
+    },
+  });
 
   // filter logic
   const filteredData = useMemo(() => {
@@ -53,7 +77,7 @@ export default function LeadsTabel() {
   // TABLE COLUMNS
   const columns = [
     {
-      accessorKey: "full_name",
+      accessorKey: "name",
       header: "Name",
       cell: ({ getValue }) => getValue() || "N/A",
     },
@@ -93,7 +117,7 @@ export default function LeadsTabel() {
       header: "Status",
       cell: ({ row }) => (
         <div
-          className={`py-1 text-base w-fit px-3 rounded-full border-none ${
+          className={`py-1 text-sm capitalize w-fit px-3 rounded-full border-none ${
             statusStyle[row.original.status]
           }`}
         >
@@ -105,10 +129,16 @@ export default function LeadsTabel() {
       accessorKey: "edit",
       header: "Action",
       cell: ({ row }) => (
-        <StatusUpdateModal
-          currentStatus={row?.original?.status}
-          rowId={row?.original?.id}
-        />
+        <div className="flex items-center gap-3">
+          <LeadUpdateModal data={row?.original} />
+          <div onClick={setid(row?.original?.id)}>
+            <DeleteModal
+              deleteMutation={deleteMutation}
+              open={open}
+              setopen={setopen}
+            />
+          </div>
+        </div>
       ),
     },
   ];
@@ -174,7 +204,7 @@ export default function LeadsTabel() {
                     >
                       {flexRender(
                         header.column.columnDef.header ?? "N/A",
-                        header.getContext()
+                        header.getContext(),
                       )}
                     </th>
                   ))}
@@ -215,7 +245,7 @@ export default function LeadsTabel() {
                         >
                           {flexRender(
                             cell.column.columnDef.cell,
-                            cell.getContext()
+                            cell.getContext(),
                           )}
                         </td>
                       ))}
