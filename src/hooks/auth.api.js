@@ -21,17 +21,15 @@ export const useLogin = () => {
             user: data?.data?.user,
             token: data?.data?.token?.original?.access_token,
             remember,
-          })
+          }),
         );
         router.push("/");
       } else {
         router.push("https://elenaferro-agent.vercel.app/pricing");
         toast.info(
-          "You must have an active subscription to access the dashboard."
+          "You must have an active subscription to access the dashboard.",
         );
       }
-
-      console.log(data);
     },
     onError: (error) => {
       if (error?.code === "ERR_NETWORK") {

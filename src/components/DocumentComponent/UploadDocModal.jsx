@@ -24,6 +24,7 @@ import { CloudUpload, FileUp, X } from "lucide-react";
 import { useRef, useState } from "react";
 import { Spinner } from "../ui/spinner";
 import { toast } from "sonner";
+import { Alert, AlertTitle } from "../ui/alert";
 
 export default function UploadDocModal() {
   const inputRef = useRef(null);
@@ -143,7 +144,7 @@ export default function UploadDocModal() {
                 <input
                   ref={inputRef}
                   type="file"
-                  multiple
+                  accept="application/pdf"
                   className="hidden"
                   onChange={(e) => handleFiles(e.target.files)}
                 />
@@ -165,7 +166,12 @@ export default function UploadDocModal() {
               </div>
             )}
           </div>
-
+          <Alert className="bg-yellow-50 ">
+            <AlertTitle className="line-clamp-none! font-normal">
+              Please upload the PDF document that will be sent to the recipient
+              for electronic signature.
+            </AlertTitle>
+          </Alert>
           <DialogFooter>
             <DialogClose asChild>
               <Button

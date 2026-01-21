@@ -1,11 +1,29 @@
 "use client";
-import { FileText, Inbox, Search } from "lucide-react";
+import {
+  FileText,
+  Inbox,
+  InfoIcon,
+  Search,
+  SendHorizontal,
+} from "lucide-react";
 import { useMemo, useState } from "react";
 import { Input } from "../ui/input";
 import { useDocumentDetails } from "@/hooks/document.api";
+import { Alert, AlertTitle } from "../ui/alert";
+import { Button } from "../ui/button";
+import { useConnectDocusign, useDocusignStatus } from "@/hooks/docusign.api";
+import { Spinner } from "../ui/spinner";
+import SendSignatureModal from "./SendSignatureModal";
 
 export default function DocumentDetails({ id }) {
   const [search, setSearch] = useState("");
+
+  // connect docusign
+  const docusignConnect = useConnectDocusign();
+
+  // docusign status
+  const { data: docusignStatus } = useDocusignStatus();
+  const connected = docusignStatus?.data?.is_connected;
 
   // document details data hooks
   const { data, isPending } = useDocumentDetails(id);
@@ -35,6 +53,24 @@ export default function DocumentDetails({ id }) {
           <Search className="absolute top-1/2 -translate-y-1/2 left-4 text-gray-500" />
         </div>
       )}
+      {/* docusign connect alert */}
+      {!connected && (
+        <Alert className="bg-yellow-50 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <InfoIcon className="size-4" />
+            <AlertTitle>
+              Please connect your DocuSign account before sending documents for
+              e-signature
+            </AlertTitle>
+          </div>
+          <Button
+            disabled={docusignConnect?.isPending}
+            onClick={() => docusignConnect?.mutate()}
+          >
+            Connect {docusignConnect?.isPending && <Spinner />}
+          </Button>
+        </Alert>
+      )}
 
       <h3 className="text-xl font-semibold">Personal Documents</h3>
       <div className="space-y-3.5 mt-4 h-[calc(100vh-275px)] overflow-auto pr-4">
@@ -55,19 +91,23 @@ export default function DocumentDetails({ id }) {
           filteredData?.map((item, index) => (
             <div
               key={index}
-              className="bg-white p-4 rounded-xl flex items-center gap-4"
+              className="bg-white p-4 rounded-xl flex items-center gap-4 justify-between"
             >
-              <div className="size-14 rounded-full overflow-hidden bg-[#EAEEFF] text-[#002BFF] flex items-center justify-center">
-                <FileText />
+              <div className="flex items-center gap-4">
+                <div className="size-14 rounded-full overflow-hidden bg-[#EAEEFF] text-[#002BFF] flex items-center justify-center">
+                  <FileText />
+                </div>
+                <div>
+                  <h5 className="text-lg font-medium">
+                    {item?.document_folder_name}
+                  </h5>
+                  <p className="text-sm font-normal">
+                    {item?.last_updated_human}
+                  </p>
+                </div>
               </div>
-              <div>
-                <h5 className="text-lg font-medium">
-                  {item?.document_folder_name}
-                </h5>
-                <p className="text-sm font-normal">
-                  {item?.last_updated_human}
-                </p>
-              </div>
+
+              <SendSignatureModal documents={details} id={item?.id} />
             </div>
           ))
         ) : (
