@@ -1,34 +1,38 @@
-import React from "react";
+"use client";
+import { useDashboardStats } from "@/hooks/dashboard.api";
 import StatsCard from "../common/StatsCard";
 import { CircleDollarSign, FileText, ListChecks, Users } from "lucide-react";
 
 export default function DashboardStats() {
+  const { data } = useDashboardStats();
+  const stat = data?.data;
+
   // stats data
   const stats = [
     {
       name: "New Leads",
-      value: "8",
+      value: stat?.lead_count ?? 0,
       icon: <Users />,
       bg: "#EFF6FF",
       color: "#3853FF",
     },
     {
       name: "Active Transactions",
-      value: "8",
+      value: stat?.active_transaction_count ?? 0,
       icon: <CircleDollarSign />,
       bg: "#F0FDF4",
       color: "#2FA75F",
     },
     {
       name: "Pending Documents",
-      value: "8",
+      value: stat?.pending_document_count ?? 0,
       icon: <FileText />,
       bg: "#FAF5FF",
       color: "#A633FA",
     },
     {
       name: "Tasks Due Today",
-      value: "8",
+      value: stat?.task_due_today_count ?? 0,
       icon: <ListChecks />,
       bg: "#FFF7ED",
       color: "#F7763D",
