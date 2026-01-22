@@ -31,6 +31,8 @@ export default function PublicFolders() {
     }));
   }, [resources, search, type, data]);
 
+  console.log(filteredData);
+
   return (
     <div className="space-y-5">
       <PublicFolderHeader
@@ -58,11 +60,11 @@ export default function PublicFolders() {
           ) : filteredData?.length > 0 ? (
             filteredData?.map((item, index) => {
               return (
-                item?.items?.length > 0 && (
-                  <div key={index} className="space-y-3">
-                    <h5 className="text-xl font-semibold capitalize">
-                      {item?.category}
-                    </h5>
+                <div key={index} className="space-y-3">
+                  <h5 className="text-xl font-semibold capitalize">
+                    {item?.category}
+                  </h5>
+                  {item?.items?.length > 0 ? (
                     <div className="space-y-3.5">
                       {item?.items?.map((resource, idx) => (
                         <div
@@ -126,8 +128,15 @@ export default function PublicFolders() {
                         </div>
                       ))}
                     </div>
-                  </div>
-                )
+                  ) : (
+                    <div className="h-full text-center text-base flex items-center justify-center">
+                      <div className="flex flex-col items-center justify-center gap-2">
+                        <Inbox className="text-gray-400 size-13" /> No data
+                        found
+                      </div>
+                    </div>
+                  )}
+                </div>
               );
             })
           ) : (

@@ -90,3 +90,40 @@ export const usePasswordChange = () => {
     },
   });
 };
+
+// change password
+export const useForgotPassword = () => {
+  const router = useRouter();
+  return useApiMutation({
+    key: "send_code",
+    isPrivate: true,
+    endpoint: "/forgot-password",
+    onSuccess: (data, variables) => {
+      console.log(data);
+
+      router.push(`verify_email?email=${variables.email}`);
+      toast.success("Password reset code sent to your email");
+    },
+    onError: (error) => {
+      toast.error(error?.response?.data?.message || "Something went wrong!");
+      console.error("Error from password changed", error);
+    },
+  });
+};
+
+// verify forgot password code
+export const useVerifyForgotPasswordCode = () => {
+  const router = useRouter();
+  return useApiMutation({
+    key: "verify-otp-password",
+    isPrivate: true,
+    endpoint: "/verify-otp-password",
+    onSuccess: () => {
+      router.push("password_change");
+    },
+    onError: (error) => {
+      toast.error(error?.response?.data?.message || "Something went wrong!");
+      console.error("Error from password changed", error);
+    },
+  });
+};

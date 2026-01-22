@@ -1,12 +1,14 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Spinner } from "@/components/ui/spinner";
+import { useForgotPassword } from "@/hooks/auth.api";
 import { ArrowRight } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 
 export default function ForgotPassForm() {
-  const router = useRouter();
+  // forgot password
+  const forgotPassMutation = useForgotPassword();
 
   // hook form
   const {
@@ -16,7 +18,9 @@ export default function ForgotPassForm() {
   } = useForm();
 
   const onSubmit = (data) => {
-    router.push("verify_email");
+    console.log(data);
+
+    forgotPassMutation?.mutate(data);
   };
 
   return (
@@ -41,9 +45,15 @@ export default function ForgotPassForm() {
         {/* Submit */}
         <Button
           type="submit"
+          disabled={forgotPassMutation.isPending}
           className="w-full rounded-full bg-secondary hover:bg-secondary/90 text-base h-11 flex gap-2"
         >
-          Send OTP <ArrowRight className="size-5" />
+          Send OTP{" "}
+          {forgotPassMutation?.isPending ? (
+            <Spinner />
+          ) : (
+            <ArrowRight className="size-5" />
+          )}
         </Button>
       </form>
     </div>
