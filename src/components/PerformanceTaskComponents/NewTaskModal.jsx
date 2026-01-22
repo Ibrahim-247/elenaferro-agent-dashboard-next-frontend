@@ -38,7 +38,6 @@ export default function NewTaskModal() {
   // lead list
   const { data } = useLeadlist();
   const leads = data?.data?.data;
-  console.log(leads);
 
   // hook form
   const {
@@ -68,7 +67,6 @@ export default function NewTaskModal() {
       ...data,
       due_date: data?.due_date?.toLocaleDateString("en-CA"),
     });
-    console.log(data);
   };
 
   const FieldError = ({ error }) =>
@@ -268,7 +266,7 @@ export default function NewTaskModal() {
                         <SelectContent>
                           {leads?.map((item) => (
                             <SelectItem key={item.id} value={String(item.id)}>
-                              {item.full_name}
+                              {item.name}
                             </SelectItem>
                           ))}
                         </SelectContent>

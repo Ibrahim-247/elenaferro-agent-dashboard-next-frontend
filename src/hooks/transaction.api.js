@@ -57,7 +57,6 @@ export const useDocumentLinked = (id) => {
     onSuccess: (data) => {
       queryClient.invalidateQueries(["linked_document_list"]);
       toast.success("Documents linked successfully");
-      console.log(data);
     },
     onError: (error) => {
       console.error("Linked document", error);

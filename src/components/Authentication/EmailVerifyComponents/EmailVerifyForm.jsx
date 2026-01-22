@@ -1,15 +1,23 @@
 "use client";
-
 import { Button } from "@/components/ui/button";
 import {
   InputOTP,
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
+import { Spinner } from "@/components/ui/spinner";
+import { useVerifyForgotPasswordCode } from "@/hooks/auth.api";
 import { ArrowRight } from "lucide-react";
+import { useSearchParams } from "next/navigation";
 import { useForm, Controller } from "react-hook-form";
 
 export default function EmailVerifyForm() {
+  const query = useSearchParams();
+  const email = query.get("email");
+
+  // verify email
+  const verifyEmailMutation = useVerifyForgotPasswordCode();
+
   const {
     control,
     handleSubmit,
@@ -21,15 +29,18 @@ export default function EmailVerifyForm() {
   });
 
   const onSubmit = (data) => {
-    console.log("OTP:", data.otp);
+    verifyEmailMutation?.mutate({
+      ...data,
+      email: email,
+      action: "forgot_password",
+    });
   };
 
   return (
     <div className="flex flex-col items-center justify-center my-10 text-center">
       <h4 className="text-4xl font-semibold mb-8">Verify Code</h4>
       <div className="text-lg font-normal max-w-150 mb-6">
-        Enter the verification code we send you on:{" "}
-        <span>elenaferro******@gmail.com</span>
+        Enter the verification code we send you on: <span>{email}</span>
       </div>
 
       <form
@@ -76,9 +87,15 @@ export default function EmailVerifyForm() {
         {/* Submit */}
         <Button
           type="submit"
+          disabled={verifyEmailMutation.isPending}
           className="w-full rounded-full bg-secondary hover:bg-secondary/90 text-base h-11 flex gap-2"
         >
-          Verify <ArrowRight className="size-5" />
+          Verify
+          {verifyEmailMutation?.isPending ? (
+            <Spinner />
+          ) : (
+            <ArrowRight className="size-5" />
+          )}
         </Button>
       </form>
 

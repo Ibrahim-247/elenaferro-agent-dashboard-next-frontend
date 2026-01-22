@@ -79,7 +79,6 @@ export default function CreateLead() {
 
   const onSubmit = (data) => {
     createLeadMutation?.mutate(data);
-    console.log(data);
   };
 
   const FieldError = ({ error }) => {

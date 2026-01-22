@@ -3,6 +3,7 @@ import useApiMutation from "./useApiMutation";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { setAuth } from "@/redux/slices/authSlice";
+import { useQueryClient } from "@tanstack/react-query";
 
 // login api
 export const useLogin = () => {
@@ -52,6 +53,77 @@ export const useProfileInfo = () => {
     endpoint: "/me",
     onError: (error) => {
       console.error("Error from profile info", error);
+    },
+  });
+};
+
+// profile update
+export const useUpdateProfile = () => {
+  const quryClient = useQueryClient();
+  return useApiMutation({
+    key: "profile_update",
+    isPrivate: true,
+    endpoint: "/agent/update",
+    headers: { "Content-Type": "multipart/form-data" },
+    onSuccess: () => {
+      toast.success("Profile updated successfully");
+      quryClient.invalidateQueries(["me"]);
+    },
+    onError: (error) => {
+      console.error("Error from profile update", error);
+    },
+  });
+};
+
+// change password
+export const usePasswordChange = () => {
+  return useApiMutation({
+    key: "password_change",
+    isPrivate: true,
+    endpoint: "/password/change",
+    onSuccess: () => {
+      toast.success("Password changed successfully");
+    },
+    onError: (error) => {
+      toast.error(error?.response?.data?.message || "Something went wrong!");
+      console.error("Error from password changed", error);
+    },
+  });
+};
+
+// change password
+export const useForgotPassword = () => {
+  const router = useRouter();
+  return useApiMutation({
+    key: "send_code",
+    isPrivate: true,
+    endpoint: "/forgot-password",
+    onSuccess: (data, variables) => {
+      console.log(data);
+
+      router.push(`verify_email?email=${variables.email}`);
+      toast.success("Password reset code sent to your email");
+    },
+    onError: (error) => {
+      toast.error(error?.response?.data?.message || "Something went wrong!");
+      console.error("Error from password changed", error);
+    },
+  });
+};
+
+// verify forgot password code
+export const useVerifyForgotPasswordCode = () => {
+  const router = useRouter();
+  return useApiMutation({
+    key: "verify-otp-password",
+    isPrivate: true,
+    endpoint: "/verify-otp-password",
+    onSuccess: () => {
+      router.push("password_change");
+    },
+    onError: (error) => {
+      toast.error(error?.response?.data?.message || "Something went wrong!");
+      console.error("Error from password changed", error);
     },
   });
 };

@@ -5,16 +5,18 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
 import { Search } from "lucide-react";
 import { useState } from "react";
 
-export default function PublicFolderHeader() {
-  const [search, setSearch] = useState("");
-  const [type, setType] = useState("all");
+export default function PublicFolderHeader({
+  search,
+  type,
+  setSearch,
+  setType,
+}) {
   const [status, setStatus] = useState("all");
   return (
     <div>
@@ -31,13 +33,17 @@ export default function PublicFolderHeader() {
 
         <Select value={type} onValueChange={setType}>
           <SelectTrigger className="md:w-40 h-12!">
-            <SelectValue placeholder="Priority" />
+            <SelectValue placeholder="Category" />
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
-              <SelectItem value="all">All Priority</SelectItem>
-              <SelectItem value="Buyer">Buyer</SelectItem>
-              <SelectItem value="Seller">Seller</SelectItem>
+              <SelectItem value="all">All Category</SelectItem>
+              <SelectItem value="templates">Templates</SelectItem>
+              <SelectItem value="brand_assets">Brand Assets</SelectItem>
+              <SelectItem value="guidelines">Guidelines</SelectItem>
+              <SelectItem value="marketing_materials">
+                Marketing Materials
+              </SelectItem>
             </SelectGroup>
           </SelectContent>
         </Select>

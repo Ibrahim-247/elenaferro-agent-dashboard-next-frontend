@@ -5,8 +5,13 @@ import { useForm } from "react-hook-form";
 import { Eye, EyeOff } from "lucide-react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
+import { usePasswordChange } from "@/hooks/auth.api";
+import { Spinner } from "../ui/spinner";
 
 export default function ChangePassword() {
+  // change password hook
+  const passwordChangeMutation = usePasswordChange();
+
   const {
     register,
     handleSubmit,
@@ -17,16 +22,15 @@ export default function ChangePassword() {
 
   /* show/hide per field */
   const [show, setShow] = useState({
-    currentPassword: false,
-    newPassword: false,
-    confirmPassword: false,
+    current_password: false,
+    password: false,
+    password_confirmation: false,
   });
 
-  const newPassword = watch("newPassword");
+  const newPassword = watch("password");
 
   const onSubmit = (data) => {
-    console.log("Password Change Data:", data);
-    reset();
+    passwordChangeMutation?.mutate(data);
   };
 
   return (
@@ -43,9 +47,9 @@ export default function ChangePassword() {
 
           <div className="relative">
             <Input
-              type={show.currentPassword ? "text" : "password"}
+              type={show.current_password ? "text" : "password"}
               placeholder="Enter current password"
-              {...register("currentPassword", {
+              {...register("current_password", {
                 required: "Current password is required",
                 minLength: {
                   value: 6,
@@ -59,18 +63,18 @@ export default function ChangePassword() {
               onClick={() =>
                 setShow((s) => ({
                   ...s,
-                  currentPassword: !s.currentPassword,
+                  current_password: !s.current_password,
                 }))
               }
               className="absolute right-3 top-2.5 text-gray-400"
             >
-              {show.currentPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+              {show.current_password ? <EyeOff size={16} /> : <Eye size={16} />}
             </button>
           </div>
 
-          {errors.currentPassword && (
+          {errors.current_password && (
             <p className="text-xs text-red-500">
-              {errors.currentPassword.message}
+              {errors.current_password.message}
             </p>
           )}
         </div>
@@ -81,9 +85,9 @@ export default function ChangePassword() {
 
           <div className="relative">
             <Input
-              type={show.newPassword ? "text" : "password"}
+              type={show.password ? "text" : "password"}
               placeholder="Enter new password"
-              {...register("newPassword", {
+              {...register("password", {
                 required: "New password is required",
                 minLength: {
                   value: 8,
@@ -97,17 +101,17 @@ export default function ChangePassword() {
               onClick={() =>
                 setShow((s) => ({
                   ...s,
-                  newPassword: !s.newPassword,
+                  password: !s.password,
                 }))
               }
               className="absolute right-3 top-2.5 text-gray-400"
             >
-              {show.newPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+              {show.password ? <EyeOff size={16} /> : <Eye size={16} />}
             </button>
           </div>
 
-          {errors.newPassword && (
-            <p className="text-xs text-red-500">{errors.newPassword.message}</p>
+          {errors.password && (
+            <p className="text-xs text-red-500">{errors.password.message}</p>
           )}
         </div>
 
@@ -117,9 +121,9 @@ export default function ChangePassword() {
 
           <div className="relative">
             <Input
-              type={show.confirmPassword ? "text" : "password"}
+              type={show.password_confirmation ? "text" : "password"}
               placeholder="Confirm new password"
-              {...register("confirmPassword", {
+              {...register("password_confirmation", {
                 required: "Confirm password is required",
                 validate: (value) =>
                   value === newPassword || "Passwords do not match",
@@ -131,18 +135,22 @@ export default function ChangePassword() {
               onClick={() =>
                 setShow((s) => ({
                   ...s,
-                  confirmPassword: !s.confirmPassword,
+                  password_confirmation: !s.password_confirmation,
                 }))
               }
               className="absolute right-3 top-2.5 text-gray-400"
             >
-              {show.confirmPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+              {show.password_confirmation ? (
+                <EyeOff size={16} />
+              ) : (
+                <Eye size={16} />
+              )}
             </button>
           </div>
 
-          {errors.confirmPassword && (
+          {errors.password_confirmation && (
             <p className="text-xs text-red-500">
-              {errors.confirmPassword.message}
+              {errors.password_confirmation.message}
             </p>
           )}
         </div>
@@ -151,10 +159,11 @@ export default function ChangePassword() {
         {isDirty && (
           <div className="md:col-span-2 flex justify-end gap-3 mt-4">
             <Button
+              disabled={passwordChangeMutation?.isPending}
               type="submit"
               className="bg-secondary text-white hover:bg-secondary/90"
             >
-              Save Changes
+              Save Changes {passwordChangeMutation?.isPending && <Spinner />}
             </Button>
           </div>
         )}
