@@ -4,7 +4,7 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { Inbox, Trash2 } from "lucide-react";
+import { Inbox } from "lucide-react";
 import PerformanceTaskHeader from "./PerformanceTaskHeader";
 import EditTaskModal from "./EditTaskModal";
 import { useMemo, useState } from "react";
@@ -76,11 +76,11 @@ export default function PerformanceTaskTable() {
       header: "Task Title",
     },
     {
-      accessorKey: "client",
+      accessorKey: "name",
       header: "Client",
       cell: ({ row }) => (
         <span className="px-3 py-1 text-sm border rounded-full">
-          {row.original.client}
+          {row.original.name}
         </span>
       ),
     },
@@ -124,7 +124,7 @@ export default function PerformanceTaskTable() {
       ),
     },
     {
-      accessorKey: "assignedTo",
+      accessorKey: "assigned_by_admin",
       header: "Assigned To",
     },
     {

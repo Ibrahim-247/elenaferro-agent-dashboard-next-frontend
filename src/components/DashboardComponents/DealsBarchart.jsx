@@ -35,7 +35,6 @@ export default function DealsBarchart() {
   // my task list
   const { data, isPending } = useTasklist();
   const taskList = data?.data?.data;
-  console.log(taskList);
 
   return (
     <div className="grid grid-cols-12 gap-6">

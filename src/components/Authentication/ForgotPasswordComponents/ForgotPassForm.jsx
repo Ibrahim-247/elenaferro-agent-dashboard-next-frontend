@@ -16,7 +16,6 @@ export default function ForgotPassForm() {
   } = useForm();
 
   const onSubmit = (data) => {
-    console.log("Login Data:", data);
     router.push("verify_email");
   };
 
