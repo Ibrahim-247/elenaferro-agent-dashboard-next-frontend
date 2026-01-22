@@ -22,7 +22,6 @@ export default function TransactionTable() {
   const [status, setStatus] = useState("all");
   const [date, setDate] = useState(undefined);
   const columnHelper = createColumnHelper();
-  console.log(date);
 
   // transaction list
   const { data: transactions, isPending } = useTransactionlist();
@@ -44,8 +43,6 @@ export default function TransactionTable() {
       return matchSearch && matchStatus && matchDate;
     });
   }, [search, date, status, data]);
-
-  console.log(data);
 
   // columns
   const columns = [
@@ -145,7 +142,7 @@ export default function TransactionTable() {
                     >
                       {flexRender(
                         header.column.columnDef.header,
-                        header.getContext()
+                        header.getContext(),
                       )}
                     </th>
                   ))}
@@ -173,7 +170,7 @@ export default function TransactionTable() {
                       <td key={cell.id} className="px-4 py-3 text-sm">
                         {flexRender(
                           cell.column.columnDef.cell,
-                          cell.getContext()
+                          cell.getContext(),
                         )}
                       </td>
                     ))}

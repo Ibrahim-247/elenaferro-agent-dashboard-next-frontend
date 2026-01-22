@@ -142,7 +142,7 @@ export default function EditTransaction({ datas }) {
                             <CalendarRange />
                             {field?.value && !isNaN(new Date(field.value))
                               ? new Date(field.value).toLocaleDateString(
-                                  "en-CA"
+                                  "en-CA",
                                 )
                               : "Pick a date"}
                           </Button>
@@ -179,7 +179,7 @@ export default function EditTransaction({ datas }) {
                               <CalendarRange />
                               {field?.value && !isNaN(new Date(field.value))
                                 ? new Date(field.value).toLocaleDateString(
-                                    "en-CA"
+                                    "en-CA",
                                   )
                                 : "Pick a date"}
                             </Button>
@@ -249,7 +249,7 @@ export default function EditTransaction({ datas }) {
                         <SelectContent>
                           {leads?.map((item, index) => (
                             <SelectItem value={item?.id} key={index}>
-                              {item?.full_name}
+                              {item?.name}
                             </SelectItem>
                           ))}
                         </SelectContent>

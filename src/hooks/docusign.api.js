@@ -9,7 +9,6 @@ export const useConnectDocusign = () => {
 
     onSuccess: (data) => {
       window.location.replace(data?.data?.auth_url, "_blank");
-      console.log(data);
     },
     onError: (error) => {
       console.error("Error from docusign connect", error);

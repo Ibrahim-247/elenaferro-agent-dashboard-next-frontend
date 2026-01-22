@@ -1,9 +1,10 @@
 import EmailVerifyForm from "@/components/Authentication/EmailVerifyComponents/EmailVerifyForm";
+import { Suspense } from "react";
 
 export default function page() {
   return (
-    <div>
+    <Suspense>
       <EmailVerifyForm />
-    </div>
+    </Suspense>
   );
 }

@@ -52,7 +52,7 @@ export default function EditTaskModal({ data }) {
     reset({ ...data });
   }, [data]);
 
-  // create task mutation
+  // update task mutation
   const updateTaskMutation = useApiMutation({
     key: "update_task",
     isPrivate: true,
@@ -65,7 +65,7 @@ export default function EditTaskModal({ data }) {
       setopen(false);
     },
     onError: (error) => {
-      console.error("Create task", error);
+      console.error("update task", error);
     },
   });
 
@@ -76,7 +76,6 @@ export default function EditTaskModal({ data }) {
         ? new Date(data?.due_date).toLocaleDateString("en-CA")
         : null,
     });
-    console.log(data);
   };
 
   const FieldError = ({ error }) =>
@@ -270,8 +269,8 @@ export default function EditTaskModal({ data }) {
                         </SelectTrigger>
                         <SelectContent>
                           {leads?.map((item, index) => (
-                            <SelectItem key={index} value={item?.id}>
-                              {item?.full_name}
+                            <SelectItem key={index} value={item.id}>
+                              {item?.name}
                             </SelectItem>
                           ))}
                         </SelectContent>

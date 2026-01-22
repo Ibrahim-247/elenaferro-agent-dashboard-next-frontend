@@ -7,22 +7,32 @@ import dummy from "../../assets/avatar.png";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { useUpdateProfile } from "@/hooks/auth.api";
+import { Spinner } from "../ui/spinner";
 
 export default function ProfileInfo({ userdata }) {
-  const [avatar, setAvatar] = useState(userdata?.avatar ?? null);
+  const [avatar, setAvatar] = useState(null);
   const [avatarFile, setAvatarFile] = useState(null);
 
-  // hook form
+  // profile update hook
+  const profileUpdateMutation = useUpdateProfile();
 
+  // hook form
   const {
     register,
     handleSubmit,
     reset,
-    formState: { errors },
+    formState: { errors, isDirty },
   } = useForm();
 
   useEffect(() => {
     reset({ ...userdata });
+  }, [userdata]);
+
+  useEffect(() => {
+    if (userdata?.avatar) {
+      setAvatar(userdata.avatar);
+    }
   }, [userdata]);
 
   const handleAvatarUpload = (file) => {
@@ -36,7 +46,11 @@ export default function ProfileInfo({ userdata }) {
   };
 
   const onSubmit = (data) => {
-    console.log(data);
+    profileUpdateMutation?.mutate({
+      name: data?.name,
+      phone: data?.phone,
+      avatar: avatarFile,
+    });
   };
 
   return (
@@ -61,7 +75,7 @@ export default function ProfileInfo({ userdata }) {
                   className="flex items-center gap-2 text-sm border px-3 py-2 font-normal hover:bg-gray-50 rounded-md"
                 >
                   <Upload size={16} />
-                  Upload Photo
+                  {avatarFile ? "Replace Photo" : "Upload Photo"}
                 </div>
                 <input
                   type="file"
@@ -72,18 +86,19 @@ export default function ProfileInfo({ userdata }) {
                   }
                 />
               </label>
-
-              <button
-                type="button"
-                onClick={() => {
-                  setAvatar(null);
-                  setAvatarFile(null);
-                }}
-                className="text-sm text-red-500 flex items-center gap-1"
-              >
-                <Trash2 size={14} />
-                Remove
-              </button>
+              {avatarFile && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setAvatar(null);
+                    setAvatarFile(null);
+                  }}
+                  className="text-sm text-red-500 flex items-center gap-1"
+                >
+                  <Trash2 size={14} />
+                  Remove
+                </button>
+              )}
             </div>
           </div>
 
@@ -130,15 +145,15 @@ export default function ProfileInfo({ userdata }) {
 
             {/* Actions */}
             <div className="md:col-span-2 flex justify-end gap-3 mt-4">
-              <Button type="button" variant="outline">
-                Cancel
-              </Button>
-              <Button
-                type="submit"
-                className="bg-secondary text-white hover:bg-secondary/90"
-              >
-                Save Changes
-              </Button>
+              {(isDirty || avatarFile) && (
+                <Button
+                  disabled={profileUpdateMutation?.isPending}
+                  type="submit"
+                  className="bg-secondary text-white hover:bg-secondary/90"
+                >
+                  Save Changes {profileUpdateMutation?.isPending && <Spinner />}
+                </Button>
+              )}
             </div>
           </form>
         </div>

@@ -108,4 +108,39 @@
   .custom_scroll::-webkit-scrollbar-thumb {
     background: #dfdfdf;
   }
+
+  /* style fort docusign alert */
+
+  .sign-swal-success-icon {
+    width: 20px !important  ;
+    transform: scale(1.4) !important;
+    border-color: #c54322 !important;
+    -webkit-transform: scale(1.4) !important;
+    -moz-transform: scale(1.4) !important;
+    -ms-transform: scale(1.4) !important;
+    -o-transform: scale(1.4) !important;
+  }
+  .sign-swal-title {
+    font-family: var(--font-inter);
+    font-size: 22px !important;
+    padding-top: 0px !important;
+    font-weight: 600;
+  }
+
+  .sign-swal-text {
+    font-family: var(--font-inter);
+    font-size: 14px !important;
+    color: #4b5563;
+  }
+
+  .sign-swal-confirm-btn {
+    font-family: var(--font-inter);
+    font-size: 14px !important;
+    padding: 10px 50px !important;
+    border-radius: 5px !important;
+    -webkit-border-radius: 5px !important;
+    -moz-border-radius: 5px !important;
+    -ms-border-radius: 5px !important;
+    -o-border-radius: 5px !important;
+  }
 }

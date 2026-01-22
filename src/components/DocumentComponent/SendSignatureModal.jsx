@@ -16,13 +16,14 @@ import { Spinner } from "../ui/spinner";
 import { useState } from "react";
 import useApiMutation from "@/hooks/useApiMutation";
 import { useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
 import { Alert, AlertTitle } from "../ui/alert";
 import pdfImg from "../../assets/pdf.png";
 import Image from "next/image";
+import Swal from "sweetalert2";
 
 export default function SendSignatureModal({ documents, id }) {
   const [open, setopen] = useState();
+  const [open2, setopen2] = useState();
   const queryClient = useQueryClient();
 
   const document = documents?.filter((item) => item?.id === id);
@@ -45,9 +46,21 @@ export default function SendSignatureModal({ documents, id }) {
     isPrivate: true,
     endpoint: `/agent/document/${id}/send-for-signature`,
     onSuccess: () => {
+      Swal.fire({
+        title: "The document has been successfully sent for E-signature",
+        text: "When the recipient views and signs the document, you will be notified in email.",
+        imageUrl: "https://cdn-icons-png.flaticon.com/512/14090/14090371.png",
+        imageWidth: 68,
+        imageHeight: 68,
+        customClass: {
+          icon: "sign-swal-success-icon",
+          title: "sign-swal-title",
+          htmlContainer: "sign-swal-text",
+          confirmButton: "sign-swal-confirm-btn",
+        },
+      });
       setopen(false);
       queryClient.invalidateQueries(["document_details"]);
-      toast.success("The document has been successfully sent for E-signature");
     },
     onError: (error) => {
       console.error("Error from document send", error);

@@ -69,8 +69,6 @@ export default function LeadUpdateModal({ data }) {
     isPrivate: true,
     endpoint: `/agent/lead/edit/${data?.id}`,
     onSuccess: (data) => {
-      console.log(data);
-
       setopen(false);
       queryClient.invalidateQueries(["lead_list"]);
       toast.success("Lead updated successfully");

@@ -234,7 +234,7 @@ export default function NewTransactionModal() {
                         <SelectContent>
                           {leads?.map((item, index) => (
                             <SelectItem value={item?.id} key={index}>
-                              {item?.full_name}
+                              {item?.name}
                             </SelectItem>
                           ))}
                         </SelectContent>
