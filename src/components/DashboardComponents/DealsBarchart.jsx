@@ -40,58 +40,68 @@ export default function DealsBarchart() {
   return (
     <div className="grid grid-cols-12 gap-6">
       {/* Monthly Deal */}
-      <div className="col-span-9 p-8 bg-white rounded-2xl">
-        <h4 className="text-lg font-bold">Monthly Deals Closed</h4>
-        <p className="text-base font-normal">
-          Performance in the past 6 months
-        </p>
-        <ChartContainer config={chartConfig} className="w-full h-110 mt-10">
-          <BarChart
-            accessibilityLayer
-            data={chartData}
-            barCategoryGap={24} // space between bars
-            barGap={6} // space if multiple bars
-          >
-            {/* Gradient Definition */}
-            <defs>
-              <linearGradient id="desktopGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop
-                  offset="0%"
-                  stopColor="var(--color-desktop)"
-                  stopOpacity={1}
-                />
-                <stop
-                  offset="100%"
-                  stopColor="var(--color-desktop)"
-                  stopOpacity={0.3}
-                />
-              </linearGradient>
-            </defs>
+      <div className="col-span-9 py-8 bg-white rounded-2xl">
+        <div className="px-8">
+          <h4 className="text-lg font-bold">Monthly Deals Closed</h4>
+          <p className="text-base font-normal">
+            Performance in the past 6 months
+          </p>
+        </div>
+        <div className="pr-8">
+          <ChartContainer config={chartConfig} className="w-full h-110 mt-10">
+            <BarChart
+              accessibilityLayer
+              data={chartData}
+              barCategoryGap={24} // space between bars
+              barGap={6} // space if multiple bars
+            >
+              {/* Gradient Definition */}
+              <defs>
+                <linearGradient
+                  id="desktopGradient"
+                  x1="0"
+                  y1="0"
+                  x2="0"
+                  y2="1"
+                >
+                  <stop
+                    offset="0%"
+                    stopColor="var(--color-desktop)"
+                    stopOpacity={1}
+                  />
+                  <stop
+                    offset="100%"
+                    stopColor="var(--color-desktop)"
+                    stopOpacity={0.3}
+                  />
+                </linearGradient>
+              </defs>
 
-            <CartesianGrid vertical={false} />
+              <CartesianGrid vertical={false} />
 
-            <XAxis
-              dataKey="month"
-              tickLine={false}
-              tickMargin={10}
-              axisLine={false}
-              tickFormatter={(value) => value.slice(0, 3)}
-            />
-            <YAxis tickLine={false} axisLine={false} allowDecimals={false} />
+              <XAxis
+                dataKey="month"
+                tickLine={false}
+                tickMargin={10}
+                axisLine={false}
+                tickFormatter={(value) => value.slice(0, 3)}
+              />
+              <YAxis tickLine={false} axisLine={false} allowDecimals={false} />
 
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent hideLabel />}
-            />
+              <ChartTooltip
+                cursor={false}
+                content={<ChartTooltipContent hideLabel />}
+              />
 
-            <Bar
-              dataKey="desktop"
-              fill="url(#desktopGradient)"
-              radius={[8, 8, 0, 0]}
-              barSize={70}
-            />
-          </BarChart>
-        </ChartContainer>
+              <Bar
+                dataKey="desktop"
+                fill="url(#desktopGradient)"
+                radius={[8, 8, 0, 0]}
+                barSize={70}
+              />
+            </BarChart>
+          </ChartContainer>
+        </div>
       </div>
       {/* Tasks */}
       <div className="bg-white rounded-2xl p-6 pr-0 col-span-3">
