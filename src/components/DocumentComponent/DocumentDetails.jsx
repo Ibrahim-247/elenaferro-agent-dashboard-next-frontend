@@ -25,6 +25,8 @@ export default function DocumentDetails({ id }) {
   const { data: docusignStatus } = useDocusignStatus();
   const connected = docusignStatus?.data?.is_connected;
 
+  console.log(connected);
+
   // document details data hooks
   const { data, isPending } = useDocumentDetails(id);
   const details = data?.data;
@@ -107,7 +109,11 @@ export default function DocumentDetails({ id }) {
                 </div>
               </div>
 
-              <SendSignatureModal documents={details} id={item?.id} />
+              <SendSignatureModal
+                documents={details}
+                id={item?.id}
+                connected={connected}
+              />
             </div>
           ))
         ) : (
