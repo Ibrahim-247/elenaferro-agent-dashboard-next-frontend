@@ -9,7 +9,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Search } from "lucide-react";
-import { useState } from "react";
 
 export default function PublicFolderHeader({
   search,
@@ -17,7 +16,6 @@ export default function PublicFolderHeader({
   setSearch,
   setType,
 }) {
-  const [status, setStatus] = useState("all");
   return (
     <div>
       <div className="flex flex-col md:flex-row gap-5 bg-white p-6 rounded-2xl">
@@ -45,18 +43,6 @@ export default function PublicFolderHeader({
                 Marketing Materials
               </SelectItem>
             </SelectGroup>
-          </SelectContent>
-        </Select>
-
-        <Select value={status} onValueChange={setStatus}>
-          <SelectTrigger className="md:w-40 h-12!">
-            <SelectValue placeholder="Status" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All</SelectItem>
-            <SelectItem value="New">New</SelectItem>
-            <SelectItem value="Contacted">Contacted</SelectItem>
-            <SelectItem value="Converted">Converted</SelectItem>
           </SelectContent>
         </Select>
       </div>

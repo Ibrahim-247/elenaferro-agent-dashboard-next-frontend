@@ -44,6 +44,46 @@ export const useLogin = () => {
   });
 };
 
+// google login
+export const useGoogleLoginMutation = () => {
+  const router = useRouter();
+  const dispatch = useDispatch();
+
+  return useApiMutation({
+    key: "google_login",
+    endpoint: "/callback",
+    onSuccess: (data) => {
+      console.log(data);
+
+      // if (data?.data?.is_subscribed) {
+      //   const remember = variables?.remember || false;
+      //   dispatch(
+      //     setAuth({
+      //       user: data?.data?.user,
+      //       token: data?.data?.token?.original?.access_token,
+      //       remember,
+      //     }),
+      //   );
+      //   router.push("/");
+      // } else {
+      //   router.push("https://elenaferro-agent.vercel.app/pricing");
+      //   toast.info(
+      //     "You must have an active subscription to access the dashboard.",
+      //   );
+      // }
+    },
+    onError: (error) => {
+      if (error?.code === "ERR_NETWORK") {
+        toast.error("Please check your network connection");
+      } else {
+        toast.error(error?.response?.data?.message || "Something went wrong!");
+      }
+
+      console.error("Google Login error:", error);
+    },
+  });
+};
+
 // profile info
 export const useProfileInfo = () => {
   return useApiMutation({

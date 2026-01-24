@@ -9,11 +9,11 @@ import { useMemo, useState } from "react";
 export default function PublicFolders() {
   const [search, setSearch] = useState("");
   const [type, setType] = useState("");
-  const [status, setStatus] = useState("all");
 
   // resources list
   const { data, isPending } = useResourceslist();
   const resources = data?.data?.data;
+  console.log(resources);
 
   const filteredData = useMemo(() => {
     return resources?.map((item) => ({
@@ -62,7 +62,7 @@ export default function PublicFolders() {
               return (
                 <div key={index} className="space-y-3">
                   <h5 className="text-xl font-semibold capitalize">
-                    {item?.category}
+                    {item?.category_name}
                   </h5>
                   {item?.items?.length > 0 ? (
                     <div className="space-y-3.5">
