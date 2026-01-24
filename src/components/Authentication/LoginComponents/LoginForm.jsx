@@ -10,12 +10,27 @@ import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { loginSchema } from "@/lib/validators/loginSchema";
-import { useLogin } from "@/hooks/auth.api";
+import { useGoogleLoginMutation, useLogin } from "@/hooks/auth.api";
 import { Alert, AlertTitle } from "@/components/ui/alert";
 import { Spinner } from "@/components/ui/spinner";
+import { useGoogleLogin } from "@react-oauth/google";
 
 export default function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
+
+  const googleMutation = useGoogleLoginMutation();
+
+  // google login
+  const googleLogin = useGoogleLogin({
+    onSuccess: (tokenResponse) =>
+      (() => {
+        const googleToken = tokenResponse?.access_token;
+        const submissionGoogleToken = new FormData();
+        submissionGoogleToken.append("token", googleToken);
+        submissionGoogleToken.append("provider", "google");
+        googleMutation(submissionGoogleToken);
+      })(),
+  });
 
   //   hook form with zod validation
   const {
@@ -150,9 +165,15 @@ export default function LoginForm() {
         {/* Google Login */}
         <Button
           type="button"
+          onClick={googleLogin}
+          disabled={googleMutation?.isPending}
           className="bg-transparent hover:bg-gray-50 border rounded-full text-primary w-full h-11 text-base flex gap-2"
         >
-          <Image src={google} alt="google" className="w-5" />
+          {googleMutation?.isPending ? (
+            <Spinner />
+          ) : (
+            <Image src={google} alt="google" className="w-5" />
+          )}
           Continue with Google
         </Button>
       </form>

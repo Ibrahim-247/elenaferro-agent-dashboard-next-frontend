@@ -3,6 +3,7 @@ import "./globals.css";
 import { Toaster } from "sonner";
 import QueryProvider from "@/provider/QueryProvider";
 import ReduxProvider from "@/provider/ReduxProvider";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 const cormorant = Cormorant_Garamond({
   variable: "--font-cormorant",
@@ -25,7 +26,9 @@ export default function RootLayout({ children }) {
       <body className={`${cormorant.variable} ${inter.variable} antialiased`}>
         <Toaster />
         <QueryProvider>
-          <ReduxProvider>{children}</ReduxProvider>
+          <GoogleOAuthProvider clientId={process.env.NEXT_GOOGLE_CLIENT_ID}>
+            <ReduxProvider>{children}</ReduxProvider>
+          </GoogleOAuthProvider>
         </QueryProvider>
       </body>
     </html>

@@ -9,7 +9,6 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-
 import { useForm } from "react-hook-form";
 import { CircleAlert, SendHorizontal } from "lucide-react";
 import { Spinner } from "../ui/spinner";
@@ -21,9 +20,8 @@ import pdfImg from "../../assets/pdf.png";
 import Image from "next/image";
 import Swal from "sweetalert2";
 
-export default function SendSignatureModal({ documents, id }) {
+export default function SendSignatureModal({ documents, id, connected }) {
   const [open, setopen] = useState();
-  const [open2, setopen2] = useState();
   const queryClient = useQueryClient();
 
   const document = documents?.filter((item) => item?.id === id);
@@ -34,11 +32,7 @@ export default function SendSignatureModal({ documents, id }) {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({
-    defaultValues: {
-      lead_type: "",
-    },
-  });
+  } = useForm();
 
   //  send documents for signature
   const DocumentSend = useApiMutation({
@@ -68,7 +62,9 @@ export default function SendSignatureModal({ documents, id }) {
   });
 
   const onSubmit = (data) => {
-    DocumentSend?.mutate(data);
+    console.log(data);
+
+    // DocumentSend?.mutate(data);
   };
 
   const FieldError = ({ error }) => {
@@ -84,9 +80,11 @@ export default function SendSignatureModal({ documents, id }) {
   return (
     <Dialog open={open} onOpenChange={setopen}>
       <DialogTrigger asChild>
-        <Button>
-          Send <SendHorizontal />
-        </Button>
+        {connected && (
+          <Button>
+            Send <SendHorizontal />
+          </Button>
+        )}
       </DialogTrigger>
 
       <DialogContent className="max-w-162! w-full max-h-[90vh] overflow-y-auto p-0 custom_scroll">
