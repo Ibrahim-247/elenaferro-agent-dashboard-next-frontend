@@ -227,7 +227,7 @@ export default function LeadUpdateModal({ data }) {
                 <FieldError error={errors.lead_type} />
               </div>
               <div className="space-y-2.5">
-                <h4 className="text-sm font-normal">Lead Type</h4>
+                <h4 className="text-sm font-normal">Lead Source</h4>
                 <Controller
                   control={control}
                   name="lead_source"
