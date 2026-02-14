@@ -18,7 +18,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { Alert, AlertTitle } from "../ui/alert";
 import pdfImg from "../../assets/pdf.png";
 import Image from "next/image";
-import Swal from "sweetalert2";
+import { useRouter } from "next/navigation";
 
 export default function SendSignatureModal({ documents, id, connected }) {
   const [open, setopen] = useState();
@@ -34,27 +34,18 @@ export default function SendSignatureModal({ documents, id, connected }) {
     formState: { errors },
   } = useForm();
 
+  const router = useRouter();
+
   //  send documents for signature
   const DocumentSend = useApiMutation({
     key: "send_signature",
     isPrivate: true,
     endpoint: `/agent/document/${id}/send-for-signature`,
-    onSuccess: () => {
-      Swal.fire({
-        title: "The document has been successfully sent for E-signature",
-        text: "When the recipient views and signs the document, you will be notified in email.",
-        imageUrl: "https://cdn-icons-png.flaticon.com/512/14090/14090371.png",
-        imageWidth: 68,
-        imageHeight: 68,
-        customClass: {
-          icon: "sign-swal-success-icon",
-          title: "sign-swal-title",
-          htmlContainer: "sign-swal-text",
-          confirmButton: "sign-swal-confirm-btn",
-        },
-      });
+    onSuccess: (data) => {
+      window.open(data?.data?.prepare_url, "_blank");
       setopen(false);
       queryClient.invalidateQueries(["document_details"]);
+      router.push("/documents/success");
     },
     onError: (error) => {
       console.error("Error from document send", error);
@@ -62,9 +53,7 @@ export default function SendSignatureModal({ documents, id, connected }) {
   });
 
   const onSubmit = (data) => {
-    console.log(data);
-
-    // DocumentSend?.mutate(data);
+    DocumentSend?.mutate(data);
   };
 
   const FieldError = ({ error }) => {
