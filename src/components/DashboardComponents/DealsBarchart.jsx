@@ -12,16 +12,16 @@ import { Inbox } from "lucide-react";
 
 export default function DealsBarchart() {
   const chartData = [
-    { month: "January", desktop: 186 },
-    { month: "February", desktop: 200 },
-    { month: "March", desktop: 237 },
-    { month: "April", desktop: 73 },
-    { month: "May", desktop: 209 },
-    { month: "June", desktop: 214 },
+    { month: "January", value: 186 },
+    { month: "February", value: 200 },
+    { month: "March", value: 237 },
+    { month: "April", value: 73 },
+    { month: "May", value: 209 },
+    { month: "June", value: 214 },
   ];
   const chartConfig = {
     desktop: {
-      label: "desktop",
+      label: "value",
       color: "var(--chart-1)",
     },
   };
@@ -93,7 +93,7 @@ export default function DealsBarchart() {
               />
 
               <Bar
-                dataKey="desktop"
+                dataKey="value"
                 fill="url(#desktopGradient)"
                 radius={[8, 8, 0, 0]}
                 barSize={70}
