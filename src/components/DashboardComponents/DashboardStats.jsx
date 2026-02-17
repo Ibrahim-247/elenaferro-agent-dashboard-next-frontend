@@ -1,12 +1,8 @@
 "use client";
-import { useDashboardStats } from "@/hooks/dashboard.api";
 import StatsCard from "../common/StatsCard";
 import { CircleDollarSign, FileText, ListChecks, Users } from "lucide-react";
 
-export default function DashboardStats() {
-  const { data } = useDashboardStats();
-  const stat = data?.data;
-
+export default function DashboardStats({ stat }) {
   // stats data
   const stats = [
     {

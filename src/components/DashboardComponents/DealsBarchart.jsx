@@ -10,18 +10,15 @@ import { useTasklist } from "@/hooks/dashboard.api";
 import { Spinner } from "../ui/spinner";
 import { Inbox } from "lucide-react";
 
-export default function DealsBarchart() {
-  const chartData = [
-    { month: "January", value: 186 },
-    { month: "February", value: 200 },
-    { month: "March", value: 237 },
-    { month: "April", value: 73 },
-    { month: "May", value: 209 },
-    { month: "June", value: 214 },
-  ];
+export default function DealsBarchart({ analytics }) {
+  const chartData = analytics?.map((item) => ({
+    month: item.month,
+    Transaction: item.close_transaction || 0,
+  }));
+
   const chartConfig = {
     desktop: {
-      label: "value",
+      label: "Transaction",
       color: "var(--chart-1)",
     },
   };
@@ -41,9 +38,9 @@ export default function DealsBarchart() {
       {/* Monthly Deal */}
       <div className="col-span-9 py-8 bg-white rounded-2xl">
         <div className="px-8">
-          <h4 className="text-lg font-bold">Monthly Deals Closed</h4>
+          <h4 className="text-lg font-bold">Monthly Transaction Closed</h4>
           <p className="text-base font-normal">
-            Performance in the past 6 months
+            Performance in the past 12 months
           </p>
         </div>
         <div className="pr-8">
@@ -93,7 +90,7 @@ export default function DealsBarchart() {
               />
 
               <Bar
-                dataKey="value"
+                dataKey="Transaction"
                 fill="url(#desktopGradient)"
                 radius={[8, 8, 0, 0]}
                 barSize={70}

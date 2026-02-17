@@ -125,13 +125,13 @@ export default function Header() {
         </DropdownMenu>
         <div className="flex items-center gap-2">
           <div className="bg-gray-200 rounded-full overflow-hidden size-12">
-            <Image
-              src={user?.avatar ?? avatar}
+            {/* <Image
+              src={user?.avatar || avatar}
               alt={user?.name ?? "name"}
               width={48}
               height={48}
               className="w-full h-full object-cover"
-            />
+            /> */}
           </div>
           <div>
             <h5 className="text-lg font-medium">{user?.name}</h5>
