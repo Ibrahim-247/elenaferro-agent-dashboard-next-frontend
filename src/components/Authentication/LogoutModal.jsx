@@ -43,7 +43,7 @@ export default function LogoutModal() {
   return (
     <Dialog open={open} onOpenChange={setopen}>
       <DialogTrigger asChild>
-        <div className="px-11">
+        <div>
           <Button
             className={`rounded-md shrink w-full bg-transparent text-black border hover:bg-gray-50`}
           >

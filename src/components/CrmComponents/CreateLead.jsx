@@ -100,7 +100,7 @@ export default function CreateLead() {
       </DialogTrigger>
 
       <DialogContent className="max-w-162! w-full max-h-[90vh] overflow-y-auto p-0 custom_scroll">
-        <DialogHeader className="px-7 pt-6">
+        <DialogHeader className="px-3 lg:px-7 pt-6 text-start">
           <DialogTitle className="text-3xl font-bold text-secondary font-cormorant">
             Add New Lead
           </DialogTitle>
@@ -111,7 +111,7 @@ export default function CreateLead() {
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
           {/* ================= BASIC INFO ================= */}
-          <section className="space-y-4 bg-white shadow p-3 rounded-lg mx-7">
+          <section className="space-y-4 bg-white shadow p-3 rounded-lg mx-2 lg:mx-7">
             <h4 className="font-medium text-lg">Basic Information</h4>
             <div className="space-y-2.5">
               <h4 className="text-sm font-normal">Full Name</h4>
@@ -122,7 +122,7 @@ export default function CreateLead() {
               <FieldError error={errors.name} />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid md:grid-cols-2 gap-4">
               <div className="space-y-2.5">
                 <h4 className="text-sm font-medium">Email Address*</h4>
                 <Input
@@ -169,9 +169,9 @@ export default function CreateLead() {
             </div>
           </section>
           {/*=============== lead type and source ==============*/}
-          <section className="bg-white p-3 rounded-lg shadow space-y-4 mx-7">
+          <section className="bg-white p-3 rounded-lg shadow space-y-4 mx-2 lg:mx-7">
             <h5 className="text-lg font-medium">Lead Type</h5>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid md:grid-cols-2 gap-4">
               <div className="space-y-2.5">
                 <h4 className="text-sm font-normal">Lead Type</h4>
                 <Controller
@@ -219,7 +219,7 @@ export default function CreateLead() {
 
           {/* ================= BUYER DETAILS ================= */}
           {leadType === "buyer" && (
-            <section className="rounded-lg p-3 space-y-4 shadow mx-7">
+            <section className="rounded-lg p-3 space-y-4 shadow mx-2 lg:mx-7">
               <h4 className="font-medium text-lg">Buyer Details</h4>
               <div className="space-y-2.5">
                 <h4 className="text-sm font-normal">Desired Location (s)</h4>
@@ -229,7 +229,7 @@ export default function CreateLead() {
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid md:grid-cols-2 gap-4">
                 <div className="space-y-2.5">
                   <h4 className="text-sm font-normal">$ Min Budget</h4>
                   <Input
@@ -248,7 +248,7 @@ export default function CreateLead() {
                 </div>
               </div>
               {/* timeline & home type */}
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid md:grid-cols-2 gap-4">
                 <div className="space-y-2.5">
                   <h4 className="text-sm font-normal">Move In Timeline</h4>
                   <Controller
@@ -292,7 +292,7 @@ export default function CreateLead() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid md:grid-cols-2 gap-4">
                 <div className="space-y-2.5">
                   <h4 className="text-sm font-normal">Bedrooms</h4>
                   <Input
@@ -350,7 +350,7 @@ export default function CreateLead() {
 
           {/* ================= SELLER DETAILS ================= */}
           {leadType === "seller" && (
-            <section className="rounded-lg shadow p-3 space-y-4 mx-7">
+            <section className="rounded-lg shadow p-3 space-y-4 mx-2 lg:mx-7">
               <h4 className="font-medium text-lg">Seller Details</h4>
               <div className="space-y-2.5">
                 <h4 className="text-sm font-normal">Property Adress</h4>
@@ -362,7 +362,7 @@ export default function CreateLead() {
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid md:grid-cols-2 gap-4">
                 <div className="space-y-2.5">
                   <h4 className="text-sm font-normal">Estimated Home Value</h4>
                   <Input
@@ -381,7 +381,7 @@ export default function CreateLead() {
                   />
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid md:grid-cols-2 gap-4">
                 <div className="space-y-2.5">
                   <h4 className="text-sm font-normal">Timeline to sell</h4>
                   <Controller
