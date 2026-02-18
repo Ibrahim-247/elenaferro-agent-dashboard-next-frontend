@@ -131,7 +131,7 @@ export default function LeadsTabel() {
       cell: ({ row }) => (
         <div className="flex items-center gap-3">
           <LeadUpdateModal data={row?.original} />
-          <div onClick={setid(row?.original?.id)}>
+          <div onClick={() => setid(row?.original?.id)}>
             <DeleteModal
               deleteMutation={deleteMutation}
               open={open}
