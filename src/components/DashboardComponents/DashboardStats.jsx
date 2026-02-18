@@ -35,7 +35,7 @@ export default function DashboardStats({ stat }) {
     },
   ];
   return (
-    <div className="grid grid-cols-4 gap-5">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-5">
       {stats?.map((item, index) => (
         <StatsCard item={item} key={index} />
       ))}

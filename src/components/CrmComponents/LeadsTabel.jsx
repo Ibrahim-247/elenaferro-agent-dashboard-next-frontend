@@ -164,7 +164,7 @@ export default function LeadsTabel() {
         </div>
 
         <Select value={type} onValueChange={setType}>
-          <SelectTrigger className="md:w-40 h-12!">
+          <SelectTrigger className="md:w-40 w-full h-12!">
             <SelectValue placeholder="Type" />
           </SelectTrigger>
           <SelectContent>
@@ -175,7 +175,7 @@ export default function LeadsTabel() {
         </Select>
 
         <Select value={status} onValueChange={setStatus}>
-          <SelectTrigger className="md:w-40 h-12!">
+          <SelectTrigger className="md:w-40 w-full h-12!">
             <SelectValue placeholder="Status" />
           </SelectTrigger>
           <SelectContent>
@@ -190,7 +190,7 @@ export default function LeadsTabel() {
         <CreateLead />
       </div>
       {/* leads table */}
-      <div className="bg-white p-6 rounded-2xl space-y-6">
+      <div className="bg-white p-4 md:p-6 rounded-2xl space-y-6">
         <h5 className="text-xl font-semibold text-[#0C58FF] mb-6">Leads</h5>
         <div className="relative w-full overflow-x-auto rounded-lg border border-primary/50">
           <table className="min-w-225 w-full">

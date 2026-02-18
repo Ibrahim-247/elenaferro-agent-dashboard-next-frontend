@@ -156,14 +156,14 @@ export default function LoginForm() {
         </div>
 
         {/* Divider */}
-        <div className="flex items-center gap-4">
+        {/* <div className="flex items-center gap-4">
           <div className="bg-[#C1C4CC] h-px flex-1" />
           <span className="text-base font-semibold">Or</span>
           <div className="bg-[#C1C4CC] h-px flex-1" />
-        </div>
+        </div> */}
 
         {/* Google Login */}
-        <Button
+        {/* <Button
           type="button"
           onClick={googleLogin}
           disabled={googleMutation?.isPending}
@@ -175,7 +175,7 @@ export default function LoginForm() {
             <Image src={google} alt="google" className="w-5" />
           )}
           Continue with Google
-        </Button>
+        </Button> */}
       </form>
     </div>
   );
