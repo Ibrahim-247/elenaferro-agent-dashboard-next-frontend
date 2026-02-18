@@ -67,10 +67,10 @@ export default function UploadDocModal() {
   });
 
   return (
-    <div>
+    <div className="w-full">
       <Dialog open={open} onOpenChange={setopen}>
         <DialogTrigger asChild>
-          <Button className="h-12 bg-secondary text-white hover:bg-secondary/90 px-5!">
+          <Button className="h-12 bg-secondary w-full md:w-auto text-white hover:bg-secondary/90 px-5!">
             <FileUp className="size-5" /> Upload Documents
           </Button>
         </DialogTrigger>

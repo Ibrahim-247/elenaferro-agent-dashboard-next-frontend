@@ -28,16 +28,16 @@ export default function DocumentList() {
   return (
     <div className="space-y-12">
       <DocumentHeader setSearch={setSearch} search={search} />
-      <div className="flex items-center justify-between">
-        <h3 className="text-3xl font-semibold">All Documents</h3>{" "}
+      <div className="flex items-center flex-wrap justify-between gap-y-3">
+        <h3 className="text-2xl lg:text-3xl font-semibold">All Documents</h3>{" "}
         {folder?.length && (
-          <div className="flex items-center gap-5">
+          <div className="flex items-center gap-5 flex-col md:flex-row">
             <CreateFolderModal />
             <UploadDocModal />
           </div>
         )}
       </div>
-      <div className="grid grid-cols-4 gap-8">
+      <div className="grid lg:grid-cols-4 gap-8">
         {isPending ? (
           [...Array(4)]?.map((_, index) => (
             <div key={index} className="w-full relative animate-pulse">

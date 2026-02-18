@@ -7,14 +7,14 @@ export default function FolderCard({ item }) {
   return (
     <Link href={`/documents/${item?.id}`} className="w-full relative">
       <div className="absolute top-12 left-10">
-        <FolderSvg className="" />
+        <FolderSvg className="lg:w-15 w-11" />
       </div>
       <Image
         src={folderBg}
         alt="folder"
         className="w-full h-full object-contain"
       />
-      <div className="space-y-2 absolute bottom-10 left-10">
+      <div className="space-y-2 absolute bottom-12 lg:bottom-10 left-10">
         <h4 className="text-xl font-semibold">{item?.name}</h4>
         <p className="text-[#1D1235]/50 text-lg font-normal">
           {item?.total_documents ?? 0} files,{" "}
