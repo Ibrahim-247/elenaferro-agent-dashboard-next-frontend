@@ -52,13 +52,16 @@ axiosPrivate.interceptors.response.use(
       removeSessionStorage("elena_access_token");
       removeSessionStorage("elena_access_user");
       removeLocalStorage("elena_access_user");
-      if (window.location.pathname !== "/auth/login") {
-        window.location.href = "/auth/login";
+
+      // ADD THIS CHECK HERE
+      if (typeof window !== "undefined") {
+        if (window.location.pathname !== "/auth/login") {
+          window.location.href = "/auth/login";
+        }
       }
 
       return Promise.reject(error);
     }
-
     // 403 Forbidden
     if (status === 403) {
       toast.error("You don’t have permission to access this resource.");
