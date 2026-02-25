@@ -52,7 +52,7 @@ export default function LoginForm() {
 
   return (
     <div className="flex flex-col items-center justify-center my-10">
-      <h4 className="text-4xl font-semibold mb-8">Login to continue ookk</h4>
+      <h4 className="text-4xl font-semibold mb-8">Login to continue</h4>
       {login?.error && (
         <Alert className="bg-yellow-50 border-yellow-500 mb-5">
           <CircleAlert />
