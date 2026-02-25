@@ -4,33 +4,30 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { ArrowRight, CircleAlert, Eye, EyeOff, Info } from "lucide-react";
 import Link from "next/link";
-import google from "../../../assets/google.png";
-import Image from "next/image";
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { loginSchema } from "@/lib/validators/loginSchema";
-import { useGoogleLoginMutation, useLogin } from "@/hooks/auth.api";
+import { useLogin } from "@/hooks/auth.api";
 import { Alert, AlertTitle } from "@/components/ui/alert";
 import { Spinner } from "@/components/ui/spinner";
-import { useGoogleLogin } from "@react-oauth/google";
 
 export default function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
 
-  const googleMutation = useGoogleLoginMutation();
+  // const googleMutation = useGoogleLoginMutation();
 
   // google login
-  const googleLogin = useGoogleLogin({
-    onSuccess: (tokenResponse) =>
-      (() => {
-        const googleToken = tokenResponse?.access_token;
-        const submissionGoogleToken = new FormData();
-        submissionGoogleToken.append("token", googleToken);
-        submissionGoogleToken.append("provider", "google");
-        googleMutation(submissionGoogleToken);
-      })(),
-  });
+  // const googleLogin = useGoogleLogin({
+  //   onSuccess: (tokenResponse) =>
+  //     (() => {
+  //       const googleToken = tokenResponse?.access_token;
+  //       const submissionGoogleToken = new FormData();
+  //       submissionGoogleToken.append("token", googleToken);
+  //       submissionGoogleToken.append("provider", "google");
+  //       googleMutation(submissionGoogleToken);
+  //     })(),
+  // });
 
   //   hook form with zod validation
   const {
@@ -148,34 +145,12 @@ export default function LoginForm() {
         <div className="text-lg text-center space-x-2">
           <span>Don't have an account?</span>
           <Link
-            href="https://elenaferro-agent.vercel.app/register"
+            href="https://join.medlockrealty.com/register"
             className="text-secondary underline"
           >
             Create Account
           </Link>
         </div>
-
-        {/* Divider */}
-        {/* <div className="flex items-center gap-4">
-          <div className="bg-[#C1C4CC] h-px flex-1" />
-          <span className="text-base font-semibold">Or</span>
-          <div className="bg-[#C1C4CC] h-px flex-1" />
-        </div> */}
-
-        {/* Google Login */}
-        {/* <Button
-          type="button"
-          onClick={googleLogin}
-          disabled={googleMutation?.isPending}
-          className="bg-transparent hover:bg-gray-50 border rounded-full text-primary w-full h-11 text-base flex gap-2"
-        >
-          {googleMutation?.isPending ? (
-            <Spinner />
-          ) : (
-            <Image src={google} alt="google" className="w-5" />
-          )}
-          Continue with Google
-        </Button> */}
       </form>
     </div>
   );

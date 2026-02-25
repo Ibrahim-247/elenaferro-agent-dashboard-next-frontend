@@ -1,5 +1,8 @@
+const isBrowser = () => typeof window !== "undefined";
+
 // Set item in localStorage
 export const setLocalStorage = (key, value) => {
+  if (!isBrowser()) return;
   try {
     const stringValue =
       typeof value === "object" && value !== null
@@ -13,6 +16,7 @@ export const setLocalStorage = (key, value) => {
 
 // Get item from localStorage
 export const getLocalStorage = (key) => {
+  if (!isBrowser()) return;
   try {
     const storedValue = localStorage.getItem(key);
     if (storedValue === null) return null;
@@ -30,6 +34,7 @@ export const getLocalStorage = (key) => {
 
 // Remove item from localStorage
 export const removeLocalStorage = (key) => {
+  if (!isBrowser()) return;
   try {
     localStorage.removeItem(key);
   } catch (error) {
@@ -39,6 +44,7 @@ export const removeLocalStorage = (key) => {
 
 // Clear all localStorage
 export const clearLocalStorage = () => {
+  if (!isBrowser()) return;
   try {
     localStorage.clear();
   } catch (error) {
