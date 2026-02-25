@@ -14,7 +14,6 @@ import {
 } from "lucide-react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { Button } from "../ui/button";
 import LogoutModal from "../Authentication/LogoutModal";
 export default function Sidebar({ mobile, onClose }) {
   const pathname = usePathname();
