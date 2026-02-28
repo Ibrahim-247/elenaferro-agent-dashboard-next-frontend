@@ -53,8 +53,6 @@ export const useGoogleLoginMutation = () => {
     key: "google_login",
     endpoint: "/callback",
     onSuccess: (data) => {
-      console.log(data);
-
       // if (data?.data?.is_subscribed) {
       //   const remember = variables?.remember || false;
       //   dispatch(
@@ -139,8 +137,6 @@ export const useForgotPassword = () => {
     isPrivate: true,
     endpoint: "/forgot-password",
     onSuccess: (data, variables) => {
-      console.log(data);
-
       router.push(`verify_email?email=${variables.email}`);
       toast.success("Password reset code sent to your email");
     },
