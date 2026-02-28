@@ -13,7 +13,6 @@ export default function PublicFolders() {
   // resources list
   const { data, isPending } = useResourceslist();
   const resources = data?.data?.data;
-  console.log(resources);
 
   const filteredData = useMemo(() => {
     return resources?.map((item) => ({
@@ -30,8 +29,6 @@ export default function PublicFolders() {
       }),
     }));
   }, [resources, search, type, data]);
-
-  console.log(filteredData);
 
   return (
     <div className="space-y-5">

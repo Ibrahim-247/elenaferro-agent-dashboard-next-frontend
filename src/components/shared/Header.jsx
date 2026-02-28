@@ -4,14 +4,16 @@ import {
   useAllNotificationRead,
   useNotificationlist,
 } from "@/hooks/notification.api";
-import { Bell, FileText, Inbox, Menu } from "lucide-react";
+import { Bell, FileText, Menu } from "lucide-react";
 import { useEffect, useState } from "react";
+import dummy from "../../assets/avatar.png";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { Spinner } from "../ui/spinner";
+import Image from "next/image";
 
 export default function Header({ onMenuClick }) {
   const [greeting, setGreeting] = useState("");
@@ -140,6 +142,13 @@ export default function Header({ onMenuClick }) {
         <div className="flex items-center gap-2 lg:gap-3 pl-2 border-l">
           <div className="bg-gray-100 rounded-full overflow-hidden size-10 lg:size-12 border border-gray-200 shrink-0">
             {/* Image placeholder or actual image */}
+            <Image
+              src={user?.avatar || dummy}
+              alt="avatar"
+              width={80}
+              height={80}
+              className="rounded-full object-cover border"
+            />
           </div>
           <div className="hidden md:block">
             <h5 className="text-base lg:text-lg font-medium leading-none">

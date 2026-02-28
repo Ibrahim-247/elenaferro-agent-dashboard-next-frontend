@@ -61,7 +61,7 @@ export default function ProfileInfo({ userdata }) {
           {/* Avatar */}
           <div className="flex items-center gap-4">
             <Image
-              src={avatar ?? dummy}
+              src={avatar || dummy}
               alt="avatar"
               width={80}
               height={80}

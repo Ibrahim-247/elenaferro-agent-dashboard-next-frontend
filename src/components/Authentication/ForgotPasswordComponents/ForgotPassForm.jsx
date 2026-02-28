@@ -18,8 +18,6 @@ export default function ForgotPassForm() {
   } = useForm();
 
   const onSubmit = (data) => {
-    console.log(data);
-
     forgotPassMutation?.mutate(data);
   };
 
