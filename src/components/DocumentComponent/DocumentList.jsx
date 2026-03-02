@@ -30,12 +30,10 @@ export default function DocumentList() {
       <DocumentHeader setSearch={setSearch} search={search} />
       <div className="flex items-center flex-wrap justify-between gap-y-3">
         <h3 className="text-2xl lg:text-3xl font-semibold">All Documents</h3>{" "}
-        {folder?.length && (
-          <div className="flex items-center gap-5 flex-col md:flex-row">
-            <CreateFolderModal />
-            <UploadDocModal />
-          </div>
-        )}
+        <div className="flex items-center gap-5 flex-col md:flex-row">
+          <CreateFolderModal />
+          <UploadDocModal />
+        </div>
       </div>
       <div className="grid lg:grid-cols-4 gap-8">
         {isPending ? (
