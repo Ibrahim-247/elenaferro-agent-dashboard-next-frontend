@@ -28,7 +28,7 @@ export default function TrainingPortals() {
         <TrainingPortalHeader setSearch={setSearch} search={search} />
       )}
 
-      <div className="grid grid-cols-5 gap-7">
+      <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 xl:gap-7">
         {isPending ? (
           [...Array(5)]?.map((_, index) => (
             <div

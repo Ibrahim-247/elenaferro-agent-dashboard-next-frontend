@@ -54,7 +54,7 @@ export default function LogoutModal() {
           </Button>
         </div>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-106">
+      <DialogContent className="sm:max-w-106 z-555">
         <DialogHeader>
           <DialogTitle>Confirm logout</DialogTitle>
           <DialogDescription>

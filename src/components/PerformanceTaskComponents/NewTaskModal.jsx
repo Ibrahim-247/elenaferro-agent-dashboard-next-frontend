@@ -31,6 +31,9 @@ import { Spinner } from "../ui/spinner";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 
+const FieldError = ({ error }) =>
+  error ? <p className="text-xs text-red-500">{error.message}!</p> : null;
+
 export default function NewTaskModal() {
   const [open, setopen] = useState();
   const queryClient = useQueryClient();
@@ -69,14 +72,12 @@ export default function NewTaskModal() {
     });
   };
 
-  const FieldError = ({ error }) =>
-    error ? <p className="text-xs text-red-500">{error.message}!</p> : null;
 
   return (
     <div>
       <Dialog open={open} onOpenChange={setopen}>
         <DialogTrigger asChild>
-          <Button className="h-12 bg-secondary text-white hover:bg-secondary/90 px-5!">
+          <Button className="md:h-12 bg-secondary text-white hover:bg-secondary/90 w-full md:w-auto md:px-5!">
             <Plus className="size-5" /> Add Task
           </Button>
         </DialogTrigger>

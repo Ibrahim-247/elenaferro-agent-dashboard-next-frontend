@@ -4,9 +4,9 @@ import { useRef } from "react";
 import { makeStore } from "@/redux/store";
 
 export default function ReduxProvider({ children }) {
-  const storeRef = useRef();
+  const storeRef = useRef(null);
 
-  if (!storeRef.current) {
+  if (storeRef.current == null) {
     storeRef.current = makeStore();
   }
 

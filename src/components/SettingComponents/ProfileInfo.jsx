@@ -11,7 +11,8 @@ import { useUpdateProfile } from "@/hooks/auth.api";
 import { Spinner } from "../ui/spinner";
 
 export default function ProfileInfo({ userdata }) {
-  const [avatar, setAvatar] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState(null);
+  const [isRemoved, setIsRemoved] = useState(false);
   const [avatarFile, setAvatarFile] = useState(null);
 
   // profile update hook
@@ -27,13 +28,7 @@ export default function ProfileInfo({ userdata }) {
 
   useEffect(() => {
     reset({ ...userdata });
-  }, [userdata]);
-
-  useEffect(() => {
-    if (userdata?.avatar) {
-      setAvatar(userdata.avatar);
-    }
-  }, [userdata]);
+  }, [userdata, reset]);
 
   const handleAvatarUpload = (file) => {
     if (!file) return;
@@ -42,8 +37,11 @@ export default function ProfileInfo({ userdata }) {
       return;
     }
     setAvatarFile(file);
-    setAvatar(URL.createObjectURL(file));
+    setPreviewUrl(URL.createObjectURL(file));
+    setIsRemoved(false);
   };
+
+  const displayAvatar = previewUrl ? previewUrl : (isRemoved ? null : userdata?.avatar);
 
   const onSubmit = (data) => {
     profileUpdateMutation?.mutate({
@@ -61,7 +59,7 @@ export default function ProfileInfo({ userdata }) {
           {/* Avatar */}
           <div className="flex items-center gap-4">
             <Image
-              src={avatar || dummy}
+              src={displayAvatar || dummy}
               alt="avatar"
               width={80}
               height={80}
@@ -90,8 +88,9 @@ export default function ProfileInfo({ userdata }) {
                 <button
                   type="button"
                   onClick={() => {
-                    setAvatar(null);
+                    setPreviewUrl(null);
                     setAvatarFile(null);
+                    setIsRemoved(true);
                   }}
                   className="text-sm text-red-500 flex items-center gap-1"
                 >

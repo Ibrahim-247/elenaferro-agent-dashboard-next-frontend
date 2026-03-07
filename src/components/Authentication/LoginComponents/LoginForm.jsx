@@ -15,20 +15,6 @@ import { Spinner } from "@/components/ui/spinner";
 export default function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
 
-  // const googleMutation = useGoogleLoginMutation();
-
-  // google login
-  // const googleLogin = useGoogleLogin({
-  //   onSuccess: (tokenResponse) =>
-  //     (() => {
-  //       const googleToken = tokenResponse?.access_token;
-  //       const submissionGoogleToken = new FormData();
-  //       submissionGoogleToken.append("token", googleToken);
-  //       submissionGoogleToken.append("provider", "google");
-  //       googleMutation(submissionGoogleToken);
-  //     })(),
-  // });
-
   //   hook form with zod validation
   const {
     register,
@@ -51,8 +37,10 @@ export default function LoginForm() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center my-10">
-      <h4 className="text-4xl font-semibold mb-8">Login to continue</h4>
+    <div className="flex flex-col items-center justify-center h-screen max-w-170 w-full mx-auto overflow-auto py-5">
+      <h4 className="text-3xl md:text-4xl font-semibold mb-8">
+        Login to continue
+      </h4>
       {login?.error && (
         <Alert className="bg-yellow-50 border-yellow-500 mb-5">
           <CircleAlert />
@@ -69,7 +57,10 @@ export default function LoginForm() {
         </Alert>
       )}
 
-      <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-6">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="w-full space-y-4 md:space-y-6"
+      >
         {/* Email */}
         <div className="space-y-2">
           <h5 className="text-lg font-medium">Email Address</h5>
@@ -142,7 +133,7 @@ export default function LoginForm() {
         </Button>
 
         {/* Signup */}
-        <div className="text-lg text-center space-x-2">
+        <div className="sm:text-lg text-center space-x-2">
           <span>Don't have an account?</span>
           <Link
             href="https://join.medlockrealty.com/register"

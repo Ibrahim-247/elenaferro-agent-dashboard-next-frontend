@@ -19,8 +19,6 @@ import {
 } from "lucide-react";
 
 export function ViewDocumentModal({ data }) {
-  console.log("data from modal", data);
-
   return (
     <Dialog>
       <DialogTrigger asChild>
