@@ -18,7 +18,7 @@ export default function PublicFolderHeader({
 }) {
   return (
     <div>
-      <div className="flex flex-col md:flex-row gap-5 bg-white p-6 rounded-2xl">
+      <div className="flex flex-col md:flex-row gap-5 bg-white p-4 md:p-6 rounded-2xl">
         <div className="relative w-full">
           <Input
             placeholder="Search documents..."
@@ -30,7 +30,7 @@ export default function PublicFolderHeader({
         </div>
 
         <Select value={type} onValueChange={setType}>
-          <SelectTrigger className="md:w-40 h-12!">
+          <SelectTrigger className="md:w-40 w-full h-12!">
             <SelectValue placeholder="Category" />
           </SelectTrigger>
           <SelectContent>

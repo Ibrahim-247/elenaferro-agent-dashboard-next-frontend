@@ -181,7 +181,7 @@ export default function PerformanceTaskTable() {
                   {headerGroup.headers.map((header) => (
                     <th
                       key={header.id}
-                      className="text-left px-4 py-4 font-semibold border-x border-black/50 border-b first:border-l-0 last:border-r-0"
+                      className="text-left px-4 py-4 font-semibold border-x text-nowrap border-black/50 border-b first:border-l-0 last:border-r-0"
                     >
                       {flexRender(
                         header.column.columnDef.header,

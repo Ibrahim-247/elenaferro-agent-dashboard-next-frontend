@@ -42,7 +42,7 @@ export default function CreateFolderModal() {
     <Dialog open={open} onOpenChange={setopen}>
       <form className="w-full">
         <DialogTrigger asChild className="w-full">
-          <Button className="h-12 bg-secondary w-full md:w-auto text-white hover:bg-secondary/90 px-5!">
+          <Button className="md:h-12 bg-secondary w-full md:w-auto text-white hover:bg-secondary/90 md:px-5!">
             <FolderPlus className="size-5" /> Create New Folder
           </Button>
         </DialogTrigger>

@@ -32,6 +32,9 @@ import { Spinner } from "../ui/spinner";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 
+const FieldError = ({ error }) =>
+  error ? <p className="text-xs text-red-500">{error.message}!</p> : null;
+
 export default function NewTransactionModal() {
   const [open, setopen] = useState();
   const queryClient = useQueryClient();
@@ -76,15 +79,13 @@ export default function NewTransactionModal() {
     });
   };
 
-  const FieldError = ({ error }) =>
-    error ? <p className="text-xs text-red-500">{error.message}!</p> : null;
 
   return (
     <div>
       <Dialog open={open} onOpenChange={setopen}>
         <DialogTrigger asChild>
-          <Button className="h-12 bg-secondary text-white hover:bg-secondary/90 px-5!">
-            <Plus className="size-6" /> New Transaction
+          <Button className="md:h-12 bg-secondary text-white hover:bg-secondary/90 md:px-5!">
+            <Plus className="size-5 md:size-6" /> New Transaction
           </Button>
         </DialogTrigger>
         <DialogContent className="max-w-150! [&>button]:hidden p-0">

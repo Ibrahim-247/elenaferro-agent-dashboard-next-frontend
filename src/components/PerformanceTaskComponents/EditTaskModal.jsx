@@ -31,6 +31,9 @@ import { Spinner } from "../ui/spinner";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 
+const FieldError = ({ error }) =>
+  error ? <p className="text-xs text-red-500">{error.message}!</p> : null;
+
 export default function EditTaskModal({ data }) {
   const [open, setopen] = useState();
   const queryClient = useQueryClient();
@@ -78,8 +81,6 @@ export default function EditTaskModal({ data }) {
     });
   };
 
-  const FieldError = ({ error }) =>
-    error ? <p className="text-xs text-red-500">{error.message}!</p> : null;
 
   return (
     <div>

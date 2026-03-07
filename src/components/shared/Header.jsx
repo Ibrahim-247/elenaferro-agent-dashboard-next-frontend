@@ -16,7 +16,16 @@ import { Spinner } from "../ui/spinner";
 import Image from "next/image";
 
 export default function Header({ onMenuClick }) {
-  const [greeting, setGreeting] = useState("");
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+
+    if (hour >= 5 && hour < 12) return "Good Morning";
+    else if (hour >= 12 && hour < 17) return "Good Afternoon";
+    else if (hour >= 17 && hour < 21) return "Good Evening";
+    else return "Good Night";
+  };
+
+  const [greeting, setGreeting] = useState(getGreeting);
 
   // profile info
   const { data } = useProfileInfo();
@@ -29,19 +38,8 @@ export default function Header({ onMenuClick }) {
   // mark all as read
   const notificationMarkReadMutation = useAllNotificationRead();
 
-  // greetings
-  const updateGreeting = () => {
-    const hour = new Date().getHours();
-
-    if (hour >= 5 && hour < 12) setGreeting("Good Morning");
-    else if (hour >= 12 && hour < 17) setGreeting("Good Afternoon");
-    else if (hour >= 17 && hour < 21) setGreeting("Good Evening");
-    else setGreeting("Good Night");
-  };
-
   useEffect(() => {
-    updateGreeting();
-    const interval = setInterval(updateGreeting, 60 * 1000);
+    const interval = setInterval(() => setGreeting(getGreeting()), 60 * 1000);
     return () => clearInterval(interval);
   }, []);
 

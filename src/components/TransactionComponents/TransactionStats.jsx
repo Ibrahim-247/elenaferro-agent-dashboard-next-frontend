@@ -57,7 +57,7 @@ export default function TransactionStats() {
     },
   ];
   return (
-    <div className="grid grid-cols-5 gap-5">
+    <div className="grid lg:grid-cols-4 md:grid-cols-3 xl:grid-cols-5 gap-5">
       {stats?.map((item, index) => (
         <StatsCard item={item} key={index} />
       ))}

@@ -26,6 +26,16 @@ import useApiMutation from "@/hooks/useApiMutation";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
+const FieldError = ({ error }) => {
+  if (!error) return null;
+  return (
+    <p className="text-xs text-red-500 mt-1 flex items-center gap-1">
+      <CircleAlert className="size-3" />
+      {error.message}
+    </p>
+  );
+};
+
 export default function LeadUpdateModal({ data }) {
   const [open, setopen] = useState();
   const queryClient = useQueryClient();
@@ -82,15 +92,7 @@ export default function LeadUpdateModal({ data }) {
     createLeadMutation?.mutate(data);
   };
 
-  const FieldError = ({ error }) => {
-    if (!error) return null;
-    return (
-      <p className="text-xs text-red-500 mt-1 flex items-center gap-1">
-        <CircleAlert className="size-3" />
-        {error.message}
-      </p>
-    );
-  };
+
 
   return (
     <Dialog open={open} onOpenChange={setopen}>
