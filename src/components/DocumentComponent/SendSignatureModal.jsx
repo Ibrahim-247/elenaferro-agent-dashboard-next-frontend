@@ -20,6 +20,16 @@ import pdfImg from "../../assets/pdf.png";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
+const FieldError = ({ error }) => {
+  if (!error) return null;
+  return (
+    <p className="text-xs text-red-500 mt-1 flex items-center gap-1">
+      <CircleAlert className="size-3" />
+      {error.message}
+    </p>
+  );
+};
+
 export default function SendSignatureModal({ documents, id, connected }) {
   const [open, setopen] = useState();
   const queryClient = useQueryClient();
@@ -56,15 +66,6 @@ export default function SendSignatureModal({ documents, id, connected }) {
     DocumentSend?.mutate(data);
   };
 
-  const FieldError = ({ error }) => {
-    if (!error) return null;
-    return (
-      <p className="text-xs text-red-500 mt-1 flex items-center gap-1">
-        <CircleAlert className="size-3" />
-        {error.message}
-      </p>
-    );
-  };
 
   return (
     <Dialog open={open} onOpenChange={setopen}>

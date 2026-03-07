@@ -29,8 +29,8 @@ export default function DocumentList() {
     <div className="space-y-12">
       <DocumentHeader setSearch={setSearch} search={search} />
       <div className="flex items-center flex-wrap justify-between gap-y-3">
-        <h3 className="text-2xl lg:text-3xl font-semibold">All Documents</h3>{" "}
-        <div className="flex items-center gap-5 flex-col md:flex-row">
+        <h3 className="text-2xl lg:text-3xl font-semibold">All Documents</h3>
+        <div className="flex items-center gap-5 flex-col md:flex-row w-full md:w-auto">
           <CreateFolderModal />
           <UploadDocModal />
         </div>

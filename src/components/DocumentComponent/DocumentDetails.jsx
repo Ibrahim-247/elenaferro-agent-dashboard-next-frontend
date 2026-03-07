@@ -57,7 +57,7 @@ export default function DocumentDetails({ id }) {
       {!connected && (
         <Alert className="bg-yellow-50 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <InfoIcon className="size-4" />
+            <InfoIcon className="size-4 shrink-0" />
             <AlertTitle>
               Please connect your DocuSign account before sending documents for
               e-signature

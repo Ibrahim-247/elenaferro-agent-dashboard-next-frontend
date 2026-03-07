@@ -26,6 +26,16 @@ import useApiMutation from "@/hooks/useApiMutation";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
+const FieldError = ({ error }) => {
+  if (!error) return null;
+  return (
+    <p className="text-xs text-red-500 mt-1 flex items-center gap-1">
+      <CircleAlert className="size-3" />
+      {error.message}
+    </p>
+  );
+};
+
 export default function CreateLead() {
   const [open, setopen] = useState();
   const queryClient = useQueryClient();
@@ -81,18 +91,10 @@ export default function CreateLead() {
     createLeadMutation?.mutate(data);
   };
 
-  const FieldError = ({ error }) => {
-    if (!error) return null;
-    return (
-      <p className="text-xs text-red-500 mt-1 flex items-center gap-1">
-        <CircleAlert className="size-3" />
-        {error.message}
-      </p>
-    );
-  };
+
 
   return (
-    <Dialog open={open} onOpenChange={setopen}>
+    <Dialog open={open} onOpenChange={setopen} className="mx-2!">
       <DialogTrigger asChild>
         <Button className="h-12 bg-secondary text-white hover:bg-secondary/90 px-5!">
           <UserRoundPlus /> Add New Lead

@@ -38,7 +38,7 @@ export default function PublicFolders() {
         setType={setType}
         type={type}
       />
-      <div className="bg-white p-6 rounded-xl space-y-5">
+      <div className="bg-white p-4 md:p-6 rounded-xl space-y-5">
         <h3 className="text-xl font-semibold">All Resources</h3>
         <div className="space-y-3.5 mt-4 h-[calc(100vh-540px)] overflow-auto pr-4">
           {isPending ? (
@@ -66,14 +66,14 @@ export default function PublicFolders() {
                       {item?.items?.map((resource, idx) => (
                         <div
                           key={idx}
-                          className="bg-gray-100 p-4 rounded-xl flex items-center gap-4 justify-between"
+                          className="bg-gray-100 p-4 rounded-xl flex items-center flex-wrap gap-4 justify-between"
                         >
                           <div className="flex items-center gap-4">
-                            <div className="size-14 rounded-full overflow-hidden bg-[#EDDAFF] text-[#A633FA] flex items-center justify-center">
+                            <div className="size-14 shrink-0 rounded-full overflow-hidden bg-[#EDDAFF] text-[#A633FA] flex items-center justify-center">
                               <FileText />
                             </div>
                             <div>
-                              <h5 className="text-lg font-medium">
+                              <h5 className="text-lg font-medium line-clamp-1">
                                 {resource?.name}
                               </h5>
                               <p className="text-sm font-normal">

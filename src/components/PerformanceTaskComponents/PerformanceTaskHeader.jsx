@@ -28,13 +28,13 @@ export default function PerformanceTaskHeader({
             placeholder="Search by task title"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full h-12 pl-10"
+            className="w-full h-12 pl-10 placeholder:text-sm"
           />
           <Search className="absolute top-1/2 -translate-y-1/2 left-2 text-gray-500" />
         </div>
 
         <Select value={type} onValueChange={setType}>
-          <SelectTrigger className="md:w-40 h-12!">
+          <SelectTrigger className="md:w-40 w-full md:h-12!">
             <SelectValue placeholder="Priority" />
           </SelectTrigger>
           <SelectContent>
@@ -49,7 +49,7 @@ export default function PerformanceTaskHeader({
         </Select>
 
         <Select value={status} onValueChange={setStatus}>
-          <SelectTrigger className="md:w-40 h-12!">
+          <SelectTrigger className="md:w-40 w-full md:h-12!">
             <SelectValue placeholder="Status" />
           </SelectTrigger>
           <SelectContent>
