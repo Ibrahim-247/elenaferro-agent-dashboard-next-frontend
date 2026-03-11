@@ -107,7 +107,7 @@ export default function DealsBarchart({ analytics }) {
         <h4 className="text-xl lg:text-2xl font-semibold">My Tasks</h4>
         <div className="mt-5 space-y-3 lg:max-h-120 overflow-auto custom_scroll">
           {isPending ? (
-            <div className="h-40 lg:h-full text-center text-base flex flex-col items-center justify-center">
+            <div className="max-h-40 h-full text-center text-base flex flex-col items-center justify-center">
               <div className="flex items-center justify-center gap-2">
                 <Spinner /> Loading...
               </div>
@@ -140,7 +140,7 @@ export default function DealsBarchart({ analytics }) {
               </div>
             ))
           ) : (
-            <div className="h-full lg:h-40 flex flex-col justify-center text-center text-base">
+            <div className="h-full lg:h-80 flex flex-col justify-center text-center text-base">
               <div className="flex flex-col items-center justify-center gap-2">
                 <Inbox className="text-gray-300 size-10 lg:size-13" />
                 <p className="text-gray-500">No tasks found</p>
