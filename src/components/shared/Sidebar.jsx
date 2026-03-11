@@ -11,10 +11,13 @@ import {
   TrendingUp,
   Users,
   Video,
+  CalendarDays,
 } from "lucide-react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import LogoutModal from "../Authentication/LogoutModal";
+import slack from "../../assets/slack.png";
+
 export default function Sidebar({ mobile, onClose }) {
   const pathname = usePathname();
 
@@ -28,6 +31,7 @@ export default function Sidebar({ mobile, onClose }) {
       path: "/performance_tasks",
       icon: <TrendingUp />,
     },
+    { name: "Calendar", path: "/calendar", icon: <CalendarDays /> },
     { name: "Public Folder", path: "/public_folder", icon: <Folder /> },
     { name: "Training Portal", path: "/training_portal", icon: <Video /> },
     { name: "Settings", path: "/settings", icon: <Settings /> },
@@ -63,6 +67,7 @@ export default function Sidebar({ mobile, onClose }) {
             </Link>
           </div>
         ))}
+        <Image src={slack} alt="slack" className="w-32" />
       </div>
       {/* logout */}
       <div className="px-6 lg:px-11 mt-4">
