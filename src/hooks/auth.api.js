@@ -77,7 +77,7 @@ export const useGoogleLoginMutation = () => {
         toast.error(error?.response?.data?.message || "Something went wrong!");
       }
 
-      console.error("Google Login error:", error);
+      console.log("Google Login error:", error);
     },
   });
 };

@@ -12,7 +12,6 @@ import {
 import {
   Select,
   SelectContent,
-  SelectGroup,
   SelectItem,
   SelectTrigger,
   SelectValue,
@@ -30,13 +29,15 @@ export default function UploadDocModal() {
   const inputRef = useRef(null);
   const [isDragging, setIsDragging] = useState(false);
   const [files, setFiles] = useState(null);
-  const [folderId, setfolderId] = useState();
+  const [folderId, setfolderId] = useState("");
   const queryClient = useQueryClient();
   const [open, setopen] = useState();
 
   // folder list
   const { data } = useFolderlist();
   const folder = data?.data;
+
+  console.log(folder);
 
   const handleFiles = (fileList) => {
     if (!fileList) return;
@@ -85,7 +86,7 @@ export default function UploadDocModal() {
           </DialogClose>
           <DialogHeader>
             <DialogTitle className="text-3xl font-bold text-secondary font-cormorant">
-              Create New Folder
+              Upload your documents
             </DialogTitle>
             <p className="text-sm font-normal">
               Select a file to upload to your document library.
@@ -99,13 +100,11 @@ export default function UploadDocModal() {
                 <SelectValue placeholder="Select folder" />
               </SelectTrigger>
               <SelectContent>
-                <SelectGroup>
-                  {folder?.map((item, index) => (
-                    <SelectItem key={index} value={item?.id}>
-                      {item?.name}
-                    </SelectItem>
-                  ))}
-                </SelectGroup>
+                {folder?.map((item) => (
+                  <SelectItem key={item?.id} value={item.id.toString()}>
+                    {item?.name}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>

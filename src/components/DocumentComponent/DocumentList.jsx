@@ -37,13 +37,15 @@ export default function DocumentList() {
       </div>
       <div className="grid lg:grid-cols-4 gap-8">
         {isPending ? (
-          [...Array(4)]?.map((_, index) => (
-            <div key={index} className="w-full relative animate-pulse">
-              <div className="absolute top-12 left-10 w-10 h-10 bg-gray-300 rounded-full"></div>
-              <div className="w-full h-48 bg-gray-200 rounded-md"></div>
-              <div className="space-y-2 absolute bottom-10 left-10">
-                <div className="w-32 h-6 bg-gray-300 rounded-md"></div>
-                <div className="w-48 h-4 bg-gray-300 rounded-md"></div>
+          [...Array(8)]?.map((_, index) => (
+            <div
+              key={index}
+              className="w-full bg-white border border-gray-100 rounded-2xl p-6 shadow-xs animate-pulse space-y-5"
+            >
+              <div className="size-14 rounded-xl bg-gray-200"></div>
+              <div className="space-y-3">
+                <div className="w-3/4 h-6 bg-gray-200 rounded-md"></div>
+                <div className="w-1/2 h-4 bg-gray-100 rounded-md"></div>
               </div>
             </div>
           ))

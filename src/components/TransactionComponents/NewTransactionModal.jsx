@@ -79,7 +79,6 @@ export default function NewTransactionModal() {
     });
   };
 
-
   return (
     <div>
       <Dialog open={open} onOpenChange={setopen}>
@@ -233,8 +232,8 @@ export default function NewTransactionModal() {
                           <SelectValue placeholder="Select client" />
                         </SelectTrigger>
                         <SelectContent>
-                          {leads?.map((item, index) => (
-                            <SelectItem value={item?.id} key={index}>
+                          {leads?.map((item) => (
+                            <SelectItem value={`${item?.id}`} key={item?.id}>
                               {item?.name}
                             </SelectItem>
                           ))}

@@ -27,3 +27,29 @@ export const useDocumentDetails = (id) => {
     enabled: !!id,
   });
 };
+
+// folder update
+export const useUpdateFolder = (id) => {
+  return useApiMutation({
+    key: "folder_update",
+    method: "post",
+    isPrivate: true,
+    endpoint: `/agent/document_folder/update/${id}`,
+    onError: (error) => {
+      console.error("Folder update", error);
+    },
+  });
+};
+
+// folder delete
+export const useDeleteFolder = (id) => {
+  return useApiMutation({
+    key: "folder_delete",
+    method: "post",
+    isPrivate: true,
+    endpoint: `/agent/document_folder/delete/${id}`,
+    onError: (error) => {
+      console.error("Folder delete", error);
+    },
+  });
+};
