@@ -37,8 +37,6 @@ export default function UploadDocModal() {
   const { data } = useFolderlist();
   const folder = data?.data;
 
-  console.log(folder);
-
   const handleFiles = (fileList) => {
     if (!fileList) return;
     const selectedFiles = Array.from(fileList);
