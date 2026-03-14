@@ -45,7 +45,7 @@ export const useUpdateFolder = (id) => {
 export const useDeleteFolder = (id) => {
   return useApiMutation({
     key: "folder_delete",
-    method: "post",
+    method: "delete",
     isPrivate: true,
     endpoint: `/agent/document_folder/delete/${id}`,
     onError: (error) => {
