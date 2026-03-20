@@ -4,7 +4,6 @@ import {
   FileText,
   Inbox,
   SquarePen,
-  Folder,
   X,
   ChevronRight,
 } from "lucide-react";
@@ -13,13 +12,7 @@ import { Button } from "../ui/button";
 import { useResourceslist } from "@/hooks/resources.api";
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogClose,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import FolderSvg from "../svg/FolderSvg";
 
 export default function PublicFolders() {
@@ -27,12 +20,9 @@ export default function PublicFolders() {
   const [type, setType] = useState("");
   const [selectedCategory, setSelectedCategory] = useState(null);
 
-  console.log(type);
-
   // resources list
   const { data, isPending } = useResourceslist();
   const resources = data?.data?.data;
-  console.log(resources);
 
   const filteredData = useMemo(() => {
     return resources?.map((item) => ({
@@ -156,7 +146,7 @@ export default function PublicFolders() {
         </div>
 
         {/* Desktop List View */}
-        <div className="hidden md:block space-y-8 mt-4 h-[calc(100vh-535px)] overflow-auto pr-4 custom-scrollbar">
+        <div className="hidden md:block space-y-8 mt-4 h-[calc(100vh-354px)] overflow-auto pr-4 custom-scrollbar">
           {isPending ? (
             [...Array(4)].map((_, index) => (
               <div
@@ -171,21 +161,27 @@ export default function PublicFolders() {
               </div>
             ))
           ) : filteredData?.length > 0 ? (
-            filteredData?.map(
-              (item, index) =>
-                item?.items?.length > 0 && (
-                  <div key={index} className="space-y-4">
-                    <h5 className="text-xl font-bold text-[#1D1235] capitalize flex items-center gap-2">
-                      <div className="w-1 h-6 bg-secondary rounded-full" />
-                      {item?.category_name}
-                    </h5>
-                    <div className="grid grid-cols-1 gap-3.5">
-                      {item?.items?.map((resource, idx) => (
-                        <ResourceItem key={idx} resource={resource} />
-                      ))}
-                    </div>
+            filteredData?.map((item, index) =>
+              item?.items?.length > 0 ? (
+                <div key={index} className="space-y-4">
+                  <h5 className="text-xl font-bold text-[#1D1235] capitalize flex items-center gap-2">
+                    <div className="w-1 h-6 bg-secondary rounded-full" />
+                    {item?.category_name}
+                  </h5>
+                  <div className="grid grid-cols-1 gap-3.5">
+                    {item?.items?.map((resource, idx) => (
+                      <ResourceItem key={idx} resource={resource} />
+                    ))}
                   </div>
-                ),
+                </div>
+              ) : (
+                <div className="h-full flex flex-col items-center justify-center gap-3 text-[#798090] py-20">
+                  <Inbox className="size-15 opacity-20" />
+                  <p className="text-lg font-medium">
+                    No results found for your search
+                  </p>
+                </div>
+              ),
             )
           ) : (
             <div className="h-full flex flex-col items-center justify-center gap-3 text-[#798090] py-20">

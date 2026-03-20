@@ -76,15 +76,6 @@ export default function PerformanceTaskTable() {
       header: "Task Title",
     },
     {
-      accessorKey: "name",
-      header: "Client",
-      cell: ({ row }) => (
-        <span className="px-3 py-1 text-sm border rounded-full">
-          {row.original.name}
-        </span>
-      ),
-    },
-    {
       accessorKey: "due_date",
       header: "Due Date",
       cell: ({ row }) => (
@@ -122,10 +113,6 @@ export default function PerformanceTaskTable() {
           {row.original.status}
         </span>
       ),
-    },
-    {
-      accessorKey: "assigned_by_admin",
-      header: "Assigned To",
     },
     {
       id: "action",
