@@ -1,5 +1,4 @@
 "use client";
-
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 import {
   ChartContainer,
@@ -9,6 +8,8 @@ import {
 import { useTasklist } from "@/hooks/dashboard.api";
 import { Spinner } from "../ui/spinner";
 import { Inbox } from "lucide-react";
+import PerformanceTaskTable from "../PerformanceTaskComponents/PerformanceTaskTable";
+import CalendarView from "../CalendarComponents/CalendarView";
 
 export default function DealsBarchart({ analytics }) {
   const chartData = analytics?.map((item) => ({
@@ -36,7 +37,7 @@ export default function DealsBarchart({ analytics }) {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
       {/* Monthly Deal */}
-      <div className="lg:col-span-8 xl:col-span-9 py-6 lg:py-8 bg-white rounded-2xl border border-gray-100">
+      {/* <div className="lg:col-span-8 xl:col-span-9 py-6 lg:py-8 bg-white rounded-2xl border border-gray-100">
         <div className="px-4 lg:px-8">
           <h4 className="text-lg font-bold">Monthly Transaction Closed</h4>
           <p className="text-sm lg:text-base font-normal text-gray-500">
@@ -51,10 +52,9 @@ export default function DealsBarchart({ analytics }) {
             <BarChart
               accessibilityLayer
               data={chartData}
-              barCategoryGap={24} // space between bars
-              barGap={6} // space if multiple bars
+              barCategoryGap={24}
+              barGap={6} 
             >
-              {/* Gradient Definition */}
               <defs>
                 <linearGradient
                   id="desktopGradient"
@@ -101,7 +101,11 @@ export default function DealsBarchart({ analytics }) {
             </BarChart>
           </ChartContainer>
         </div>
+      </div>  */}
+      <div className="col-span-9">
+        <PerformanceTaskTable />
       </div>
+
       {/* Tasks */}
       <div className="bg-white rounded-2xl p-6 lg:col-span-4 xl:col-span-3 border border-gray-100">
         <h4 className="text-xl lg:text-2xl font-semibold">My Tasks</h4>
