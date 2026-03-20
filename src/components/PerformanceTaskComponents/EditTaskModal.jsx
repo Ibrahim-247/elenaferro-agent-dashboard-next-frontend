@@ -30,6 +30,7 @@ import { useLeadlist } from "@/hooks/crm.api";
 import { Spinner } from "../ui/spinner";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
+import { useTransactionlist } from "@/hooks/transaction.api";
 
 const FieldError = ({ error }) =>
   error ? <p className="text-xs text-red-500">{error.message}!</p> : null;
@@ -37,6 +38,12 @@ const FieldError = ({ error }) =>
 export default function EditTaskModal({ data }) {
   const [open, setopen] = useState();
   const queryClient = useQueryClient();
+
+  // transaction list
+  const { data: transactions, isPending } = useTransactionlist();
+  const transactionList = transactions?.data?.data || [];
+
+  console.log(transactionList);
 
   // lead list
   const { datas } = useLeadlist();
@@ -49,7 +56,11 @@ export default function EditTaskModal({ data }) {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      lead_id: undefined,
+    },
+  });
 
   useEffect(() => {
     reset({ ...data });
@@ -80,7 +91,6 @@ export default function EditTaskModal({ data }) {
         : null,
     });
   };
-
 
   return (
     <div>
@@ -258,20 +268,20 @@ export default function EditTaskModal({ data }) {
                 <Controller
                   control={control}
                   name="lead_id"
-                  rules={{ required: "Client is required" }}
+                  rules={{ required: "Address is required" }}
                   render={({ field }) => (
                     <>
                       <Select
-                        onValueChange={field.onChange}
-                        value={field.value}
+                        onValueChange={(val) => field.onChange(Number(val))}
+                        value={field.value ? String(field.value) : undefined}
                       >
-                        <SelectTrigger className="h-10! w-full">
-                          <SelectValue placeholder="Select client" />
+                        <SelectTrigger className="h-10! w-full capitalize">
+                          <SelectValue placeholder="Select address" />
                         </SelectTrigger>
-                        <SelectContent>
-                          {leads?.map((item, index) => (
-                            <SelectItem key={index} value={item.id}>
-                              {item?.name}
+                        <SelectContent className="capitalize">
+                          {transactionList?.map((item, index) => (
+                            <SelectItem key={index} value={String(item.id)}>
+                              {item?.property_address}
                             </SelectItem>
                           ))}
                         </SelectContent>
