@@ -1,3 +1,4 @@
+import { useQueryClient } from "@tanstack/react-query";
 import useApiMutation from "./useApiMutation";
 
 // my folder list
@@ -50,6 +51,36 @@ export const useDeleteFolder = (id) => {
     endpoint: `/agent/document_folder/delete/${id}`,
     onError: (error) => {
       console.error("Folder delete", error);
+    },
+  });
+};
+
+// document update (rename)
+export const useUpdateDocument = (id) => {
+  return useApiMutation({
+    key: "document_update",
+    method: "post",
+    isPrivate: true,
+    endpoint: `/agent/document/update/${id}`,
+    onError: (error) => {
+      console.error("Document update", error);
+    },
+  });
+};
+
+// document delete
+export const useDeleteDocument = (id) => {
+  const queryClient = useQueryClient();
+  return useApiMutation({
+    key: "document_delete",
+    method: "delete",
+    isPrivate: true,
+    endpoint: `/agent/document/delete/${id}`,
+    onSuccess: () => {
+      queryClient.invalidateQueries(["document_details"]);
+    },
+    onError: (error) => {
+      console.error("Document delete", error);
     },
   });
 };

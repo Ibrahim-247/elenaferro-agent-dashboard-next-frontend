@@ -28,9 +28,9 @@ export default function PerformanceTaskHeader({
             placeholder="Search by task title"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full h-12 pl-10 placeholder:text-sm"
+            className="w-full md:h-12 pl-10 placeholder:text-sm"
           />
-          <Search className="absolute top-1/2 -translate-y-1/2 left-2 text-gray-500" />
+          <Search className="absolute top-1/2 md:size-6 -translate-y-1/2 left-2 text-gray-500" />
         </div>
 
         <Select value={type} onValueChange={setType}>

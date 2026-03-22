@@ -1,6 +1,4 @@
 "use client";
-import React from "react";
-import DashboardStats from "./DashboardStats";
 import DealsBarchart from "./DealsBarchart";
 import { useDashboardStats } from "@/hooks/dashboard.api";
 

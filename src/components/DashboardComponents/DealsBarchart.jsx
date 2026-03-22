@@ -1,15 +1,8 @@
 "use client";
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
-import {
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@/components/ui/chart";
 import { useTasklist } from "@/hooks/dashboard.api";
 import { Spinner } from "../ui/spinner";
 import { Inbox } from "lucide-react";
 import PerformanceTaskTable from "../PerformanceTaskComponents/PerformanceTaskTable";
-import CalendarView from "../CalendarComponents/CalendarView";
 
 export default function DealsBarchart({ analytics }) {
   const chartData = analytics?.map((item) => ({
@@ -102,12 +95,12 @@ export default function DealsBarchart({ analytics }) {
           </ChartContainer>
         </div>
       </div>  */}
-      <div className="col-span-9">
+      <div className="col-span-12 lg:col-span-9">
         <PerformanceTaskTable />
       </div>
 
       {/* Tasks */}
-      <div className="bg-white rounded-2xl p-6 lg:col-span-4 xl:col-span-3 border border-gray-100">
+      <div className="bg-white rounded-2xl p-6 col-span-12 lg:col-span-4 xl:col-span-3 border border-gray-100">
         <h4 className="text-xl lg:text-2xl font-semibold">My Tasks</h4>
         <div className="mt-5 space-y-3 lg:max-h-120 overflow-auto custom_scroll">
           {isPending ? (

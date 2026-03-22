@@ -46,6 +46,8 @@ const CalendarEventComponent = ({ event, onEdit, onDelete }) => {
         return <Briefcase className="w-3 h-3" />;
       case "appointment":
         return <Clock className="w-3 h-3" />;
+      case "event":
+        return <Star className="w-3 h-3" />;
       default:
         return null;
     }
@@ -63,7 +65,9 @@ const CalendarEventComponent = ({ event, onEdit, onDelete }) => {
         </span>
       </div>
 
-      {event.type === "appointment" && (
+      {(event.type === "appointment" ||
+        event.type === "task" ||
+        event.type === "event") && (
         <div
           className="opacity-0 hover:opacity-100 transition-opacity bg-white/50 backdrop-blur-sm rounded-l-md ml-1"
           onClick={(e) => e.stopPropagation()}
@@ -111,6 +115,7 @@ const CalendarView = () => {
   const appointments = appointmentsData?.data?.data || [];
 
   const deleteMutation = useDeleteAppointment();
+  // const deleteTaskMutation = useDeleteTask();
 
   const events = useMemo(() => {
     const allEvents = [];
@@ -158,7 +163,7 @@ const CalendarView = () => {
       }
     });
 
-    // Add Appointments
+    // Add Appointments & Events
     appointments.forEach((app) => {
       if (app.date) {
         let startDate = parseISO(app.date);
@@ -190,7 +195,7 @@ const CalendarView = () => {
           start: startDate,
           end: endDate,
           allDay: !app.time,
-          type: "appointment",
+          type: app.type || "appointment",
           original: app,
         });
       }
@@ -235,7 +240,7 @@ const CalendarView = () => {
             className="bg-secondary text-white hover:bg-secondary/90 px-5 h-9"
           >
             <Plus />
-            New Appointment
+            New Entry
           </Button>
 
           <div className="flex items-center bg-gray-50/80 rounded-sm p-1 border border-gray-100/80">
@@ -290,20 +295,26 @@ const CalendarView = () => {
         <CalendarEventComponent
           event={event}
           onEdit={() => {
-            if (event.type === "appointment") {
+            if (
+              event.type === "appointment" ||
+              event.type === "task" ||
+              event.type === "event"
+            ) {
               setEditingAppointment(event.original);
               setIsModalOpen(true);
             }
           }}
           onDelete={() => {
-            if (event.type === "appointment") {
+            if (event.type === "appointment" || event.type === "event") {
               deleteMutation.mutate(event.original.id);
+            } else if (event.type === "task") {
+              // deleteTaskMutation.mutate(event.original.id);
             }
           }}
         />
       ),
     }),
-    [CustomToolbar],
+    [CustomToolbar, deleteMutation],
   );
 
   const eventPropGetter = (event) => {
@@ -313,10 +324,13 @@ const CalendarView = () => {
         className += "bg-blue-50 text-blue-700 border-blue-200";
         break;
       case "transaction":
-        className += "bg-amber-50 text-amber-700 border-amber-200";
+        className += "bg-emerald-50 text-emerald-700 border-emerald-200";
         break;
       case "appointment":
         className += "bg-purple-50 text-purple-700 border-purple-200";
+        break;
+      case "event":
+        className += "bg-amber-50 text-amber-700 border-amber-200";
         break;
       default:
         className += "bg-gray-50 text-gray-700 border-gray-200";
@@ -358,12 +372,6 @@ const CalendarView = () => {
       `,
         }}
       />
-
-      {/* {isDataPending && (
-        <div className="absolute inset-0 bg-white/50 backdrop-blur-[1px] z-50 flex items-center justify-center rounded-3xl">
-          <Spinner className="w-10 h-10" />
-        </div>
-      )} */}
 
       <Calendar
         localizer={localizer}
