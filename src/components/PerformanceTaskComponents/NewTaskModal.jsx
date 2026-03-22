@@ -72,7 +72,6 @@ export default function NewTaskModal() {
     });
   };
 
-
   return (
     <div>
       <Dialog open={open} onOpenChange={setopen}>
@@ -94,7 +93,7 @@ export default function NewTaskModal() {
                 <X className="h-5 w-5" />
               </div>
             </DialogClose>
-            <DialogHeader className="px-8 pt-8">
+            <DialogHeader className="px-8 pt-8 text-start">
               <DialogTitle className="text-3xl font-bold text-secondary font-cormorant">
                 Add New Task
               </DialogTitle>
@@ -117,7 +116,7 @@ export default function NewTaskModal() {
                 <FieldError error={errors.title} />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid sm:grid-cols-2 gap-4">
                 <div className="grid gap-2">
                   <label className="text-[#404A60]">Due Date</label>
                   <Controller

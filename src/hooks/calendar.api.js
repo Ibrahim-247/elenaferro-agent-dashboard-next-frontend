@@ -71,3 +71,41 @@ export const useDeleteAppointment = (id) => {
     },
   });
 };
+
+// create task
+export const useCreateTask = () => {
+  const queryClient = useQueryClient();
+  return useApiMutation({
+    key: "create_task",
+    method: "post",
+    isPrivate: true,
+    endpoint: "/agent/task/create",
+    onSuccess: () => {
+      queryClient.invalidateQueries(["task_list"]);
+      toast.success("Task created successfully");
+    },
+    onError: (error) => {
+      console.error("Create task error", error);
+      toast.error(error?.response?.data?.message || "Failed to create task");
+    },
+  });
+};
+
+// update task
+export const useUpdateTask = (id) => {
+  const queryClient = useQueryClient();
+  return useApiMutation({
+    key: ["update_task", id],
+    method: "post",
+    isPrivate: true,
+    endpoint: `/agent/task/update/${id}`,
+    onSuccess: () => {
+      queryClient.invalidateQueries(["task_list"]);
+      toast.success("Task updated successfully");
+    },
+    onError: (error) => {
+      console.error("Update task error", error);
+      toast.error(error?.response?.data?.message || "Failed to update task");
+    },
+  });
+};

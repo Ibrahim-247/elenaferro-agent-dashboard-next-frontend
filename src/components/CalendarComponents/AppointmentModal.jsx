@@ -1,7 +1,7 @@
 "use client";
-import React, { useEffect } from "react";
-import { useForm, Controller } from "react-hook-form";
-import { format } from "date-fns";
+import React, { useEffect, useState } from "react";
+import { useForm, Controller, useWatch } from "react-hook-form";
+import { format, parseISO } from "date-fns";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,8 +9,19 @@ import { Textarea } from "@/components/ui/textarea";
 import {
   useCreateAppointment,
   useUpdateAppointment,
+  useCreateTask,
+  useUpdateTask,
 } from "@/hooks/calendar.api";
-import { Clock, Calendar as CalendarIcon, FileText, X } from "lucide-react";
+import { useLeadlist } from "@/hooks/crm.api";
+import {
+  Clock,
+  Calendar as CalendarIcon,
+  FileText,
+  X,
+  CheckCircle2,
+  Star,
+  User,
+} from "lucide-react";
 import {
   Popover,
   PopoverContent,
@@ -18,56 +29,116 @@ import {
 } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import AppointmentSvg from "../svg/AppointmentSvg";
+import Calender03Svg from "../svg/Calender03Svg";
+import Task01Svg from "../svg/Task01Svg";
 
 const AppointmentModal = ({ isOpen, onClose, selectedDate, appointment }) => {
-  const createMutation = useCreateAppointment();
-  const updateMutation = useUpdateAppointment(appointment?.id);
+  const [activeType, setActiveType] = useState("appointment"); // 'appointment', 'task', 'event'
+
+  const createAppointment = useCreateAppointment();
+  const updateAppointment = useUpdateAppointment(appointment?.id);
+  const createTask = useCreateTask();
+  const updateTask = useUpdateTask(appointment?.id);
+
+  const { data: leadData } = useLeadlist();
+  const leads = leadData?.data?.data;
 
   const {
     register,
     handleSubmit,
     reset,
     control,
+    setValue,
     formState: { errors },
   } = useForm({
     defaultValues: {
+      type: "appointment",
       title: "",
       date: "",
       time: "",
       description: "",
+      priority: "medium",
+      status: "in_progress",
+      lead_id: "",
     },
   });
+
+  const watchType = useWatch({ control, name: "type" });
 
   useEffect(() => {
     if (isOpen) {
       if (appointment) {
+        const type = appointment.type || "appointment";
+        setActiveType(type);
         reset({
-          title: appointment.title,
-          date: appointment.date,
-          time: appointment.time,
-          description: appointment.description,
+          type: type,
+          title: appointment.title || appointment.original?.title || "",
+          date:
+            appointment.date ||
+            appointment.original?.date ||
+            appointment.original?.due_date ||
+            format(selectedDate, "yyyy-MM-dd"),
+          time: appointment.time || appointment.original?.time || "",
+          description:
+            appointment.description || appointment.original?.description || "",
+          priority: appointment.original?.priority || "medium",
+          status: appointment.original?.status || "in_progress",
+          lead_id: appointment.original?.lead_id || "",
         });
       } else {
+        setActiveType("appointment");
         reset({
+          type: "appointment",
           title: "",
           date: format(selectedDate, "yyyy-MM-dd"),
           time: format(selectedDate, "HH:mm"),
           description: "",
+          priority: "medium",
+          status: "in_progress",
+          lead_id: "",
         });
       }
     }
   }, [isOpen, appointment, selectedDate, reset]);
 
+  // Sync internal state with form state
+  useEffect(() => {
+    if (watchType) setActiveType(watchType);
+  }, [watchType]);
+
   const onSubmit = (data) => {
-    if (appointment) {
-      updateMutation.mutate(data, {
+    const isEditing = !!appointment;
+
+    if (activeType === "task") {
+      const payload = {
+        ...data,
+        due_date: data.date,
+      };
+      const mutation = isEditing ? updateTask : createTask;
+      mutation.mutate(payload, {
         onSuccess: () => {
           onClose();
           reset();
         },
       });
     } else {
-      createMutation.mutate(data, {
+      // Event or Appointment
+      const payload = {
+        ...data,
+        // If event, we might want to flag it as all-day or similar
+        // For now, we use the same appointment API
+      };
+      const mutation = isEditing ? updateAppointment : createAppointment;
+      mutation.mutate(payload, {
         onSuccess: () => {
           onClose();
           reset();
@@ -76,41 +147,88 @@ const AppointmentModal = ({ isOpen, onClose, selectedDate, appointment }) => {
     }
   };
 
-  const isPending = createMutation.isPending || updateMutation.isPending;
+  const isPending =
+    createAppointment.isPending ||
+    updateAppointment.isPending ||
+    createTask.isPending ||
+    updateTask.isPending;
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-md w-[95%] rounded-lg p-0 overflow-auto max-h-[95vh] border-none [&>button]:hidden">
-        <div className="bg-secondary p-8 flex flex-col items-center justify-center text-white relative">
+      <DialogContent className="max-w-md w-[95%] rounded-lg p-0 overflow-auto custom_scroll max-h-[95vh] border-none [&>button]:hidden">
+        <div
+          className={cn(
+            "p-8 flex flex-col items-center justify-center text-white relative transition-colors duration-300",
+            activeType === "task"
+              ? "bg-blue-600"
+              : activeType === "event"
+                ? "bg-amber-600"
+                : "bg-secondary",
+          )}
+        >
           <div
             onClick={onClose}
-            className="absolute top-5 right-5 p-2 hover:bg-white/10 rounded-full transition-colors"
+            className="absolute top-5 right-5 p-2 hover:bg-white/10 rounded-full transition-colors cursor-pointer"
           >
             <X className="size-6" />
           </div>
-          <div className="size-16 rounded-2xl bg-white/10 flex items-center justify-center mb-4">
-            <CalendarIcon className="size-8" />
+
+          <div className="size-14 rounded-xl bg-white/10 flex items-center justify-center mb-4">
+            {activeType === "task" ? (
+              <Task01Svg className="size-8" />
+            ) : activeType === "event" ? (
+              <Calender03Svg className="size-8" />
+            ) : (
+              <AppointmentSvg className="size-8" />
+            )}
           </div>
+
           <DialogTitle className="text-2xl font-bold text-center">
-            {appointment ? "Edit Appointment" : "New Appointment"}
+            {appointment ? `Edit ${activeType}` : `New ${activeType}`}
           </DialogTitle>
-          <p className="text-white/70 text-sm mt-1">
-            {appointment
-              ? "Update your appointment details"
-              : `Scheduling for ${format(selectedDate, "MMM dd, yyyy")}`}
-          </p>
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-5">
-          <div className="space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)} className=" space-y-5">
+          <Tabs
+            defaultValue="appointment"
+            value={activeType}
+            onValueChange={(val) => {
+              setActiveType(val);
+              setValue("type", val);
+            }}
+            className="w-full max-w-100 px-6"
+          >
+            <TabsList className="grid grid-cols-3 w-full bg-white/10 text-white h-9 p-0.5">
+              <TabsTrigger
+                value="appointment"
+                className="text-sm h-8 data-[state=active]:bg-white data-[state=active]:text-secondary"
+              >
+                Appt
+              </TabsTrigger>
+              <TabsTrigger
+                value="event"
+                className="text-sm h-8 data-[state=active]:bg-white data-[state=active]:text-amber-600"
+              >
+                Event
+              </TabsTrigger>
+              <TabsTrigger
+                value="task"
+                className="text-sm h-8 data-[state=active]:bg-white data-[state=active]:text-blue-600"
+              >
+                Task
+              </TabsTrigger>
+            </TabsList>
+          </Tabs>
+          <div className="space-y-4 p-6 pt-0">
+            {/* Title Field */}
             <div className="space-y-2">
-              <label className="text-sm font-bold text-[#1D1235] px-1 block">
-                Appointment Title
+              <label className="text-sm font-bold text-[#1D1235] px-1 block capitalize">
+                {activeType} Title
               </label>
               <div className="relative">
                 <Input
                   {...register("title", { required: "Title is required" })}
-                  placeholder="e.g. Client Meeting"
+                  placeholder={`e.g. ${activeType === "task" ? "Update docs" : activeType === "event" ? "Open House" : "Client Meeting"}`}
                   className="h-12 bg-gray-50 pl-10"
                 />
                 <FileText className="size-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
@@ -122,10 +240,11 @@ const AppointmentModal = ({ isOpen, onClose, selectedDate, appointment }) => {
               )}
             </div>
 
+            {/* Date & Time Fields */}
             <div className="grid sm:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <label className="text-sm font-bold text-[#1D1235] px-1 block">
-                  Date
+                  {activeType === "task" ? "Due Date" : "Date"}
                 </label>
                 <div className="relative flex">
                   <Controller
@@ -144,7 +263,7 @@ const AppointmentModal = ({ isOpen, onClose, selectedDate, appointment }) => {
                           >
                             <CalendarIcon className="size-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
                             {field.value ? (
-                              format(new Date(field.value), "PPP")
+                              format(parseISO(field.value), "PPP")
                             ) : (
                               <span>Pick a date</span>
                             )}
@@ -157,7 +276,7 @@ const AppointmentModal = ({ isOpen, onClose, selectedDate, appointment }) => {
                           <Calendar
                             mode="single"
                             selected={
-                              field.value ? new Date(field.value) : undefined
+                              field.value ? parseISO(field.value) : undefined
                             }
                             onSelect={(date) =>
                               field.onChange(
@@ -177,43 +296,126 @@ const AppointmentModal = ({ isOpen, onClose, selectedDate, appointment }) => {
                   </p>
                 )}
               </div>
-              <div className="space-y-2">
-                <label className="text-sm font-bold text-[#1D1235] px-1 block">
-                  Time
-                </label>
-                <div className="relative">
-                  <Input
-                    type="time"
-                    id="time-picker-optional"
-                    step="1"
-                    {...register("time", { required: "Time is required" })}
-                    defaultValue="10:30:00"
-                    className="appearance-none bg-gray-50 h-12 pl-10 [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
-                  />
 
-                  <Clock className="size-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
+              {activeType !== "task" && (
+                <div className="space-y-2">
+                  <label className="text-sm font-bold text-[#1D1235] px-1 block">
+                    Time {activeType === "event" && "(Optional)"}
+                  </label>
+                  <div className="relative">
+                    <Input
+                      type="time"
+                      {...register("time", {
+                        required:
+                          activeType === "appointment"
+                            ? "Time is required"
+                            : false,
+                      })}
+                      className="appearance-none bg-gray-50 h-12 pl-10!"
+                    />
+                    <Clock className="size-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                  </div>
+                  {errors.time && (
+                    <p className="text-red-500 text-xs px-1 font-medium">
+                      {errors.time.message}
+                    </p>
+                  )}
                 </div>
-                {errors.time && (
-                  <p className="text-red-500 text-xs px-1 font-medium">
-                    {errors.time.message}
-                  </p>
-                )}
-              </div>
+              )}
+
+              {/* Task Specific Fields: Priority & Link To */}
+              {activeType === "task" && (
+                <div className="space-y-2">
+                  <label className="text-sm font-bold text-[#1D1235] px-1 block">
+                    Priority
+                  </label>
+                  <Controller
+                    control={control}
+                    name="priority"
+                    render={({ field }) => (
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value}
+                      >
+                        <SelectTrigger className="h-12! w-full bg-gray-50">
+                          <SelectValue placeholder="Priority" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem
+                            value="high"
+                            className="text-red-600 font-medium"
+                          >
+                            High
+                          </SelectItem>
+                          <SelectItem
+                            value="medium"
+                            className="text-amber-600 font-medium"
+                          >
+                            Medium
+                          </SelectItem>
+                          <SelectItem
+                            value="low"
+                            className="text-green-600 font-medium"
+                          >
+                            Normal
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+                    )}
+                  />
+                </div>
+              )}
             </div>
 
+            {activeType === "task" && (
+              <div className="space-y-2">
+                <label className="text-sm font-bold px-1 block">
+                  Link To (Client)
+                </label>
+                <div className="relative">
+                  <Controller
+                    control={control}
+                    name="lead_id"
+                    render={({ field }) => (
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value ? String(field.value) : ""}
+                      >
+                        <SelectTrigger className="h-12! w-full bg-gray-50 pl-10!">
+                          <SelectValue placeholder="Select from CRM" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {leads?.map((item) => (
+                            <SelectItem key={item.id} value={String(item.id)}>
+                              {item.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    )}
+                  />
+                  <User className="size-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2 z-10" />
+                </div>
+              </div>
+            )}
+
+            {/* Description Field */}
             <div className="space-y-2">
-              <label className="text-sm font-bold text-[#1D1235] px-1 block">
+              <label className="text-sm px-1 block font-medium">
                 Description (Optional)
               </label>
-              <Textarea
-                {...register("description")}
-                placeholder="Add some details about the appointment..."
-                className="min-h-25 bg-gray-50 resize-none p-4"
-              />
+              <div className="relative">
+                <Textarea
+                  {...register("description")}
+                  placeholder={`Add some details about the ${activeType}...`}
+                  className="min-h-25 bg-gray-50 resize-none p-4"
+                />
+              </div>
             </div>
           </div>
 
-          <div className="flex gap-3 pt-2 sticky bottom-0 left-0">
+          {/* Action Buttons */}
+          <div className="flex gap-3  sticky bottom-0 bg-white py-6 px-6 left-0">
             <Button
               type="button"
               variant="outline"
@@ -225,7 +427,14 @@ const AppointmentModal = ({ isOpen, onClose, selectedDate, appointment }) => {
             <Button
               type="submit"
               disabled={isPending}
-              className="flex-1 bg-secondary text-white hover:bg-secondary/90 h-10 shadow-secondary/20 transition-all active:scale-95"
+              className={cn(
+                "flex-1 text-white h-10 shadow-sm transition-all active:scale-95",
+                activeType === "task"
+                  ? "bg-blue-600 hover:bg-blue-700"
+                  : activeType === "event"
+                    ? "bg-amber-600 hover:bg-amber-700"
+                    : "bg-secondary hover:bg-secondary/90",
+              )}
             >
               {isPending ? "Saving..." : appointment ? "Update" : "Create"}
             </Button>

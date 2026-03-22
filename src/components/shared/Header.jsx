@@ -14,6 +14,7 @@ import {
 } from "../ui/dropdown-menu";
 import { Spinner } from "../ui/spinner";
 import Image from "next/image";
+import Notification01Svg from "../svg/Notification01Svg";
 
 export default function Header({ onMenuClick }) {
   const getGreeting = () => {
@@ -65,7 +66,7 @@ export default function Header({ onMenuClick }) {
           <DropdownMenuTrigger asChild>
             <button className="relative">
               <div className="size-10 lg:size-12 rounded-lg bg-gray-50 border border-gray-200 flex items-center justify-center hover:bg-gray-100 transition-colors">
-                <Bell className="size-5 text-gray-700" />
+                <Notification01Svg className="size-6 text-gray-700" />
               </div>
 
               {/* unread badge */}
@@ -128,7 +129,7 @@ export default function Header({ onMenuClick }) {
               ) : (
                 <div className="h-40 text-center text-base flex items-center justify-center">
                   <div className="flex flex-col items-center justify-center gap-2">
-                    <Bell className="text-gray-300 size-10 lg:size-13" />
+                    <Notification01Svg className="text-gray-300 size-10 lg:size-13" />
                     <p className="text-gray-500">No notifications yet</p>
                   </div>
                 </div>
