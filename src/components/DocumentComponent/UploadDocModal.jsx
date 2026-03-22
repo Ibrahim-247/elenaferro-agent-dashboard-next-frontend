@@ -19,11 +19,12 @@ import {
 import { useFolderlist } from "@/hooks/document.api";
 import useApiMutation from "@/hooks/useApiMutation";
 import { useQueryClient } from "@tanstack/react-query";
-import { CloudUpload, FileUp, X } from "lucide-react";
+import { CloudUpload, X } from "lucide-react";
 import { useRef, useState } from "react";
 import { Spinner } from "../ui/spinner";
 import { toast } from "sonner";
 import { Alert, AlertTitle } from "../ui/alert";
+import Upload05Svg from "../svg/Upload05Svg";
 
 export default function UploadDocModal() {
   const inputRef = useRef(null);
@@ -70,7 +71,7 @@ export default function UploadDocModal() {
       <Dialog open={open} onOpenChange={setopen}>
         <DialogTrigger asChild>
           <Button className="md:h-12 bg-secondary w-full md:w-auto text-white hover:bg-secondary/90 md:px-5!">
-            <FileUp className="size-5" /> Upload Documents
+            <Upload05Svg /> Upload Documents
           </Button>
         </DialogTrigger>
         <DialogContent className="max-w-150! p-8 [&>button]:hidden overflow-auto max-h-[90vh]">

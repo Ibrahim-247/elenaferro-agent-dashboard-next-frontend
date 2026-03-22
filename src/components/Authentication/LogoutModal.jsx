@@ -18,8 +18,10 @@ import { Spinner } from "../ui/spinner";
 import { useState } from "react";
 import { logout } from "@/redux/slices/authSlice";
 import { toast } from "sonner";
+import { cn } from "@/lib/utils";
+import Logout02Svg from "../svg/Logout02Svg";
 
-export default function LogoutModal() {
+export default function LogoutModal({ isCollapsed }) {
   const [open, setopen] = useState(false);
   const router = useRouter();
   const dispatch = useDispatch();
@@ -43,14 +45,18 @@ export default function LogoutModal() {
   return (
     <Dialog open={open} onOpenChange={setopen}>
       <DialogTrigger asChild>
-        <div>
+        <div className="w-full">
           <Button
-            className={`rounded-md shrink w-full bg-transparent text-black border hover:bg-gray-50`}
+            className={cn(
+              "rounded-md shrink w-full bg-transparent text-black border hover:bg-gray-50 flex items-center gap-2",
+              isCollapsed ? "px-0 justify-center h-12" : "px-4",
+            )}
+            title={isCollapsed ? "Logout" : ""}
           >
-            <span>
-              <LogOut className="text-red-500" />
+            <span className={cn(isCollapsed && "scale-110")}>
+              <Logout02Svg className="text-red-500" />
             </span>
-            <span>Logout</span>
+            {!isCollapsed && <span>Logout</span>}
           </Button>
         </div>
       </DialogTrigger>

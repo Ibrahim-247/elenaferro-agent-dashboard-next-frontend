@@ -11,11 +11,12 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import useApiMutation from "@/hooks/useApiMutation";
-import { FolderPlus, X } from "lucide-react";
+import { X } from "lucide-react";
 import { useState } from "react";
 import { Spinner } from "../ui/spinner";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import FolderAddSvg from "../svg/FolderAddSvg";
 
 export default function CreateFolderModal() {
   const [folderName, setfolderName] = useState();
@@ -43,7 +44,7 @@ export default function CreateFolderModal() {
       <form className="w-full">
         <DialogTrigger asChild className="w-full">
           <Button className="md:h-12 bg-secondary w-full md:w-auto text-white hover:bg-secondary/90 md:px-5!">
-            <FolderPlus className="size-5" /> Create New Folder
+            <FolderAddSvg className="size-5" /> Create New Folder
           </Button>
         </DialogTrigger>
         <DialogContent className="max-w-150! p-8 [&>button]:hidden">

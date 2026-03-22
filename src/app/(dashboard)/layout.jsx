@@ -6,13 +6,18 @@ import { useState } from "react";
 
 export default function Layout({ children }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
   return (
     <PrivateRoute>
       <div className="flex h-screen overflow-hidden bg-white">
         {/* Desktop Sidebar */}
-        <div className="hidden lg:block h-full">
-          <Sidebar />
+        <div
+          className={`hidden lg:block h-full transition-all duration-300 ease-in-out ${
+            isCollapsed ? "w-20" : "w-88"
+          }`}
+        >
+          <Sidebar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
         </div>
 
         {/* Mobile Sidebar Overlay */}
@@ -37,7 +42,7 @@ export default function Layout({ children }) {
         </div>
 
         {/* Main Content Area */}
-        <div className="flex-1 flex flex-col min-w-0 h-screen relative">
+        <div className="flex-1 flex flex-col min-w-0 h-screen relative transition-all duration-300">
           <Header onMenuClick={() => setIsSidebarOpen(true)} />
           <main className="flex-1 overflow-auto bg-[#F6F6F6] p-4 lg:p-6 custom_scroll">
             <div className="w-full">{children}</div>
