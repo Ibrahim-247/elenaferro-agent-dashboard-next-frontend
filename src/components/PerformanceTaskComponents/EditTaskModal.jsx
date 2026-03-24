@@ -43,8 +43,6 @@ export default function EditTaskModal({ data }) {
   const { data: transactions, isPending } = useTransactionlist();
   const transactionList = transactions?.data?.data || [];
 
-  console.log(transactionList);
-
   // lead list
   const { datas } = useLeadlist();
   const leads = datas?.data?.data;
