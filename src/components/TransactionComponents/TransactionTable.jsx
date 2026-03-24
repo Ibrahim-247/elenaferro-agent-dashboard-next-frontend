@@ -80,11 +80,11 @@ export default function TransactionTable() {
       },
     }),
 
-    columnHelper.accessor("start_date", {
+    columnHelper.accessor("date_binding_agreement", {
       header: "Start Date",
     }),
 
-    columnHelper.accessor("close_date", {
+    columnHelper.accessor("date_closing", {
       header: "Close Date",
     }),
 
