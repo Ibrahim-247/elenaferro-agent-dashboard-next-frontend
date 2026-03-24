@@ -130,8 +130,6 @@ export default function NewTransactionModal() {
     isPrivate: true,
     endpoint: `/agent/transaction/create`,
     onSuccess: (data) => {
-      console.log(data);
-
       setopen(false);
       toast.success(`Transaction created successfully`);
       queryClient?.invalidateQueries(["transaction_list"]);
@@ -155,9 +153,6 @@ export default function NewTransactionModal() {
         data.date_finance_contingency?.toLocaleDateString("en-CA"),
       date_closing: data.date_closing?.toLocaleDateString("en-CA"),
     };
-
-    console.log(payload);
-
     createTransaction?.mutate(payload);
   };
 
