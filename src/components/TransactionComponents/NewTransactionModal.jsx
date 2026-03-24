@@ -40,6 +40,8 @@ import { Spinner } from "../ui/spinner";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 import { Checkbox } from "@/components/ui/checkbox";
+import UserGroupSvg from "../svg/UserGroupSvg";
+import Home11Svg from "../svg/Home11Svg";
 
 const FieldError = ({ error }) =>
   error ? <p className="text-xs text-red-500">{error.message}!</p> : null;
@@ -153,6 +155,9 @@ export default function NewTransactionModal() {
         data.date_finance_contingency?.toLocaleDateString("en-CA"),
       date_closing: data.date_closing?.toLocaleDateString("en-CA"),
     };
+
+    console.log(payload);
+
     createTransaction?.mutate(payload);
   };
 
@@ -168,7 +173,7 @@ export default function NewTransactionModal() {
       <Dialog open={open} onOpenChange={setopen}>
         <DialogTrigger asChild>
           <Button className="md:h-12 bg-secondary text-white hover:bg-secondary/90 md:px-5!">
-            <Plus className="size-5 md:size-6" /> New Transaction
+            <Plus className="size-5" /> New Transaction
           </Button>
         </DialogTrigger>
         <DialogContent className="max-w-2xl! p-0 overflow-hidden flex flex-col max-h-[90vh]">
@@ -208,7 +213,7 @@ export default function NewTransactionModal() {
                   className="flex flex-col items-center justify-center p-8 border-2 border-dashed rounded-xl hover:border-secondary hover:bg-secondary/5 transition-all group"
                 >
                   <div className="size-16 rounded-full bg-secondary/10 flex items-center justify-center mb-4 group-hover:bg-secondary group-hover:text-white transition-colors">
-                    <User className="size-8" />
+                    <UserGroupSvg className="size-9" />
                   </div>
                   <span className="text-xl font-semibold text-secondary">
                     Buyer
@@ -224,7 +229,7 @@ export default function NewTransactionModal() {
                   className="flex flex-col items-center justify-center p-8 border-2 border-dashed rounded-xl hover:border-secondary hover:bg-secondary/5 transition-all group"
                 >
                   <div className="size-16 rounded-full bg-secondary/10 flex items-center justify-center mb-4 group-hover:bg-secondary group-hover:text-white transition-colors">
-                    <Home className="size-8" />
+                    <Home11Svg className="size-8" />
                   </div>
                   <span className="text-xl font-semibold text-secondary">
                     Seller
@@ -770,7 +775,7 @@ export default function NewTransactionModal() {
                     {createTransaction?.isPending ? (
                       <Spinner />
                     ) : (
-                      <CheckCircle2 className="mr-2 h-4 w-4" />
+                      <CheckCircle2 className="size-4" />
                     )}
                     Save Transaction
                   </Button>

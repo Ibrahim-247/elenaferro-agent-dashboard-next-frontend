@@ -57,11 +57,15 @@ export const useDeleteFolder = (id) => {
 
 // document update (rename)
 export const useUpdateDocument = (id) => {
+  const queryClient = useQueryClient();
   return useApiMutation({
     key: "document_update",
     method: "post",
     isPrivate: true,
-    endpoint: `/agent/document/update/${id}`,
+    endpoint: `/agent/document/rename/${id}`,
+    onSuccess: () => {
+      queryClient.invalidateQueries(["document_details"]);
+    },
     onError: (error) => {
       console.error("Document update", error);
     },

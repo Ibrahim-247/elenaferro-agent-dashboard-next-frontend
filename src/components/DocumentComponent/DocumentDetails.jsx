@@ -4,7 +4,6 @@ import {
   Inbox,
   InfoIcon,
   Search,
-  SendHorizontal,
   MoreVertical,
   Pencil,
   Trash2,
@@ -65,7 +64,7 @@ export default function DocumentDetails({ id }) {
   const handleRename = () => {
     if (!renameData?.name) return;
     renameMutation?.mutate(
-      { file_name: renameData.name },
+      { name: renameData.name },
       {
         onSuccess: () => {
           setRenameData(null);
@@ -212,35 +211,37 @@ export default function DocumentDetails({ id }) {
       {/* rename modal */}
       <Dialog open={!!renameData} onOpenChange={() => setRenameData(null)}>
         <DialogContent className="max-w-md p-8 [&>button]:hidden">
-          <DialogHeader>
-            <DialogTitle className="text-3xl font-bold text-secondary font-cormorant">
-              Rename Document
-            </DialogTitle>
-          </DialogHeader>
-          <div className="mt-4">
-            <Input
-              value={renameData?.name || ""}
-              onChange={(e) =>
-                setRenameData({ ...renameData, name: e.target.value })
-              }
-              placeholder="Enter new name"
-              className="h-12"
-            />
-          </div>
-          <DialogFooter className="mt-8 gap-3">
-            <DialogClose asChild>
-              <Button variant="outline" className="w-full shrink">
-                Cancel
+          <form onSubmit={(e) => e.preventDefault()}>
+            <DialogHeader>
+              <DialogTitle className="text-3xl font-bold text-secondary font-cormorant">
+                Rename Document
+              </DialogTitle>
+            </DialogHeader>
+            <div className="mt-4">
+              <Input
+                value={renameData?.name || ""}
+                onChange={(e) =>
+                  setRenameData({ ...renameData, name: e.target.value })
+                }
+                placeholder="Enter new name"
+                className="h-12"
+              />
+            </div>
+            <DialogFooter className="mt-8 gap-3">
+              <DialogClose asChild>
+                <Button variant="outline" className="w-full shrink">
+                  Cancel
+                </Button>
+              </DialogClose>
+              <Button
+                className="w-full bg-secondary shrink"
+                disabled={renameMutation.isPending || !renameData?.name}
+                onClick={handleRename}
+              >
+                {renameMutation.isPending && <Spinner />} Save Changes
               </Button>
-            </DialogClose>
-            <Button
-              className="w-full bg-secondary shrink"
-              disabled={renameMutation.isPending || !renameData?.name}
-              onClick={handleRename}
-            >
-              {renameMutation.isPending && <Spinner />} Save Changes
-            </Button>
-          </DialogFooter>
+            </DialogFooter>
+          </form>
         </DialogContent>
       </Dialog>
 
