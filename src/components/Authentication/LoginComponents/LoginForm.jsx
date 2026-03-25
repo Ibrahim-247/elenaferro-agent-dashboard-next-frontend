@@ -37,7 +37,7 @@ export default function LoginForm() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen max-w-170 w-full mx-auto overflow-auto py-5">
+    <div className="flex flex-col items-center py-5 w-full">
       <h4 className="text-3xl md:text-4xl font-semibold mb-8">
         Login to continue
       </h4>

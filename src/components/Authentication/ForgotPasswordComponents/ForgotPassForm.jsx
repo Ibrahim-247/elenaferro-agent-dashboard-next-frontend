@@ -22,8 +22,10 @@ export default function ForgotPassForm() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center my-10">
-      <h4 className="text-4xl font-semibold mb-8">Forgot Your Password</h4>
+    <div className="flex flex-col items-center justify-center my-10 w-full">
+      <h4 className="text-3xl md:text-4xl font-semibold mb-8">
+        Forgot Your Password
+      </h4>
       <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-6">
         {/* Email */}
         <div className="space-y-2">

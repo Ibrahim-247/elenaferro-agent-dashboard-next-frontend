@@ -2,7 +2,7 @@ import ChangePassForm from "@/components/Authentication/ChangePassComponents/Cha
 
 export default function page() {
   return (
-    <div>
+    <div className="max-w-150 w-full mx-auto min-h-screen flex flex-col items-center justify-center">
       <ChangePassForm />
     </div>
   );

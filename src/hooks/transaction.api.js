@@ -54,7 +54,7 @@ export const useDocumentLinked = (id) => {
     enabled: !!id,
     endpoint: `/agent/transaction/${id}/document/link`,
 
-    onSuccess: (data) => {
+    onSuccess: () => {
       queryClient.invalidateQueries(["linked_document_list"]);
       toast.success("Documents linked successfully");
     },

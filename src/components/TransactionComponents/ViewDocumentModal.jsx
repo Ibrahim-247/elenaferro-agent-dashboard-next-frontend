@@ -54,7 +54,7 @@ export function ViewDocumentModal({ data }) {
           <InfoRow
             icon={<DollarSign size={16} />}
             label="Listing Price"
-            value={`$${data?.listing_price}`}
+            value={`$${data?.listing_price || data?.offer_price}`}
           />
         </section>
 
@@ -88,13 +88,13 @@ export function ViewDocumentModal({ data }) {
           <InfoRow
             icon={<Calendar size={16} />}
             label="Start Date"
-            value={data?.start_date}
+            value={data?.start_date || data?.date_binding_agreement}
           />
 
           <InfoRow
             icon={<Calendar size={16} />}
             label="Close Date"
-            value={data?.close_date}
+            value={data?.close_date || data?.date_closing}
           />
         </section>
 
@@ -102,7 +102,7 @@ export function ViewDocumentModal({ data }) {
         <section className="mt-6 space-y-2">
           <h4 className="font-semibold text-gray-800">Notes</h4>
           <div className="bg-yellow-50 rounded-lg p-4 text-sm text-gray-700 font-normal">
-            {data?.internal_notes}
+            {data?.internal_notes || data?.inspection_notes}
           </div>
         </section>
       </DialogContent>

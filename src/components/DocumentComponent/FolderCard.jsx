@@ -91,9 +91,6 @@ export default function FolderCard({ item }) {
             </div>
           </div>
         </div>
-
-        {/* Subtle Decorative Element */}
-        <div className="absolute bottom-0 right-0 w-24 h-24 bg-secondary/5 rounded-tl-[100px] -z-10 group-hover:bg-secondary/10 transition-all duration-300" />
       </Link>
 
       {/* Modals */}
