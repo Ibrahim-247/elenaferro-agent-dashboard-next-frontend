@@ -175,7 +175,10 @@ export default function PublicFolders() {
                   </div>
                 </div>
               ) : (
-                <div className="h-full flex flex-col items-center justify-center gap-3 text-[#798090] py-20">
+                <div
+                  key={index}
+                  className="h-full flex flex-col items-center justify-center gap-3 text-[#798090] py-20"
+                >
                   <Inbox className="size-15 opacity-20" />
                   <p className="text-lg font-medium">
                     No results found for your search

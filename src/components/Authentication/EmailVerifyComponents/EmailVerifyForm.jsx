@@ -37,8 +37,8 @@ export default function EmailVerifyForm() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center my-10 text-center">
-      <h4 className="text-4xl font-semibold mb-8">Verify Code</h4>
+    <div className="flex flex-col items-center justify-center my-10 text-center w-full">
+      <h4 className="text-3xl md:text-4xl font-semibold mb-8">Verify Code</h4>
       <div className="text-lg font-normal max-w-150 mb-6">
         Enter the verification code we send you on: <span>{email}</span>
       </div>

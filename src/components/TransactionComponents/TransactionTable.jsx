@@ -1,7 +1,6 @@
 "use client";
 import TransactionHeader from "./TransactionHeader";
-import { Button } from "../ui/button";
-import { FileText, Inbox, Plus, SquarePen } from "lucide-react";
+import { Inbox } from "lucide-react";
 import {
   useReactTable,
   getCoreRowModel,
@@ -37,8 +36,10 @@ export default function TransactionTable() {
       const matchStatus = status === "all" || lead?.status === status;
       const matchDate =
         !date ||
-        (lead?.start_date || lead?.close_date) ===
-          date.toLocaleDateString("en-CA");
+        (lead?.start_date ||
+          lead?.close_date ||
+          lead?.date_closing ||
+          lead?.date_binding_agreement) === date.toLocaleDateString("en-CA");
 
       return matchSearch && matchStatus && matchDate;
     });

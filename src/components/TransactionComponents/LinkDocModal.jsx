@@ -35,7 +35,7 @@ export default function LinkDocModal({ open, onOpenChange, data }) {
 
   const toggleSelect = (id) => {
     setSelected((prev) =>
-      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
+      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id],
     );
   };
 
@@ -58,10 +58,7 @@ export default function LinkDocModal({ open, onOpenChange, data }) {
             </p>
           </div>
           <DialogClose>
-            <button
-              onClick={() => onOpenChange(false)}
-              className="rounded-full border p-2 hover:bg-muted"
-            >
+            <button className="rounded-full border p-2 hover:bg-muted">
               <X className="size-4" />
             </button>
           </DialogClose>

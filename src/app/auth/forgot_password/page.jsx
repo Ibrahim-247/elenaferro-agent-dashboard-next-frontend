@@ -1,9 +1,8 @@
 import ForgotPassForm from "@/components/Authentication/ForgotPasswordComponents/ForgotPassForm";
-import React from "react";
 
 export default function page() {
   return (
-    <div>
+    <div className="max-w-150 w-full mx-auto min-h-screen flex-col flex items-center justify-center">
       <ForgotPassForm />
     </div>
   );
