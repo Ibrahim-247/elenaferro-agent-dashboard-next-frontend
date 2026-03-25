@@ -16,8 +16,6 @@ export default function ChangePassForm() {
     register,
     handleSubmit,
     formState: { errors },
-    setValue,
-    watch,
   } = useForm({
     resolver: zodResolver(registerSchema),
     defaultValues: {
@@ -29,8 +27,10 @@ export default function ChangePassForm() {
     console.log("Login Data:", data);
   };
   return (
-    <div className="flex flex-col items-center justify-center my-10">
-      <h4 className="text-4xl font-semibold mb-8">Change your password</h4>
+    <div className="flex flex-col items-center justify-center my-10 w-full">
+      <h4 className="text-3xl md:text-4xl font-semibold mb-8">
+        Change your password
+      </h4>
       <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-6">
         {/* Password */}
         <div className="space-y-2">
