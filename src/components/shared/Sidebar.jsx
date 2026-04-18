@@ -33,7 +33,7 @@ export default function Sidebar({
     { name: "Documents", path: "/documents", icon: <File01Svg /> },
     { name: "Transactions", path: "/transaction", icon: <TransactionSvg /> },
     {
-      name: "Performance & Tasks",
+      name: "Tasks & Performance",
       path: "/performance_tasks",
       icon: <StickyNoteSvg />,
     },
@@ -55,7 +55,7 @@ export default function Sidebar({
       {!mobile && (
         <button
           onClick={() => setIsCollapsed(!isCollapsed)}
-          className="absolute -right-3 top-20 z-50 bg-white border border-gray-100 rounded-full p-1 shadow-md hover:bg-gray-50 transition-colors"
+          className="absolute -right-3 top-20 z-100 bg-white border border-gray-100 rounded-full p-1 shadow-md hover:bg-gray-50 transition-colors"
         >
           {isCollapsed ? (
             <ChevronRight className="size-4 text-secondary" />

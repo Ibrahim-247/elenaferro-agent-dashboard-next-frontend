@@ -153,7 +153,7 @@ export default function PerformanceTaskTable() {
       <div className="w-full p-6 bg-white rounded-xl space-y-6">
         <div>
           <h4 className="text-xl font-semibold text-secondary">
-            Task & Performance
+            Tasks & Performance
           </h4>
           <p className="text-base font-normal text-[#5B6477]">
             Manage your tasks and track your performance across all clients and
