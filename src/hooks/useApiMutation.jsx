@@ -1,3 +1,4 @@
+"use client";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axiosPrivate from "./axios/useAxiosPrivate";
 import { axiosPublic } from "./axios/useAxiosPublic";

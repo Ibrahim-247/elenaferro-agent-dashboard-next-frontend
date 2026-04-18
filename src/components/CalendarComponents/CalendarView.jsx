@@ -12,6 +12,8 @@ import {
   Pencil,
   Trash2,
   Plus,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTasklist } from "@/hooks/dashboard.api";
@@ -247,39 +249,39 @@ const CalendarView = () => {
             <Button
               variant="ghost"
               onClick={goToBack}
-              className="h-9 px-3 rounded-sm hover:bg-white hover:shadow-xs text-xs font-medium text-gray-600 transition-all"
+              className="h-9 px-2 rounded-sm hover:bg-white hover:shadow-xs text-xs font-medium text-gray-600 transition-all"
             >
-              Back
+              <ChevronLeft className="size-4" />
             </Button>
             <Button
               variant="ghost"
               onClick={goToCurrent}
-              className="h-9 px-3 rounded-sm hover:bg-white hover:shadow-xs text-xs font-medium text-gray-800 transition-all"
+              className="h-9 px-4 rounded-sm hover:bg-white hover:shadow-xs text-xs font-semibold text-gray-800 transition-all"
             >
               Today
             </Button>
             <Button
               variant="ghost"
               onClick={goToNext}
-              className="h-9 px-3 rounded-sm hover:bg-white hover:shadow-xs text-xs font-medium text-gray-600 transition-all"
+              className="h-9 px-2 rounded-sm hover:bg-white hover:shadow-xs text-xs font-medium text-gray-600 transition-all"
             >
-              Next
+              <ChevronRight className="size-4" />
             </Button>
           </div>
 
           <div className="items-center bg-gray-50/80 rounded-sm p-1 border border-gray-100/80 hidden sm:flex">
-            {["month", "week", "work_week", "day", "agenda"].map((v) => (
+            {["month", "week", "day", "agenda"].map((v) => (
               <Button
                 key={v}
                 variant="ghost"
                 onClick={() => toolbar.onView(v)}
-                className={`h-9 px-3 rounded-sm text-xs capitalize transition-all ${
+                className={`h-9 px-4 rounded-sm text-xs capitalize transition-all ${
                   toolbar.view === v
-                    ? "bg-white text-secondary"
+                    ? "bg-white text-secondary shadow-xs font-semibold"
                     : "hover:bg-white/60 text-gray-600 font-medium"
                 }`}
               >
-                {v.replace("_", " ")}
+                {v}
               </Button>
             ))}
           </div>
