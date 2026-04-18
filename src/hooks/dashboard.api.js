@@ -1,3 +1,4 @@
+"use client";
 import useApiMutation from "./useApiMutation";
 
 // my task list

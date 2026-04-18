@@ -8,7 +8,7 @@ export const useAppointmentList = () => {
     key: "appointment_list",
     method: "get",
     isPrivate: true,
-    endpoint: "/agent/appointment/list",
+    endpoint: "/agent/calendar/list",
     onError: (error) => {
       console.error("Appointment list error", error);
     },
@@ -29,7 +29,9 @@ export const useCreateAppointment = () => {
     },
     onError: (error) => {
       console.error("Create appointment error", error);
-      toast.error(error?.response?.data?.message || "Failed to create appointment");
+      toast.error(
+        error?.response?.data?.message || "Failed to create appointment",
+      );
     },
   });
 };
@@ -48,7 +50,9 @@ export const useUpdateAppointment = (id) => {
     },
     onError: (error) => {
       console.error("Update appointment error", error);
-      toast.error(error?.response?.data?.message || "Failed to update appointment");
+      toast.error(
+        error?.response?.data?.message || "Failed to update appointment",
+      );
     },
   });
 };
@@ -67,7 +71,9 @@ export const useDeleteAppointment = (id) => {
     },
     onError: (error) => {
       console.error("Delete appointment error", error);
-      toast.error(error?.response?.data?.message || "Failed to delete appointment");
+      toast.error(
+        error?.response?.data?.message || "Failed to delete appointment",
+      );
     },
   });
 };

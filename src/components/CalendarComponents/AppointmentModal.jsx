@@ -159,11 +159,7 @@ const AppointmentModal = ({ isOpen, onClose, selectedDate, appointment }) => {
         <div
           className={cn(
             "p-8 flex flex-col items-center justify-center text-white relative transition-colors duration-300",
-            activeType === "task"
-              ? "bg-blue-600"
-              : activeType === "event"
-                ? "bg-amber-600"
-                : "bg-secondary",
+            "bg-secondary",
           )}
         >
           <div
@@ -207,13 +203,13 @@ const AppointmentModal = ({ isOpen, onClose, selectedDate, appointment }) => {
               </TabsTrigger>
               <TabsTrigger
                 value="event"
-                className="text-sm h-8 data-[state=active]:bg-white data-[state=active]:text-amber-600"
+                className="text-sm h-8 data-[state=active]:bg-white data-[state=active]:text-secondary"
               >
                 Event
               </TabsTrigger>
               <TabsTrigger
                 value="task"
-                className="text-sm h-8 data-[state=active]:bg-white data-[state=active]:text-blue-600"
+                className="text-sm h-8 data-[state=active]:bg-white data-[state=active]:text-secondary"
               >
                 Task
               </TabsTrigger>
@@ -429,11 +425,7 @@ const AppointmentModal = ({ isOpen, onClose, selectedDate, appointment }) => {
               disabled={isPending}
               className={cn(
                 "flex-1 text-white h-10 shadow-sm transition-all active:scale-95",
-                activeType === "task"
-                  ? "bg-blue-600 hover:bg-blue-700"
-                  : activeType === "event"
-                    ? "bg-amber-600 hover:bg-amber-700"
-                    : "bg-secondary hover:bg-secondary/90",
+                "bg-secondary hover:bg-secondary/90",
               )}
             >
               {isPending ? "Saving..." : appointment ? "Update" : "Create"}
